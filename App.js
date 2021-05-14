@@ -6,13 +6,13 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Font from 'expo-font';
 import HomeScreen from './src/screens/HomeScreen';
 import TravelScreen from './src/screens/TravelScreen';
-import FavoritesScreen from './src/screens/FavoritesScreen';
+import SearchScreen from './src/screens/SearchScreen';
 import UserProfileScreen from './src/screens/UserProfileScreen';
 
 const bottomBarNavigator = createBottomTabNavigator({
   Home: HomeScreen,
   Travel: TravelScreen,
-  Favorite: FavoritesScreen,
+  Search: SearchScreen,
   UserProfileScreen: UserProfileScreen
 });
 

@@ -2,10 +2,10 @@ import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
-const FavoritesScreen = () => {
+const SearchScreen = () => {
   return(
     <View style={styles.container}>
-      <Text style={styles.text}>Favorites</Text>
+      <Text style={styles.text}>Search</Text>
     </View>
   );
 };
@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default FavoritesScreen;
+export default SearchScreen;
