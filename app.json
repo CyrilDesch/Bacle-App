@@ -20,6 +20,10 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.proto.bacle",
+      "config": {
+        "googleMaps": { "apiKey": "AIzaSyAhlSB6lammf-dUfSdoHL1e5jXfZOBJbas" }   
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
