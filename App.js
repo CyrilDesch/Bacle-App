@@ -7,13 +7,13 @@ import * as Font from 'expo-font';
 import HomeScreen from './src/screens/HomeScreen';
 import TravelScreen from './src/screens/TravelScreen';
 import SearchScreen from './src/screens/SearchScreen';
-import UserProfileScreen from './src/screens/UserProfileScreen';
+import ProfilScreen from './src/screens/ProfilScreen';
 
 const bottomBarNavigator = createBottomTabNavigator({
   Home: HomeScreen,
   Travel: TravelScreen,
   Search: SearchScreen,
-  UserProfileScreen: UserProfileScreen
+  Profil: ProfilScreen
 });
 
 const fetchFonts = () => {

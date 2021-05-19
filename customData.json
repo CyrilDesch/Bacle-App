@@ -1,0 +1,25 @@
+{
+  "user": {
+    "id": "1515",
+    "firstName": "Julie",
+    "lastName": "Bossé",
+    "email": "julie.bosse@gmail.com",
+    "isVerified": "true",
+    "trips": [
+      {
+        "id": "TR741",
+        "name": "Vacance Lyon",
+        "destination": "Lyon",
+        "days": ["rien capté"],
+        "startDate": "2021-07-05T00:00:00.000+00:0"
+      },
+      {
+        "id": "TR787",
+        "name": "Vacance Paris",
+        "destination": "Paris",
+        "days": ["rien capté"],
+        "startDate": "2021-08-22T00:00:00.000+00:0"
+      }
+    ]
+  }
+}

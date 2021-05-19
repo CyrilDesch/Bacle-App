@@ -1,13 +1,13 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Map from '../components/Map';
 
 const HomeScreen = () => {
+
   return(
     <SafeAreaView style={styles.container}>
-      <Map style={styles.map} />
+      <Text>Home</Text>
     </SafeAreaView>
   );
 };
