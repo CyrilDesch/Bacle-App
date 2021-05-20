@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Button } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ProfilScreen = () => {
+const ProfilScreen = ({ navigation }) => {
 
   const user = require('../../customData.json').user;
   
@@ -13,6 +14,10 @@ const ProfilScreen = () => {
       <Text style={styles.text}>Email: {user.email}</Text>
       <Text style={styles.text}>Trip 1: {JSON.stringify(user.trips[0])}</Text>
       <Text style={styles.text}>Trip 2: {JSON.stringify(user.trips[1])}</Text>
+      <Button title="Se déconnecter" onPress={async() => {
+        await AsyncStorage.removeItem('token');
+        navigation.navigate('WaitSign');
+      }}/>
     </View>
   );
 };

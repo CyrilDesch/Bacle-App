@@ -1,19 +1,36 @@
 import React, { useState } from 'react';
 import AppLoading from 'expo-app-loading';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { Provider as AuthProvider } from './src/context/AuthContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Font from 'expo-font';
 import HomeScreen from './src/screens/HomeScreen';
 import TravelScreen from './src/screens/TravelScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import ProfilScreen from './src/screens/ProfilScreen';
+import WaitSignScreen from './src/screens/Auth/WaitSignScreen';
+import SigninScreen from './src/screens/Auth/SigninScreen';
+import SignupScreen from './src/screens/Auth/SignupScreen';
+import NavigationRef from './src/navigationRef';
+
+const authNavigator = createStackNavigator({
+  WaitSign: WaitSignScreen,
+  SignUp: SignupScreen,
+  SignIn: SigninScreen
+})
 
 const bottomBarNavigator = createBottomTabNavigator({
   Home: HomeScreen,
   Travel: TravelScreen,
   Search: SearchScreen,
   Profil: ProfilScreen
+});
+
+const appNavigator = createSwitchNavigator({
+  Auth: authNavigator,
+  Main: bottomBarNavigator
 });
 
 const fetchFonts = () => {
@@ -30,15 +47,15 @@ const fetchFonts = () => {
   });
 };
 
-const App = createAppContainer(bottomBarNavigator);
+const App = createAppContainer(appNavigator);
 export default () => {
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [fontLoaded, setFontLoaded] = useState(false);
 
-  if(!dataLoaded){
+  if(!fontLoaded){
     return(
-      <AppLoading 
+      <AppLoading
         startAsync={fetchFonts}
-        onFinish={() => setDataLoaded(true)}
+        onFinish={() => setFontLoaded(true)}
         onError={(err) => console.log(err)}
       />
     );
@@ -46,7 +63,9 @@ export default () => {
 
   return(
     <SafeAreaProvider>
-      <App />
+      <AuthProvider>
+        <App ref={NavigationRef.setNavigator} />
+      </AuthProvider> 
     </SafeAreaProvider>
   );
 };
