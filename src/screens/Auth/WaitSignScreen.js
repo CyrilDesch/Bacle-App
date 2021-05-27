@@ -1,11 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { Context as AuthContext } from '../../context/AuthContext';
 
 const WaitSignScreen = () => {
-  console.log('test');
   const { tryLocalSignIn } = useContext(AuthContext);
-  tryLocalSignIn();
+  useEffect(() => {
+    tryLocalSignIn();
+  }, []);
 
   return(
     <View />

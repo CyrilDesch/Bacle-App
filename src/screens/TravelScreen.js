@@ -6,31 +6,33 @@ import Map from '../components/Map';
 import getBakeries from '../../mocks/getBakeries';
 
 
-// Permet de récupérer uniquement les latitudes et longitudes (sous forme d'objet LatLng) depuis une liste de points géographiques d'OpenStreetMap
-function getLatLng(pointList) {
-  output = [];
-  for (let i = 0; i < pointList.length; i++) {
-    // console.log(pointList[i]);
-    if (pointList[i].lat && pointList[i].lon) {
-      output.push({
-        latitude: Number(pointList[i].lat), 
-        longitude: Number(pointList[i].lon) 
-      });
-    }
-  }
-  console.log("OUTPUT:", output);
-  return output;
-}
-
-
 // Contient une petite carte avec des balises reliées entre elles (pour simuler un trajet) 
 const TravelScreen = () => {
+
+  // Permet de récupérer uniquement les latitudes et longitudes (sous forme d'objet LatLng) depuis une liste de points géographiques d'OpenStreetMap
+  const getLatLng = (pointList) => {
+    output = [];
+    for (let i = 0; i < pointList.length; i++) {
+      if (pointList[i].lat && pointList[i].lon) {
+        output.push({
+          latitude: Number(pointList[i].lat), 
+          longitude: Number(pointList[i].lon) 
+        });
+      }
+    }
+    return output;
+  }
+
+  const steps = getLatLng(getBakeries());
+
   return(
     <SafeAreaView style={styles.container}>
-      <Map 
-        style={styles.map}
-        stepsProps={getLatLng(getBakeries())}
-      />
+      {steps ?
+        <Map 
+          style={styles.map}
+          steps={steps}
+        />
+      : null}
     </SafeAreaView>
   );
 };
