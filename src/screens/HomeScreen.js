@@ -1,9 +1,10 @@
 import React from 'react';
+import { TouchableOpacity } from 'react-native';
 import { FlatList, Image, StyleSheet, Text } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
 
   const tendance = require('../../customData.json').tendance;
 
@@ -16,13 +17,15 @@ const HomeScreen = () => {
         keyExtractor={(item) => item.id}
         data={tendance}
         renderItem={({item}) =>
-          <Image 
-            style={styles.image} 
-            source={{ uri: item.urlImage }}
-          />
+          <TouchableOpacity onPress={() => navigation.navigate("DetailLieu", { lieu: item })}>
+            <Image 
+              style={styles.image} 
+              source={{ uri: item.urlImage }}
+            />
+          </TouchableOpacity>
         }
       />
-      <Text>Recommendation</Text>
+      <Text>Recommandation</Text>
       <FlatList
         horizontal
         keyExtractor={(item) => item.id}

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
 import { Input } from 'react-native-elements';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -13,13 +13,14 @@ const SearchScreen = () => {
       "https://nominatim.openstreetmap.org/",
       {
         params: { 
-          street: text, 
+          q: text, 
           format: "json",
           "accept-language": "fr"
         } 
       }
     );
-    const data = res.data.filter(value => value.class == "tourism");
+    const data = res.data.filter(value => (value.class == "tourism" || value.class == "boundary"));
+    console.log(data);
     setData(data);
   }
 
@@ -29,9 +30,9 @@ const SearchScreen = () => {
       <Input value={text} onChangeText={setText} onSubmitEditing={callApi} />
       <FlatList
         data={data}
-        keyExtractor={(item) => item.osm_id}
+        keyExtractor={(item) => item.osm_id.toString()}
         renderItem={({item}) =>
-          <Text>{item.display_name}</Text>
+          <Text>{item.display_name.split(",")[0]} à {item.display_name.split(",")[4]}</Text>
         }
       />
     </View>

@@ -10,6 +10,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import TravelScreen from './src/screens/TravelScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import ProfilScreen from './src/screens/ProfilScreen';
+import DetailLieuScreen from './src/screens/DetailLieuScreen';
 import WaitSignScreen from './src/screens/Auth/WaitSignScreen';
 import SigninScreen from './src/screens/Auth/SigninScreen';
 import SignupScreen from './src/screens/Auth/SignupScreen';
@@ -21,8 +22,13 @@ const authNavigator = createStackNavigator({
   SignIn: SigninScreen
 })
 
-const bottomBarNavigator = createBottomTabNavigator({
+const homeStackNavigator = createStackNavigator({
   Home: HomeScreen,
+  DetailLieu: DetailLieuScreen
+})
+
+const bottomBarNavigator = createBottomTabNavigator({
+  HomeStack: homeStackNavigator,
   Travel: TravelScreen,
   Search: SearchScreen,
   Profil: ProfilScreen
@@ -30,7 +36,7 @@ const bottomBarNavigator = createBottomTabNavigator({
 
 const appNavigator = createSwitchNavigator({
   Auth: authNavigator,
-  Main: bottomBarNavigator
+  Main: bottomBarNavigator,
 });
 
 const fetchFonts = () => {
