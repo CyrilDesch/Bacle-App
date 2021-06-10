@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'react-native';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 

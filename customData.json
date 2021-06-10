@@ -175,5 +175,83 @@
         ]
       }
     }
+  ],
+  "circuit": [
+    {
+      "place_id": 53581556,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 4533627787,
+      "boundingbox": [
+          "48.8707073",
+          "48.8708073",
+          "2.3052812",
+          "2.3053812"
+      ],
+      "lat": "48.8707573",
+      "lon": "2.3053312",
+      "display_name": "Champs Élysées, Promenade des Champs-Élysées, Quartier du Faubourg-du-Roule, Paris 8e Arrondissement, Paris, Île-de-France, France métropolitaine, 75008, France",
+      "class": "tourism",
+      "type": "attraction",
+      "importance": 0.6389143157033701,
+      "icon": "https://nominatim.openstreetmap.org/ui/mapicons//poi_point_of_interest.p.20.png"
+    },
+    {
+      "place_id": 44219086,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+      "osm_type": "node",
+      "osm_id": 3414141480,
+      "boundingbox": [
+          "48.857527",
+          "48.867527",
+          "2.2950067",
+          "2.3050067"
+      ],
+      "lat": "48.862527",
+      "lon": "2.3000067",
+      "display_name": "Pont de l'Alma, Promenade Gisèle Halimi, Quartier du Gros-Caillou, Paris 7e Arrondissement, Paris, Île-de-France, France métropolitaine, 75007, France",
+      "class": "railway",
+      "type": "station",
+      "importance": 0.7343526860531795,
+      "icon": "https://nominatim.openstreetmap.org/ui/mapicons//transport_train_station2.p.20.png"
+    },
+    {
+      "place_id": 84512907,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+      "osm_type": "way",
+      "osm_id": 5013364,
+      "boundingbox": [
+          "48.8574753",
+          "48.8590453",
+          "2.2933084",
+          "2.2956897"
+      ],
+      "lat": "48.858260200000004",
+      "lon": "2.2944990543196795",
+      "display_name": "Tour Eiffel, 5, Avenue Anatole France, Quartier du Gros-Caillou, Paris 7e Arrondissement, Paris, Île-de-France, France métropolitaine, 75007, France",
+      "class": "tourism",
+      "type": "attraction",
+      "importance": 0.7868325701744197,
+      "icon": "https://nominatim.openstreetmap.org/ui/mapicons//poi_point_of_interest.p.20.png"
+    },
+    {
+      "place_id": 257768528,
+      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+      "osm_type": "relation",
+      "osm_id": 7515426,
+      "boundingbox": [
+          "48.8593816",
+          "48.8629132",
+          "2.3317162",
+          "2.3400113"
+      ],
+      "lat": "48.8611473",
+      "lon": "2.33802768704666",
+      "display_name": "Musée du Louvre, Rue Croix des Petits Champs, Quartier Les Halles, Paris 1er Arrondissement, Les Halles, Paris, Île-de-France, France métropolitaine, 75001, France",
+      "class": "tourism",
+      "type": "museum",
+      "importance": 0.9436012537671365,
+      "icon": "https://nominatim.openstreetmap.org/ui/mapicons//tourist_museum.p.20.png"
+    }
   ]
 }

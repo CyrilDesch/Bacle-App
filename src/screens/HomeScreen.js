@@ -10,7 +10,6 @@ const HomeScreen = ({ navigation }) => {
 
   return(
     <SafeAreaView style={styles.container}>
-      <Text>Home</Text>
       <Text>Tendance</Text>
       <FlatList
         horizontal

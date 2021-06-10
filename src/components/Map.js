@@ -3,21 +3,21 @@ import { StyleSheet } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 
 
-const Map = ({ style, steps }) => {
+const Map = ({ style, steps, data, currentMarkerFocus }) => {
   return (
     <MapView
       provider="google"
       style={[styles.map, style]}
-      initialRegion={{...steps[0], latitudeDelta: 0.02, longitudeDelta: 0.02}}
+      region={{...steps[currentMarkerFocus], latitudeDelta: 0.02, longitudeDelta: 0.02}}
     >
       {/* Markers */}
-      {steps.map((marker, index) => (
+      {steps.map((marker, index) => 
         <Marker
           key={index}
           coordinate={marker}
-          title={"Bakery " + (index + 1)}
+          title={data[index].display_name.split(",")[0]}
         />
-      ))}
+      )}
       {/* Linking lines */}
       <Polyline
         coordinates={steps}
