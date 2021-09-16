@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
 
 import Carousel from "react-native-snap-carousel";
 import {
@@ -8,7 +8,7 @@ import {
 } from "react-native-responsive-screen";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Map from "../components/Map/Map";
-import { Button } from "react-native";
+import Icon from "react-native-vector-icons/AntDesign";
 
 // Contient une petite carte avec des balises reliées entre elles (pour simuler un trajet)
 const TravelScreen = () => {
@@ -32,59 +32,6 @@ const TravelScreen = () => {
 
   const steps = getLatLng(circuit);
 
-  useEffect(() => {
-    const getImage = async (lat, long, name) => {
-      let url = "https://fr.wikipedia.org/w/api.php"; // VERSION FRANCAISE
-
-      const params = {
-        action: "query",
-        generator: "geosearch",
-        prop: "coordinates|pageimages",
-        ggscoord: `${lat}|${long}`,
-        format: "json",
-      };
-
-      url = url + "?origin=*";
-      Object.keys(params).forEach(function (key) {
-        url += "&" + key + "=" + params[key];
-      });
-
-      fetch(url)
-        .then(function (response) {
-          return response.json();
-        })
-        .then(function (response) {
-          const pages = Object.values(response.query.pages);
-          let page = 0;
-
-          const words = name.toLowerCase().split(" ");
-          const counts = []; // MAP ERREUR
-          while (page < pages.length) {
-            words.forEach((word) => {
-              if (pages[page].title.includes(word))
-                counts[page] = counts[page] + 1;
-            });
-            console.log(counts);
-            if (pages[page] && pages[page].thumbnail) {
-              //console.log(name);
-              /*console.log(
-                pages[page].title + ": " + pages[page].thumbnail.source
-              );*/
-            } else {
-              console.log("test");
-            }
-            page++;
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    };
-    circuit.forEach((element) => {
-      getImage(element.lat, element.lon, element.display_name.split(",")[0]);
-    });
-  }, []);
-
   return (
     <SafeAreaView style={styles.container}>
       {steps ? (
@@ -97,11 +44,33 @@ const TravelScreen = () => {
       ) : null}
       <View style={styles.slider}>
         <Carousel
+          onSnapToItem={(index) => setCurrentMarkerFocus(index)}
           ref={carouselRef}
           data={circuit}
           renderItem={({ item }) => (
-            <View style={styles.card}>
-              <Text>{item.display_name.split(",")[0]}</Text>
+            <View style={styles.cardContainer}>
+              <View style={styles.card}>
+                <View style={styles.imageElevation}>
+                  <Image
+                    style={styles.image}
+                    source={{
+                      uri: "https://upload.wikimedia.org/wikipedia/commons/6/66/Louvre_Museum_Wikimedia_Commons.jpg",
+                    }}
+                  />
+                </View>
+                <View style={styles.firstLine}>
+                  <Icon name="star" size={wp(5)} color="#ffbe00" />
+                  <Text style={styles.textNote}>4 sur 5</Text>
+                </View>
+                <View style={styles.secondLine}>
+                  <Text style={styles.title}>
+                    {item.display_name.split(",")[0]}
+                  </Text>
+                  <Text style={styles.type}>
+                    {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
+                  </Text>
+                </View>
+              </View>
             </View>
           )}
           layout={"stack"}
@@ -134,8 +103,7 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: "white",
-    borderRadius: wp(5),
-    width: wp(80),
+    borderRadius: wp(4),
     height: wp(30),
     shadowColor: "#000",
     shadowOffset: {
@@ -144,9 +112,57 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
-
     elevation: 2,
-    margin: wp(2),
+  },
+  cardContainer: {
+    marginTop: wp(10),
+    padding: wp(2),
+  },
+  image: {
+    width: wp(20),
+    height: wp(20),
+    borderRadius: wp(4),
+  },
+  imageElevation: {
+    position: "absolute",
+    borderRadius: wp(4),
+    top: -wp(7),
+    left: wp(6),
+    zIndex: 10,
+    backgroundColor: "#ebebeb",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+  firstLine: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginTop: wp(2),
+    marginRight: wp(6),
+  },
+  title: {
+    fontFamily: "Montserrat-Bold",
+    fontSize: wp(4),
+  },
+  type: {
+    fontFamily: "Montserrat-Medium",
+    fontSize: wp(3),
+    color: "#a5a5a5",
+  },
+  secondLine: {
+    marginTop: wp(10),
+    marginLeft: wp(6),
+  },
+  textNote: {
+    marginLeft: wp(1.5),
+    fontFamily: "Montserrat-SemiBold",
+    fontSize: wp(3.5),
   },
 });
 

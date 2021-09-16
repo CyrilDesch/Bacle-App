@@ -1,10 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Image, View } from "react-native";
-import MapView, { Marker, Polyline } from "react-native-maps";
+import React, { useEffect, useState, useRef } from "react";
+import { StyleSheet } from "react-native";
+import { Marker, Polyline, Animated, AnimatedRegion } from "react-native-maps";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import Svg, { Polygon } from "react-native-svg";
 
 const Map = ({ style, steps, data, currentMarkerFocus }) => {
+  const animatedRegion = useRef(
+    new AnimatedRegion({
+      longitude: steps[0].longitude,
+      latitude: steps[0].latitude,
+      latitudeDelta: 0.02,
+      longitudeDelta: 0.02,
+    })
+  ).current;
+
   // BUG POLYLINE VERISON 0.28
   const [lineDashPattern, setLineDashPattern] = useState([0]);
   useEffect(() => {
@@ -14,16 +22,23 @@ const Map = ({ style, steps, data, currentMarkerFocus }) => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    animatedRegion
+      .timing({
+        longitude: steps[currentMarkerFocus].longitude,
+        latitude: steps[currentMarkerFocus].latitude,
+        latitudeDelta: 0.02,
+        longitudeDelta: 0.02,
+      })
+      .start();
+  }, [currentMarkerFocus]);
+
   return (
-    <MapView
+    <Animated
       provider="google"
       customMapStyle={MapStyle}
       style={[styles.map, style]}
-      region={{
-        ...steps[currentMarkerFocus],
-        latitudeDelta: 0.02,
-        longitudeDelta: 0.02,
-      }}
+      region={animatedRegion}
     >
       {/* Markers */}
       {steps.map((marker, index) => (
@@ -40,7 +55,7 @@ const Map = ({ style, steps, data, currentMarkerFocus }) => {
         strokeWidth={2}
         lineDashPattern={lineDashPattern}
       />
-    </MapView>
+    </Animated>
   );
 };
 
