@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     flex: 1,
+    marginBottom: wp(13),
   },
   text: {
     fontSize: wp(10),
