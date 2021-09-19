@@ -1,4 +1,5 @@
 import React, {useContext, useEffect} from 'react';
+import {View, Text} from 'react-native';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import HomeScreen from './src/screens/HomeScreen';
@@ -44,7 +45,8 @@ const ProfilStack = createNativeStackNavigator();
 
 const HomeStackScreen = () => {
   return (
-    <HomeStack.Navigator>
+    <HomeStack.Navigator
+      screenOptions={{headerShown: false, gestureEnabled: false}}>
       <HomeStack.Screen name="Home" component={HomeScreen} />
       <HomeStack.Screen name="DetailLieu" component={DetailLieuScreen} />
     </HomeStack.Navigator>
@@ -53,7 +55,8 @@ const HomeStackScreen = () => {
 
 const TravelStackScreen = () => {
   return (
-    <TravelStack.Navigator>
+    <TravelStack.Navigator
+      screenOptions={{headerShown: false, gestureEnabled: false}}>
       <TravelStack.Screen name="Travel" component={TravelScreen} />
     </TravelStack.Navigator>
   );
@@ -61,7 +64,8 @@ const TravelStackScreen = () => {
 
 const SearchStackScreen = () => {
   return (
-    <SearchStack.Navigator>
+    <SearchStack.Navigator
+      screenOptions={{headerShown: false, gestureEnabled: false}}>
       <SearchStack.Screen name="Search" component={SearchScreen} />
     </SearchStack.Navigator>
   );
@@ -69,7 +73,8 @@ const SearchStackScreen = () => {
 
 const ProfilStackScreen = () => {
   return (
-    <ProfilStack.Navigator>
+    <ProfilStack.Navigator
+      screenOptions={{headerShown: false, gestureEnabled: false}}>
       <ProfilStack.Screen name="Profil" component={ProfilScreen} />
     </ProfilStack.Navigator>
   );
@@ -120,6 +125,8 @@ const TabScreen = () => {
         showLabel: false,
         inactiveTintColor: '#c5c5c5',
         activeTintColor: '#327fa0',
+        headerShown: false,
+        gestureEnabled: false,
       })}>
       <Tab.Screen name="HomeStack" component={HomeStackScreen} />
       <Tab.Screen name="TravelStack" component={TravelStackScreen} />
@@ -149,7 +156,7 @@ const App = () => {
     <NavigationContainer ref={navigationRef}>
       <AppStack.Navigator
         screenOptions={{headerShown: false, gestureEnabled: false}}>
-        {auth.token ? (
+        {auth.token !== '' ? (
           <AppStack.Screen name="Tab" component={TabScreen} />
         ) : (
           <AppStack.Screen name="AuthStack" component={AuthStackScreen} />

@@ -73,7 +73,10 @@ const tryLocalSignIn =
     const token = await AsyncStorage.getItem('token');
     if (token) {
       try {
-        dispatch({type: 'signin', payload: {token: token, localLoading: true}});
+        dispatch({
+          type: 'signin',
+          payload: {token: token, localLoading: false},
+        });
       } catch (err) {
         console.log(err);
       }
@@ -95,5 +98,5 @@ const signout = dispatch => async () => {
 export const {Provider, Context} = createDataContext(
   authReducer,
   {signin, signup, signout, removeError, tryLocalSignIn},
-  {token: null, error: '', loading: false, localLoading: false},
+  {token: null, error: '', loading: false, localLoading: true},
 );

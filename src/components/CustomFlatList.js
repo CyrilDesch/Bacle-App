@@ -78,6 +78,7 @@ const CustomFlatList = ({data}) => {
 const styles = StyleSheet.create({
   list: {
     paddingLeft: wp(5),
+    backgroundColor: 'red',
   },
   imageContainer1: {
     marginRight: wp(5),
@@ -120,8 +121,7 @@ const styles = StyleSheet.create({
     borderRadius: wp(5),
   },
   center: {
-    width: wp(100),
-    justifyContent: 'center',
+    backgroundColor: 'red',
   },
 });
 
