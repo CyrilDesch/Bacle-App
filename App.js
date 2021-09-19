@@ -1,133 +1,171 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
-import {createAppContainer, createSwitchNavigator} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
-import {createBottomTabNavigator} from 'react-navigation-tabs';
-import {Provider as AuthProvider} from './src/context/AuthContext';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import HomeScreen from './src/screens/HomeScreen';
 import TravelScreen from './src/screens/TravelScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import ProfilScreen from './src/screens/ProfilScreen';
 import DetailLieuScreen from './src/screens/DetailLieuScreen';
-import WaitSignScreen from './src/screens/Auth/WaitSignScreen';
 import SigninScreen from './src/screens/Auth/SigninScreen';
 import SignupScreen from './src/screens/Auth/SignupScreen';
-import NavigationRef from './src/navigationRef';
+import {navigationRef} from './src/navigationRef';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {
+  Context as AuthContext,
+  Provider as AuthProvider,
+} from './src/context/AuthContext';
+import {
+  Context as UserContext,
+  Provider as UserProvider,
+} from './src/context/UserContext';
 
-const authNavigator = createStackNavigator({
-  WaitSign: WaitSignScreen,
-  SignUp: SignupScreen,
-  SignIn: SigninScreen,
-});
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-const homeStackNavigator = createStackNavigator(
-  {
-    Home: HomeScreen,
-    DetailLieu: DetailLieuScreen,
-  },
-  {
-    headerMode: 'none',
-    navigationOptions: {
-      headerShown: 'false',
-      tabBarIcon: ({tintColor}) => (
-        <Icon name="home" size={wp(8)} color={tintColor} />
-      ),
-    },
-  },
-);
+const AppStack = createNativeStackNavigator();
 
-const travelStackNavigator = createStackNavigator(
-  {
-    Travel: TravelScreen,
-  },
-  {
-    headerMode: 'none',
-    navigationOptions: {
-      headerShown: 'false',
-      tabBarIcon: ({tintColor}) => (
-        <Icon name="find" size={wp(8)} color={tintColor} />
-      ),
-    },
-  },
-);
+const AuthStack = createNativeStackNavigator();
+const AuthStackScreen = () => {
+  return (
+    <AuthStack.Navigator
+      screenOptions={{headerShown: false, gestureEnabled: false}}>
+      <AuthStack.Screen name="SignUp" component={SignupScreen} />
+      <AuthStack.Screen name="SignIn" component={SigninScreen} />
+    </AuthStack.Navigator>
+  );
+};
 
-const searchStackNavigator = createStackNavigator(
-  {
-    Search: SearchScreen,
-  },
-  {
-    headerMode: 'none',
-    navigationOptions: {
-      headerShown: 'false',
-      tabBarIcon: ({tintColor}) => (
-        <Icon name="search1" size={wp(8)} color={tintColor} />
-      ),
-    },
-  },
-);
+const Tab = createBottomTabNavigator();
+const HomeStack = createNativeStackNavigator();
+const TravelStack = createNativeStackNavigator();
+const SearchStack = createNativeStackNavigator();
+const ProfilStack = createNativeStackNavigator();
 
-const profilStackNavigator = createStackNavigator(
-  {
-    Profil: ProfilScreen,
-  },
-  {
-    headerMode: 'none',
-    navigationOptions: {
-      headerShown: 'false',
-      tabBarIcon: ({tintColor}) => (
-        <Icon name="user" size={wp(8)} color={tintColor} />
-      ),
-    },
-  },
-);
+const HomeStackScreen = () => {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen name="Home" component={HomeScreen} />
+      <HomeStack.Screen name="DetailLieu" component={DetailLieuScreen} />
+    </HomeStack.Navigator>
+  );
+};
 
-const bottomBarNavigator = createBottomTabNavigator(
-  {
-    HomeStack: homeStackNavigator,
-    TravelStack: travelStackNavigator,
-    SearchStack: searchStackNavigator,
-    ProfilStack: profilStackNavigator,
-  },
-  {
-    tabBarOptions: {
-      style: {
-        borderTopLeftRadius: wp(5),
-        borderTopRightRadius: wp(5),
-        height: wp(15),
-        position: 'absolute',
-        bottom: 0,
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 9,
+const TravelStackScreen = () => {
+  return (
+    <TravelStack.Navigator>
+      <TravelStack.Screen name="Travel" component={TravelScreen} />
+    </TravelStack.Navigator>
+  );
+};
+
+const SearchStackScreen = () => {
+  return (
+    <SearchStack.Navigator>
+      <SearchStack.Screen name="Search" component={SearchScreen} />
+    </SearchStack.Navigator>
+  );
+};
+
+const ProfilStackScreen = () => {
+  return (
+    <ProfilStack.Navigator>
+      <ProfilStack.Screen name="Profil" component={ProfilScreen} />
+    </ProfilStack.Navigator>
+  );
+};
+
+const TabScreen = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        tabBarStyle: {
+          style: {
+            borderTopLeftRadius: wp(5),
+            borderTopRightRadius: wp(5),
+            height: wp(15),
+            position: 'absolute',
+            bottom: 0,
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 9,
+            },
+            shadowOpacity: 0.5,
+            shadowRadius: 12.35,
+
+            elevation: 19,
+            backgroundColor: 'white',
+            borderTopWidth: 0,
+          },
         },
-        shadowOpacity: 0.5,
-        shadowRadius: 12.35,
+        tabBarIcon: ({color}) => {
+          let iconName;
+          switch (route) {
+            case 'HomeStack':
+              iconName = 'home';
+              break;
+            case 'TravelStack':
+              iconName = 'find';
+              break;
+            case 'SearchStack':
+              iconName = 'search1';
+              break;
+            case 'ProfilStack':
+              iconName = 'user';
+              break;
+          }
+          return <Icon name={iconName} size={wp(8)} color={color} />;
+        },
+        showLabel: false,
+        inactiveTintColor: '#c5c5c5',
+        activeTintColor: '#327fa0',
+      })}>
+      <Tab.Screen name="HomeStack" component={HomeStackScreen} />
+      <Tab.Screen name="TravelStack" component={TravelStackScreen} />
+      <Tab.Screen name="SearchStack" component={SearchStackScreen} />
+      <Tab.Screen name="ProfilStack" component={ProfilStackScreen} />
+    </Tab.Navigator>
+  );
+};
 
-        elevation: 19,
-        backgroundColor: 'white',
-        borderTopWidth: 0,
-      },
-      showLabel: false,
-      inactiveTintColor: '#c5c5c5',
-      activeTintColor: '#327fa0',
-    },
-  },
-);
+const App = () => {
+  const {tryLocalSignIn, state: auth} = useContext(AuthContext);
+  const {saveUser} = useContext(UserContext);
 
-const appNavigator = createSwitchNavigator({
-  Auth: authNavigator,
-  Main: bottomBarNavigator,
-});
+  useEffect(() => {
+    tryLocalSignIn({saveUser});
+  }, []);
 
-const App = createAppContainer(appNavigator);
+  if (auth.localLoading) {
+    return (
+      <View style={{backgroundColor: '#fe9b18'}}>
+        <Text>Wait</Text>
+      </View>
+    );
+  }
+
+  return (
+    <NavigationContainer ref={navigationRef}>
+      <AppStack.Navigator
+        screenOptions={{headerShown: false, gestureEnabled: false}}>
+        {auth.token ? (
+          <AppStack.Screen name="Tab" component={TabScreen} />
+        ) : (
+          <AppStack.Screen name="AuthStack" component={AuthStackScreen} />
+        )}
+      </AppStack.Navigator>
+    </NavigationContainer>
+  );
+};
+
 export default () => {
   return (
     <SafeAreaProvider>
       <AuthProvider>
-        <App ref={NavigationRef.setNavigator} />
+        <UserProvider>
+          <App />
+        </UserProvider>
       </AuthProvider>
     </SafeAreaProvider>
   );

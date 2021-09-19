@@ -1,21 +1,13 @@
-import { NavigationActions } from 'react-navigation';
+// RootNavigation.js
 
-let _navigator;
+import {createNavigationContainerRef} from '@react-navigation/native';
 
-function setNavigator(navigatorRef) {
-  _navigator = navigatorRef;
+export const navigationRef = createNavigationContainerRef();
+
+export function navigate(name, params) {
+  if (navigationRef.isReady()) {
+    navigationRef.navigate(name, params);
+  }
 }
 
-function navigate(routeName, params) {
-  _navigator.dispatch(
-    NavigationActions.navigate({
-      routeName,
-      params,
-    })
-  );
-}
-
-export default {
-  navigate,
-  setNavigator
-};
+// add other navigation functions that you need and export them

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {TouchableOpacity} from 'react-native';
+import {Pressable} from 'react-native';
 import {FlatList, Image, StyleSheet, View} from 'react-native';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {Shadow} from 'react-native-neomorph-shadows';
@@ -28,7 +28,7 @@ const CustomFlatList = ({data}) => {
         data={data}
         renderItem={({item, index}) => (
           <View>
-            <TouchableOpacity
+            <Pressable
               onPress={() =>
                 navigation.navigate('DetailLieu', {lieu: item.item1})
               }>
@@ -43,8 +43,8 @@ const CustomFlatList = ({data}) => {
                   source={{uri: item.item1.urlImage}}
                 />
               </Shadow>
-            </TouchableOpacity>
-            <TouchableOpacity
+            </Pressable>
+            <Pressable
               onPress={() =>
                 navigation.navigate('DetailLieu', {lieu: item.item2})
               }>
@@ -59,7 +59,7 @@ const CustomFlatList = ({data}) => {
                   source={{uri: item.item2.urlImage}}
                 />
               </Shadow>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         )}
       />
