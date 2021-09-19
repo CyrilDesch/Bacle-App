@@ -84,6 +84,7 @@ const TabScreen = () => {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
+        lazy: false,
         tabBarStyle: {
           borderTopLeftRadius: wp(5),
           borderTopRightRadius: wp(5),
@@ -152,8 +153,11 @@ const App = () => {
   return (
     <NavigationContainer ref={navigationRef}>
       <AppStack.Navigator
-        screenOptions={{headerShown: false, gestureEnabled: false}}>
-        {auth.token !== '' ? (
+        screenOptions={{
+          headerShown: false,
+          gestureEnabled: false,
+        }}>
+        {auth.token && auth.token !== '' ? (
           <AppStack.Screen name="Tab" component={TabScreen} />
         ) : (
           <AppStack.Screen name="AuthStack" component={AuthStackScreen} />

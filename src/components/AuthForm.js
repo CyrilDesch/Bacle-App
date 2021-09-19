@@ -1,15 +1,24 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
 import {View, StyleSheet, Pressable} from 'react-native';
 import {Input, Button} from 'react-native-elements';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import * as navigation from '../navigationRef';
+import {Context as UserContext} from '../context/UserContext';
+import {Context as AuthContext} from '../context/AuthContext';
 
 const AuthForm = ({buttonLabel, authMethod}) => {
   const [email, setEmail] = useState('julie.bosse@gmail.com');
   const [password, setPassword] = useState('test');
   const [showPassword, setShowPassword] = useState(false);
+  const {saveUser} = useContext(UserContext);
+  const {state, removeError} = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    console.log('test');
+    if (state.error && state.error != '') setLoading(false);
+  }, [state]);
 
   return (
     <View>
@@ -42,12 +51,19 @@ const AuthForm = ({buttonLabel, authMethod}) => {
         }
         placeholderTextColor="#989898"
         secureTextEntry={!showPassword}
+        errorMessage={state.error}
+        errorStyle={styles.error}
       />
       <Button
+        loading={loading}
         buttonStyle={styles.button}
         title={buttonLabel}
         TouchableComponent={Pressable}
-        onPress={() => authMethod({email, password})}
+        onPress={() => {
+          removeError();
+          setLoading(true);
+          authMethod({email, password, saveUser});
+        }}
       />
       <View height={wp(5)} />
       <Button
@@ -95,6 +111,13 @@ const styles = StyleSheet.create({
     marginLeft: wp(2.5),
     height: wp(13),
     backgroundColor: '#1c3052',
+  },
+  error: {
+    fontSize: wp(3.5),
+    padding: wp(1.5),
+    fontFamily: 'Montserrat-Regular',
+    textAlign: 'center',
+    color: '#ae0000',
   },
 });
 

@@ -1,21 +1,19 @@
 import createDataContext from '../context/createDataContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as navigation from '../navigationRef';
 
 const authReducer = (state, action) => {
   switch (action.type) {
     case 'signup':
-      return {...state, token: action.payload, error: '', loading: true};
+      return {...state, token: action.payload, error: ''};
     case 'signin':
       return {
         ...state,
         token: action.payload.token,
         error: '',
-        loading: true,
         localLoading: action.payload.localLoading,
       };
     case 'signout':
-      return {...state, token: null, loading: true};
+      return {...state, token: null, loading: false};
     case 'add_error':
       return {...state, error: action.payload};
     case 'remove_error':
@@ -89,7 +87,6 @@ const signout = dispatch => async () => {
   try {
     await AsyncStorage.removeItem('token');
     dispatch({type: 'signout'});
-    navigation.navigate('SignIn');
   } catch (err) {
     console.log(err);
   }
@@ -98,5 +95,5 @@ const signout = dispatch => async () => {
 export const {Provider, Context} = createDataContext(
   authReducer,
   {signin, signup, signout, removeError, tryLocalSignIn},
-  {token: null, error: '', loading: false, localLoading: true},
+  {token: null, error: '', localLoading: true},
 );
