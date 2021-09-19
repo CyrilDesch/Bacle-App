@@ -13,11 +13,12 @@ const CustomFlatList = ({data}) => {
         horizontal
         contentContainerStyle={styles.list}
         overScrollMode="never"
+        showsHorizontalScrollIndicator={false}
         onScroll={e => {
           let pageNumber =
             Math.min(
               Math.max(
-                Math.floor(e.nativeEvent.contentOffset.x / wp(80) + 0.5) + 1,
+                Math.floor(e.nativeEvent.contentOffset.x / wp(30) + 0.5) + 1,
                 0,
               ),
               data.length,
@@ -65,7 +66,7 @@ const CustomFlatList = ({data}) => {
       />
       <View style={styles.center}>
         <PaginationDot
-          activeDotColor="#f96f2d"
+          activeDotColor="#1c3052"
           curPage={currentPage}
           maxPage={data.length < 10 ? data.length : 10}
           sizeRatio={0.1}
@@ -78,7 +79,7 @@ const CustomFlatList = ({data}) => {
 const styles = StyleSheet.create({
   list: {
     paddingLeft: wp(5),
-    backgroundColor: 'red',
+    paddingBottom: wp(4),
   },
   imageContainer1: {
     marginRight: wp(5),
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
     borderRadius: wp(5),
   },
   center: {
-    backgroundColor: 'red',
+    alignItems: 'center',
   },
 });
 

@@ -1,11 +1,11 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
-const ScreenTitle = ({ title1, title2 }) => {
+const ScreenTitle = ({title1, title2}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title1}>{title1}</Text>
@@ -17,20 +17,20 @@ const ScreenTitle = ({ title1, title2 }) => {
 const styles = StyleSheet.create({
   container: {
     width: wp(100),
-    marginLeft: wp(10),
+    marginLeft: wp(5),
     marginTop: wp(2),
   },
   title1: {
     fontSize: wp(6),
     lineHeight: wp(8),
-    alignSelf: "flex-start",
-    fontFamily: "Montserrat-Medium",
+    alignSelf: 'flex-start',
+    fontFamily: 'Montserrat-Medium',
   },
   title2: {
     fontSize: wp(6.5),
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
     lineHeight: wp(6.5),
-    fontFamily: "Montserrat-SemiBold",
+    fontFamily: 'Montserrat-SemiBold',
   },
 });
 

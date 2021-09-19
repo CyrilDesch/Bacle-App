@@ -85,28 +85,28 @@ const TabScreen = () => {
     <Tab.Navigator
       screenOptions={({route}) => ({
         tabBarStyle: {
-          style: {
-            borderTopLeftRadius: wp(5),
-            borderTopRightRadius: wp(5),
-            height: wp(15),
-            position: 'absolute',
-            bottom: 0,
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 9,
-            },
-            shadowOpacity: 0.5,
-            shadowRadius: 12.35,
-
-            elevation: 19,
-            backgroundColor: 'white',
-            borderTopWidth: 0,
+          borderTopLeftRadius: wp(5),
+          borderTopRightRadius: wp(5),
+          height: wp(15),
+          position: 'absolute',
+          bottom: 0,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 9,
           },
+          shadowOpacity: 0.5,
+          shadowRadius: 12.35,
+          elevation: 19,
+          backgroundColor: 'white',
+          borderTopWidth: 0,
         },
+        tabBarShowLabel: false,
+        tabBarInactiveTintColor: '#c5c5c5',
+        tabBarActiveTintColor: '#327fa0',
         tabBarIcon: ({color}) => {
           let iconName;
-          switch (route) {
+          switch (route.name) {
             case 'HomeStack':
               iconName = 'home';
               break;
@@ -122,9 +122,6 @@ const TabScreen = () => {
           }
           return <Icon name={iconName} size={wp(8)} color={color} />;
         },
-        showLabel: false,
-        inactiveTintColor: '#c5c5c5',
-        activeTintColor: '#327fa0',
         headerShown: false,
         gestureEnabled: false,
       })}>

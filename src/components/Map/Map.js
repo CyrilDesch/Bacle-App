@@ -62,14 +62,14 @@ const Map = ({style, steps, data, currentMarkerFocus}) => {
         latitudeDelta: 0.03,
         longitudeDelta: 0.03,
       }}
-      style={[styles.map, style]}>
+      style={[style]}>
       {/* Markers */}
       {steps.map((marker, index) => (
         <Marker
           key={index}
           coordinate={marker}
           title={data[index].display_name.split(',')[0]}
-          icon={{uri: 'https://static.thenounproject.com/png/8262-100.png'}}
+          icon={{uri: 'https://static.thenounproject.com/png/8262-200.png'}}
         />
       ))}
       <Polyline
