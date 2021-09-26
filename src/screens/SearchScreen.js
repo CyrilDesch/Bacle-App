@@ -16,10 +16,12 @@ const SearchScreen = () => {
 
   const callApi = async() => {
     const res = await axios.get(
-      "http://bacle-node-api.herokuapp.com/search",
+      "https://nominatim.openstreetmap.org/",
       {
         params: { 
-          q: text
+          q: text,
+          format: "json",
+          "accept-language": "fr"
         } 
       }
     );
