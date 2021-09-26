@@ -1,16 +1,34 @@
 import axios from 'axios';
 import React, {useEffect, useState, useRef} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, PermissionsAndroid} from 'react-native';
 import {Marker, Polyline, Animated} from 'react-native-maps';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {decode} from '../../decode';
+import Geolocation from '@react-native-community/geolocation';
+
+
+// Permet de récupérer uniquement les latitudes et longitudes (sous forme d'objet LatLng) depuis une liste de points géographiques d'OpenStreetMap
+const getLatLng = (placeList) => {
+  const output = [];
+  for (let i = 0; i < placeList.length; i++) {
+    if (placeList[i].lat && placeList[i].lon) {
+      output.push({
+        latitude: Number(placeList[i].lat),
+        longitude: Number(placeList[i].lon),
+      });
+    }
+  }
+  return output;
+};
+
 
 const Map = ({style, steps, data, currentMarkerFocus}) => {
   const map = useRef();
   const [polyline, setPolyline] = useState([]);
+
   useEffect(() => {
     const chemin = async () => {
-      if (steps.length > 1) {
+      if (steps != null && steps.length > 1) {
         let baseUrl = `https://router.hereapi.com/v8/routes?apiKey=xQMtiBGNDxwdDFit6X0LIF3FlEyWRuXscq1BeTVC24E&origin=${
           steps[0].latitude
         },${steps[0].longitude}&destination=${
@@ -40,16 +58,38 @@ const Map = ({style, steps, data, currentMarkerFocus}) => {
     chemin();
   }, []);
 
-  useEffect(() => {
-    map.current.animateToRegion(
-      {
-        longitude: steps[currentMarkerFocus].longitude,
-        latitude: steps[currentMarkerFocus].latitude,
-        latitudeDelta: 0.03,
-        longitudeDelta: 0.03,
+  // ERROR: "Location Permission not granted."
+  // Je voulais mettre "initialRegion" à la géolocalisation de l'appareil si il n'y a pas d'étape dans "steps".
+  const getPosition = () => {
+    console.log("Querying position");
+    Geolocation.getCurrentPosition(
+      (position) => {
+        console.log("Position: ", position);
       },
-      500,
+      (error) => {
+        console.log(error.message);
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: 30000,
+        maximumAge: 1000
+      }
     );
+    return null;
+  }
+
+  useEffect(() => {
+    if (steps != null && steps.length != 0 && currentMarkerFocus != null) {
+      map.current.animateToRegion(
+        {
+          longitude: steps[currentMarkerFocus].longitude,
+          latitude: steps[currentMarkerFocus].latitude,
+          latitudeDelta: 0.03,
+          longitudeDelta: 0.03,
+        },
+        500,
+      );
+    }
   }, [currentMarkerFocus]);
 
   return (
@@ -57,11 +97,20 @@ const Map = ({style, steps, data, currentMarkerFocus}) => {
       ref={map}
       provider="google"
       customMapStyle={MapStyle}
-      initialRegion={{
-        ...steps[0],
-        latitudeDelta: 0.03,
-        longitudeDelta: 0.03,
-      }}
+      initialRegion={ 
+        (steps != null && steps.length != 0) 
+          ? {
+            ...steps[0],
+            latitudeDelta: 0.03,
+            longitudeDelta: 0.03,
+          }
+          : {
+            latitude: 48.858260200000004,   // Par défaut : Tour Eiffel
+            longitude: 2.2944990543196795,  // TODO: Mettre par défaut la géolocalisation de l'appareil.
+            latitudeDelta: 0.03,
+            longitudeDelta: 0.03,
+          }
+      }
       style={[style]}>
       {/* Markers */}
       {steps.map((marker, index) => (
@@ -469,4 +518,6 @@ const MapStyle = [
   },
 ];
 
+
+export {getLatLng};
 export default Map;

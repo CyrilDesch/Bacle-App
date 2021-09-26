@@ -7,7 +7,7 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Map from '../components/Map/Map';
+import Map, {getLatLng} from '../components/Map/Map';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 // Contient une petite carte avec des balises reliées entre elles (pour simuler un trajet)
@@ -15,21 +15,6 @@ const TravelScreen = () => {
   const carouselRef = useRef();
   const [currentMarkerFocus, setCurrentMarkerFocus] = useState(0);
   const circuit = require('../../customData.json').circuit;
-
-  // Permet de récupérer uniquement les latitudes et longitudes (sous forme d'objet LatLng) depuis une liste de points géographiques d'OpenStreetMap
-  const getLatLng = placeList => {
-    const output = [];
-    for (let i = 0; i < placeList.length; i++) {
-      if (placeList[i].lat && placeList[i].lon) {
-        output.push({
-          latitude: Number(placeList[i].lat),
-          longitude: Number(placeList[i].lon),
-        });
-      }
-    }
-    return output;
-  };
-
   const steps = getLatLng(circuit);
 
   return (

@@ -1,8 +1,14 @@
 import axios from 'axios';
+
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
 import { Input } from 'react-native-elements';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp, widthPercentageToDP as wp,} from 'react-native-responsive-screen';
+
+import {SafeAreaView} from 'react-native-safe-area-context';
+import Map, {getLatLng} from '../components/Map/Map';
+import Icon from 'react-native-vector-icons/AntDesign';
+
 
 const SearchScreen = () => {
   const [text, setText] = useState("");
@@ -10,12 +16,10 @@ const SearchScreen = () => {
 
   const callApi = async() => {
     const res = await axios.get(
-      "https://nominatim.openstreetmap.org/",
+      "http://bacle-node-api.herokuapp.com/search",
       {
         params: { 
-          q: text, 
-          format: "json",
-          "accept-language": "fr"
+          q: text
         } 
       }
     );
@@ -35,6 +39,14 @@ const SearchScreen = () => {
           <Text>{item.display_name.split(",")[0]} à {item.display_name.split(",")[4]}</Text>
         }
       />
+      <SafeAreaView style={styles.container}>
+        <Map
+          style={styles.map}
+          steps={getLatLng(data)}
+          data={data}
+          currentMarkerFocus={null}
+        />
+      </SafeAreaView>
     </View>
   );
 };
@@ -48,7 +60,11 @@ const styles = StyleSheet.create({
   text: {
     fontSize: wp(10),
     fontFamily: 'Montserrat-Bold'
-  }
+  },
+  map: {
+    width: wp(100),
+    height: hp(100),
+  },
 });
 
 export default SearchScreen;
