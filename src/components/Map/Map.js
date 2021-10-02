@@ -21,7 +21,6 @@ const Map = ({style, steps, data, currentMarkerFocus}) => {
         for (let i = 1; i < steps.length - 1; i++) {
           baseUrl += `&via=${steps[i].latitude},${steps[i].longitude}`;
         }
-        console.log(baseUrl);
         axios
           .get(baseUrl)
           .then(response => {
