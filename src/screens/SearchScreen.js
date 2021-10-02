@@ -1,12 +1,13 @@
-import axios from 'axios';
+import BacleAPI from '../api/BacleAPI';"../api/BacleAPI"
 
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
 import { Input } from 'react-native-elements';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 import Map, { getLatLng } from '../components/Map/Map';
+
 import Icon from 'react-native-vector-icons/AntDesign';
 
 
@@ -14,20 +15,16 @@ const SearchScreen = () => {
   const [text, setText] = useState("");
   const [data, setData] = useState([]);
 
-  const callApi = async() => {
-    const res = await axios.get(
-      "https://bacle-node-api.herokuapp.com/search",
-      {
-        params: { 
-          q: text
-        } 
-      }
-    );
+  const callApi = async () => {
+    const res = await BacleAPI.search(text);
     const data = res.data.filter(value => (value.category == "tourism" || value.category == "boundary"));
+    
     console.log("--- BACLE SEARCH -----------------------------------");
-    console.log(res.data);
+    console.log(data);
     console.log("----------------------------------------------------");
-    setData(data);  }
+    
+    setData(data);
+  }
 
   return(
     <View style={styles.container}>
