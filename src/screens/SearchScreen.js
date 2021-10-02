@@ -3,10 +3,10 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
 import { Input } from 'react-native-elements';
-import {heightPercentageToDP as hp, widthPercentageToDP as wp,} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
-import {SafeAreaView} from 'react-native-safe-area-context';
-import Map, {getLatLng} from '../components/Map/Map';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Map, { getLatLng } from '../components/Map/Map';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 
@@ -16,19 +16,18 @@ const SearchScreen = () => {
 
   const callApi = async() => {
     const res = await axios.get(
-      "https://nominatim.openstreetmap.org/",
+      "https://bacle-node-api.herokuapp.com/search",
       {
         params: { 
-          q: text,
-          format: "json",
-          "accept-language": "fr"
+          q: text
         } 
       }
     );
-    const data = res.data.filter(value => (value.class == "tourism" || value.class == "boundary"));
-    console.log(data);
-    setData(data);
-  }
+    const data = res.data.filter(value => (value.category == "tourism" || value.category == "boundary"));
+    console.log("--- BACLE SEARCH -----------------------------------");
+    console.log(res.data);
+    console.log("----------------------------------------------------");
+    setData(data);  }
 
   return(
     <View style={styles.container}>
