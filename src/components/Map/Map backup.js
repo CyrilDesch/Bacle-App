@@ -8,7 +8,7 @@ import Geolocation from '@react-native-community/geolocation';
 
 
 // Permet de récupérer uniquement les latitudes et longitudes (sous forme d'objet LatLng) depuis une liste de points géographiques d'OpenStreetMap
-const getLatLngList = (placeList) => {
+const getLatLng = (placeList) => {
   const output = [];
   for (let i = 0; i < placeList.length; i++) {
     if (placeList[i].lat && placeList[i].lon) {
@@ -21,31 +21,42 @@ const getLatLngList = (placeList) => {
   return output;
 };
 
-const getMarkerList = (placeList) => {
-  const output = [];
-  for (let i = 0; i < placeList.length; i++) {
-    if (placeList[i].lat && placeList[i].lon) {
-      output.push({
-        latitude: Number(placeList[i].lat),
-        longitude: Number(placeList[i].lon),
-        title: String(
-            (placeList[i].display_name != null && placeList[i].display_name.length > 0) 
-            ? placeList[i].display_name.split(',')[0]
-            : ""
-          )
-      });
-    }
-  }
-  return output;
-};
 
-
-// markers: { LatLng, title }[]
-// polylines: Marker[][]
-// position: LatLng
-const Map = ({style, markers, polylines, position}) => {
+const Map = ({style, steps, data, currentMarkerFocus}) => {
   const map = useRef();
+  const [polyline, setPolyline] = useState([]);
 
+  useEffect(() => {
+    const chemin = async () => {
+      if (steps != null && steps.length > 1) {
+        let baseUrl = `https://router.hereapi.com/v8/routes?apiKey=xQMtiBGNDxwdDFit6X0LIF3FlEyWRuXscq1BeTVC24E&origin=${
+          steps[0].latitude
+        },${steps[0].longitude}&destination=${
+          steps[steps.length - 1].latitude
+        },${
+          steps[steps.length - 1].longitude
+        }&transportMode=pedestrian&return=polyline`;
+        for (let i = 1; i < steps.length - 1; i++) {
+          baseUrl += `&via=${steps[i].latitude},${steps[i].longitude}`;
+        }
+        console.log(baseUrl);
+        axios
+          .get(baseUrl)
+          .then(response => {
+            let array = [];
+            response.data.routes[0].sections.forEach(element => {
+              array = [...array, ...decode(element.polyline).polyline];
+            });
+            setPolyline(array);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+    };
+
+    chemin();
+  }, []);
 
   // ERROR: "Location Permission not granted."
   // Je voulais mettre "initialRegion" à la géolocalisation de l'appareil si il n'y a pas d'étape dans "steps".
@@ -68,18 +79,18 @@ const Map = ({style, markers, polylines, position}) => {
   }
 
   useEffect(() => {
-    if (position != null) {
+    if (steps != null && steps.length != 0 && currentMarkerFocus != null) {
       map.current.animateToRegion(
         {
-          ...position,
+          longitude: steps[currentMarkerFocus].longitude,
+          latitude: steps[currentMarkerFocus].latitude,
           latitudeDelta: 0.03,
           longitudeDelta: 0.03,
         },
         500,
       );
     }
-  }, [position]);
-
+  }, [currentMarkerFocus]);
 
   return (
     <Animated
@@ -87,9 +98,9 @@ const Map = ({style, markers, polylines, position}) => {
       provider="google"
       customMapStyle={MapStyle}
       initialRegion={ 
-        (position != null) 
+        (steps != null && steps.length != 0) 
           ? {
-            ...position,
+            ...steps[0],
             latitudeDelta: 0.03,
             longitudeDelta: 0.03,
           }
@@ -101,28 +112,23 @@ const Map = ({style, markers, polylines, position}) => {
           }
       }
       style={[style]}>
-
-      {markers.map((marker, index) => (
+      {/* Markers */}
+      {steps.map((marker, index) => (
         <Marker
           key={index}
-          coordinate={{
-            latitude: marker.latitude, 
-            longitude: marker.longitude
-          }}
-          title={marker.title}
+          coordinate={marker}
+          title={data[index].display_name.split(',')[0]}
           icon={{uri: 'https://static.thenounproject.com/png/8262-200.png'}}
         />
       ))}
       <Polyline
-        coordinates={polylines}
+        coordinates={polyline}
         strokeColor="#f3c600"
         strokeWidth={wp(1.5)}
       />
-
     </Animated>
   );
 };
-
 
 const styles = StyleSheet.create({
   markerContainer: {
@@ -513,5 +519,5 @@ const MapStyle = [
 ];
 
 
-export { getLatLngList, getMarkerList };
+export { getLatLng };
 export default Map;

@@ -6,7 +6,7 @@ import { Input } from 'react-native-elements';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import Map, { getLatLng } from '../components/Map/Map';
+import SearchMap from '../components/Map/SearchMap';
 
 import Icon from 'react-native-vector-icons/AntDesign';
 
@@ -22,11 +22,11 @@ const SearchScreen = () => {
     console.log("--- BACLE SEARCH -----------------------------------");
     console.log(data);
     console.log("----------------------------------------------------");
-    
-    setData(data);
-  }
 
-  return(
+    setData(data);
+  };
+
+  return (
     <View style={styles.container}>
       <Text style={styles.text}>Search</Text>
       <Input value={text} onChangeText={setText} onSubmitEditing={callApi} />
@@ -38,11 +38,9 @@ const SearchScreen = () => {
         }
       />
       <SafeAreaView style={styles.container}>
-        <Map
+        <SearchMap
           style={styles.map}
-          steps={getLatLng(data)}
-          data={data}
-          currentMarkerFocus={null}
+          searchData={data}
         />
       </SafeAreaView>
     </View>
@@ -64,5 +62,6 @@ const styles = StyleSheet.create({
     height: hp(100),
   },
 });
+
 
 export default SearchScreen;

@@ -7,29 +7,27 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Map, {getLatLng} from '../components/Map/Map';
+import TravelMap from '../components/Map/TravelMap';
 import Icon from 'react-native-vector-icons/AntDesign';
 
-// Contient une petite carte avec des balises reliées entre elles (pour simuler un trajet)
+
 const TravelScreen = () => {
   const carouselRef = useRef();
-  const [currentMarkerFocus, setCurrentMarkerFocus] = useState(0);
+  const [focusedPlaceIndex, setFocusedPlaceIndex] = useState(0);
   const circuit = require('../../customData.json').circuit;
-  const steps = getLatLng(circuit);
 
   return (
     <SafeAreaView style={styles.container}>
-      {steps ? (
-        <Map
+      {circuit ? (
+        <TravelMap
           style={styles.map}
-          steps={steps}
-          data={circuit}
-          currentMarkerFocus={currentMarkerFocus}
+          travelData={circuit}
+          focusedPlaceIndex={focusedPlaceIndex}
         />
       ) : null}
       <View style={styles.slider}>
         <Carousel
-          onSnapToItem={index => setCurrentMarkerFocus(index)}
+          onSnapToItem={index => setFocusedPlaceIndex(index)}
           ref={carouselRef}
           data={circuit}
           renderItem={({item}) => (

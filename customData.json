@@ -191,7 +191,7 @@
       "lat": "48.8707573",
       "lon": "2.3053312",
       "display_name": "Champs Élysées, Promenade des Champs-Élysées, Quartier du Faubourg-du-Roule, Paris 8e Arrondissement, Paris, Île-de-France, France métropolitaine, 75008, France",
-      "class": "tourism",
+      "category": "tourism",
       "type": "attraction",
       "importance": 0.6389143157033701,
       "icon": "https://nominatim.openstreetmap.org/ui/mapicons//poi_point_of_interest.p.20.png"
@@ -210,7 +210,7 @@
       "lat": "48.862527",
       "lon": "2.3000067",
       "display_name": "Pont de l'Alma, Promenade Gisèle Halimi, Quartier du Gros-Caillou, Paris 7e Arrondissement, Paris, Île-de-France, France métropolitaine, 75007, France",
-      "class": "railway",
+      "category": "railway",
       "type": "station",
       "importance": 0.7343526860531795,
       "icon": "https://nominatim.openstreetmap.org/ui/mapicons//transport_train_station2.p.20.png"
@@ -229,7 +229,7 @@
       "lat": "48.858260200000004",
       "lon": "2.2944990543196795",
       "display_name": "Tour Eiffel, 5, Avenue Anatole France, Quartier du Gros-Caillou, Paris 7e Arrondissement, Paris, Île-de-France, France métropolitaine, 75007, France",
-      "class": "tourism",
+      "category": "tourism",
       "type": "attraction",
       "importance": 0.7868325701744197,
       "icon": "https://nominatim.openstreetmap.org/ui/mapicons//poi_point_of_interest.p.20.png"
@@ -248,7 +248,7 @@
       "lat": "48.8611473",
       "lon": "2.33802768704666",
       "display_name": "Musée du Louvre, Rue Croix des Petits Champs, Quartier Les Halles, Paris 1er Arrondissement, Les Halles, Paris, Île-de-France, France métropolitaine, 75001, France",
-      "class": "tourism",
+      "category": "tourism",
       "type": "museum",
       "importance": 0.9436012537671365,
       "icon": "https://nominatim.openstreetmap.org/ui/mapicons//tourist_museum.p.20.png"
