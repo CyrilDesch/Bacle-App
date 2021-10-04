@@ -3,12 +3,13 @@ import React, {useEffect, useState, useRef} from 'react';
 import {StyleSheet, PermissionsAndroid} from 'react-native';
 import {Marker, Polyline, Animated} from 'react-native-maps';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import useLocation from '../../hooks/useLocation';
 import {decode} from '../../decode';
-import Geolocation from '@react-native-community/geolocation';
-
+import {isFocused} from '../../navigationRef';
+import {Icon} from 'react-native-elements';
 
 // Permet de récupérer uniquement les latitudes et longitudes (sous forme d'objet LatLng) depuis une liste de points géographiques d'OpenStreetMap
-const getLatLng = (placeList) => {
+const getLatLng = placeList => {
   const output = [];
   for (let i = 0; i < placeList.length; i++) {
     if (placeList[i].lat && placeList[i].lon) {
@@ -21,10 +22,12 @@ const getLatLng = (placeList) => {
   return output;
 };
 
-
 const Map = ({style, steps, data, currentMarkerFocus}) => {
   const map = useRef();
   const [polyline, setPolyline] = useState([]);
+
+  const [deviceLocation, setDeviceLocation] = useState(null);
+  useLocation(isFocused, setDeviceLocation);
 
   useEffect(() => {
     const chemin = async () => {
@@ -57,26 +60,6 @@ const Map = ({style, steps, data, currentMarkerFocus}) => {
     chemin();
   }, []);
 
-  // ERROR: "Location Permission not granted."
-  // Je voulais mettre "initialRegion" à la géolocalisation de l'appareil si il n'y a pas d'étape dans "steps".
-  const getPosition = () => {
-    console.log("Querying position");
-    Geolocation.getCurrentPosition(
-      (position) => {
-        console.log("Position: ", position);
-      },
-      (error) => {
-        console.log(error.message);
-      },
-      {
-        enableHighAccuracy: false,
-        timeout: 30000,
-        maximumAge: 1000
-      }
-    );
-    return null;
-  }
-
   useEffect(() => {
     if (steps != null && steps.length != 0 && currentMarkerFocus != null) {
       map.current.animateToRegion(
@@ -90,28 +73,56 @@ const Map = ({style, steps, data, currentMarkerFocus}) => {
       );
     }
   }, [currentMarkerFocus]);
-
+  console.log(
+    steps != null && steps.length != 0
+      ? {
+          ...steps[0],
+          latitudeDelta: 0.03,
+          longitudeDelta: 0.03,
+        }
+      : deviceLocation != null
+      ? {
+          latitude: deviceLocation.coords.latitude,
+          longitude: deviceLocation.coords.longitude,
+          latitudeDelta: 0.03,
+          longitudeDelta: 0.03,
+        }
+      : null,
+  );
   return (
     <Animated
       ref={map}
       provider="google"
       customMapStyle={MapStyle}
-      initialRegion={ 
-        (steps != null && steps.length != 0) 
+      initialRegion={
+        steps != null && steps.length != 0
           ? {
-            ...steps[0],
-            latitudeDelta: 0.03,
-            longitudeDelta: 0.03,
-          }
-          : {
-            latitude: 48.858260200000004,   // Par défaut : Tour Eiffel
-            longitude: 2.2944990543196795,  // TODO: Mettre par défaut la géolocalisation de l'appareil.
-            latitudeDelta: 0.03,
-            longitudeDelta: 0.03,
-          }
+              ...steps[0],
+              latitudeDelta: 0.03,
+              longitudeDelta: 0.03,
+            }
+          : deviceLocation != null
+          ? {
+              latitude: deviceLocation.coords.latitude,
+              longitude: deviceLocation.coords.longitude,
+              latitudeDelta: 0.03,
+              longitudeDelta: 0.03,
+            }
+          : null
       }
       style={[style]}>
       {/* Markers */}
+      {deviceLocation != null ? (
+        <Marker coordinate={deviceLocation.coords}>
+          <Icon
+            name="walk-outline"
+            reverse={true}
+            type="ionicon"
+            color="#517fa4"
+            size={wp(5)}
+          />
+        </Marker>
+      ) : null}
       {steps.map((marker, index) => (
         <Marker
           key={index}
@@ -516,7 +527,6 @@ const MapStyle = [
     ],
   },
 ];
-
 
 export {getLatLng};
 export default Map;

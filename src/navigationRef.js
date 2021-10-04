@@ -10,4 +10,10 @@ export function navigate(name, params) {
   }
 }
 
+export function isFocused() {
+  if (navigationRef.isReady()) {
+    return navigationRef.isFocused;
+  }
+}
+
 // add other navigation functions that you need and export them
