@@ -1,31 +1,39 @@
+import axios from 'axios';
+
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
 
 import Map, { getLatLngList, getMarkerList } from './Map';
 
+import { decode } from '../../decode';
+
 
 // Abstraction du component Map pour le SearchScreen.
+// travelData: Place[]              Une liste de lieux (typiquement un trajet à représenter sur la carte).
+// focusedPlaceIndex: int           L'indice du lieu dans la liste travelData qui doit être focus.
 const TravelMap = ({style, travelData, focusedPlaceIndex}) => {
   const [focusPosition, setFocusPosition] = useState({ 
     latitude: 48.858260200000004, 
     longitude: 2.2944990543196795 
   });
+  const [path, setPath] = useState([]);
+
 
   // On creation
   useEffect(() => {
+    // Pathfinding
     const chemin = async () => {
-      if (steps != null && steps.length > 1) {
+      if (travelData != null && travelData.length > 1) {
         let baseUrl = `https://router.hereapi.com/v8/routes?apiKey=xQMtiBGNDxwdDFit6X0LIF3FlEyWRuXscq1BeTVC24E&origin=${
-          steps[0].latitude
-        },${steps[0].longitude}&destination=${
-          steps[steps.length - 1].latitude
+          travelData[0].lat
+        },${travelData[0].lon}&destination=${
+          travelData[travelData.length - 1].lat
         },${
-          steps[steps.length - 1].longitude
+          travelData[travelData.length - 1].lon
         }&transportMode=pedestrian&return=polyline`;
-        for (let i = 1; i < steps.length - 1; i++) {
-          baseUrl += `&via=${steps[i].latitude},${steps[i].longitude}`;
+        for (let i = 1; i < travelData.length - 1; i++) {
+          baseUrl += `&via=${travelData[i].lat},${travelData[i].lon}`;
         }
-        console.log(baseUrl);
         axios
           .get(baseUrl)
           .then(response => {
@@ -33,7 +41,7 @@ const TravelMap = ({style, travelData, focusedPlaceIndex}) => {
             response.data.routes[0].sections.forEach(element => {
               array = [...array, ...decode(element.polyline).polyline];
             });
-            setPolyline(array);
+            setPath(array);
           })
           .catch(error => {
             console.log(error);
@@ -42,13 +50,13 @@ const TravelMap = ({style, travelData, focusedPlaceIndex}) => {
     };
 
     chemin();
-    console.log("Update chemin");
   }, []);
 
   // On update of position 
   useEffect(() => {
       if (travelData != null && travelData.length != 0 && focusedPlaceIndex != null) {
-        setFocusPosition(getLatLngList(travelData[focusedPlaceIndex])[0]);
+        const positions = getLatLngList([travelData[focusedPlaceIndex]]);
+        setFocusPosition(positions[0]);
       }
     },
     [focusedPlaceIndex]
@@ -60,7 +68,7 @@ const TravelMap = ({style, travelData, focusedPlaceIndex}) => {
     <Map
       style={style}
       markers={getMarkerList(travelData)}
-      polylines={[]}
+      polylines={path}
       position={focusPosition}
     />
   );

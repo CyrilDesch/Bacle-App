@@ -3,7 +3,6 @@ import React, {useEffect, useState, useRef} from 'react';
 import {StyleSheet, PermissionsAndroid} from 'react-native';
 import {Marker, Polyline, Animated} from 'react-native-maps';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
-import {decode} from '../../decode';
 import Geolocation from '@react-native-community/geolocation';
 
 
@@ -40,12 +39,25 @@ const getMarkerList = (placeList) => {
 };
 
 
-// markers: { LatLng, title }[]
-// polylines: Marker[][]
-// position: LatLng
+// markers: { LatLng, title }[]       Une liste de positions où afficher des marqueurs avec leur nom.
+// polylines: { LatLng }[][]          Une liste de listes positions représentant des séries de points reliés entre eux (typiquement des chemins à suivre). 
+// position: LatLng                   Une position vers laquelle la carte doit focus.
 const Map = ({style, markers, polylines, position}) => {
   const map = useRef();
-
+  const [initialRegion, setInitialRegion] = useState(
+    (position != null) 
+      ? {
+        ...position,
+        latitudeDelta: 0.03,
+        longitudeDelta: 0.03,
+      }
+      : {
+        latitude: 48.858260200000004,   // Par défaut : Tour Eiffel
+        longitude: 2.2944990543196795,  // TODO: Mettre par défaut la géolocalisation de l'appareil.
+        latitudeDelta: 0.03,
+        longitudeDelta: 0.03,
+    }
+  );
 
   // ERROR: "Location Permission not granted."
   // Je voulais mettre "initialRegion" à la géolocalisation de l'appareil si il n'y a pas d'étape dans "steps".
@@ -67,16 +79,27 @@ const Map = ({style, markers, polylines, position}) => {
     return null;
   }
 
+  // On update of position
   useEffect(() => {
     if (position != null) {
-      map.current.animateToRegion(
-        {
-          ...position,
-          latitudeDelta: 0.03,
-          longitudeDelta: 0.03,
-        },
-        500,
-      );
+      let region = {
+        ...position,
+        latitudeDelta: 0.03,
+        longitudeDelta: 0.03,
+      };
+      // Si la position vers laquelle focus est la même, pas besoin de faire de transition.
+      if (
+        region.latitude != initialRegion.latitude 
+        || region.longitude != initialRegion.longitude
+        || region.latitudeDelta != initialRegion.latitudeDelta 
+        || region.longitudeDelta != initialRegion.longitudeDelta
+      ) {
+        map.current.animateToRegion(
+          region,
+          500,
+        );
+        setInitialRegion(region);
+      }
     }
   }, [position]);
 
@@ -86,20 +109,7 @@ const Map = ({style, markers, polylines, position}) => {
       ref={map}
       provider="google"
       customMapStyle={MapStyle}
-      initialRegion={ 
-        (position != null) 
-          ? {
-            ...position,
-            latitudeDelta: 0.03,
-            longitudeDelta: 0.03,
-          }
-          : {
-            latitude: 48.858260200000004,   // Par défaut : Tour Eiffel
-            longitude: 2.2944990543196795,  // TODO: Mettre par défaut la géolocalisation de l'appareil.
-            latitudeDelta: 0.03,
-            longitudeDelta: 0.03,
-          }
-      }
+      initialRegion={initialRegion}
       style={[style]}>
 
       {markers.map((marker, index) => (

@@ -5,6 +5,7 @@ import Map, { getLatLngList, getMarkerList } from './Map';
 
 
 // Abstraction du component Map pour le SearchScreen.
+// searchData: Place[]              Une liste de lieux (typiquement un résulat de recherche à représenter sur la carte).
 const SearchMap = ({style, searchData}) => {
   const [markers, setMarkers] = useState([]);
 
