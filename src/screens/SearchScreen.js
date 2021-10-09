@@ -1,32 +1,28 @@
-import axios from 'axios';
+import BacleAPI from '../api/BacleAPI';"../api/BacleAPI"
 
-import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text, FlatList} from 'react-native';
-import {Input} from 'react-native-elements';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, FlatList } from 'react-native';
+import { Input } from 'react-native-elements';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import {SafeAreaView} from 'react-native-safe-area-context';
-import Map, {getLatLng} from '../components/Map/Map';
+import SearchMap from '../components/Map/SearchMap';
+
+import Icon from 'react-native-vector-icons/AntDesign';
+
 
 const SearchScreen = () => {
   const [text, setText] = useState('');
   const [data, setData] = useState([]);
 
   const callApi = async () => {
-    const res = await axios.get('https://nominatim.openstreetmap.org/', {
-      params: {
-        q: text,
-        format: 'json',
-        'accept-language': 'fr',
-      },
-    });
-    const data = res.data.filter(
-      value => value.class == 'tourism' || value.class == 'boundary',
-    );
+    const res = await BacleAPI.search(text);
+    const data = res.data.filter(value => (value.category == "tourism" || value.category == "boundary"));
+    
+    console.log("--- BACLE SEARCH -----------------------------------");
     console.log(data);
+    console.log("----------------------------------------------------");
+
     setData(data);
   };
 
@@ -45,11 +41,9 @@ const SearchScreen = () => {
         )}
       />
       <SafeAreaView style={styles.container}>
-        <Map
+        <SearchMap
           style={styles.map}
-          steps={getLatLng(data)}
-          data={data}
-          currentMarkerFocus={null}
+          searchData={data}
         />
       </SafeAreaView>
     </View>
@@ -71,5 +65,6 @@ const styles = StyleSheet.create({
     height: hp(100),
   },
 });
+
 
 export default SearchScreen;
