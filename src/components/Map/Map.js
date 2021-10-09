@@ -5,6 +5,7 @@ import {Marker, Polyline, Animated} from 'react-native-maps';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import useLocation from '../../hooks/useLocation';
 import {isFocused} from '../../navigationRef';
+import {Icon} from 'react-native-elements';
 
 
 // Permet de récupérer uniquement les latitudes et longitudes (sous forme d'objet LatLng) depuis une liste de points géographiques d'OpenStreetMap
@@ -54,7 +55,7 @@ const Map = ({style, markers, polylines, position}) => {
         latitudeDelta: 0.03,
         longitudeDelta: 0.03,
       }
-      : (deviceLocation != null) 
+      : ((deviceLocation != null) 
         ? {
           latitude: deviceLocation.coords.latitude,
           longitude: deviceLocation.coords.longitude,
@@ -67,7 +68,11 @@ const Map = ({style, markers, polylines, position}) => {
           latitudeDelta: 0.03,
           longitudeDelta: 0.03,
         }
+      )
   );
+  // Géolocalisation
+  const [deviceLocation, setDeviceLocation] = useState(null);
+  useLocation(isFocused, setDeviceLocation);
 
   // On update of position
   useEffect(() => {
