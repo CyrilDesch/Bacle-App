@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-export const baseURL = '';
+export const baseURL = 'https://bacle-node-api.herokuapp.com';
 const instance = axios.create({baseURL});
 
 export let token;

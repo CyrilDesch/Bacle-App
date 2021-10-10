@@ -11,12 +11,14 @@ const userReducer = (state, action) => {
   }
 };
 
-const saveUser = dispatch => user => {};
+const saveUser = dispatch => user => {
+  dispatch({type: 'saveUser', payload: user});
+};
 
 const updateUser = dispatch => async user => {};
 
 export const {Provider, Context} = createDataContext(
   userReducer,
   {saveUser, updateUser},
-  {pseudo: '', name: '', dateOfBirth: null, idProfilImage: ''},
+  {pseudo: '', name: '', dateOfBirth: null, idProfilImage: '', email: ''},
 );
