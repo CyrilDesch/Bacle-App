@@ -1,12 +1,10 @@
-import axios from 'axios';
 import React, {useEffect, useState, useRef} from 'react';
-import {StyleSheet, PermissionsAndroid} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {Marker, Polyline, Animated} from 'react-native-maps';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import useLocation from '../../hooks/useLocation';
 import {isFocused} from '../../navigationRef';
 import {Icon} from 'react-native-elements';
-
 
 // Permet de récupérer uniquement les latitudes et longitudes (sous forme d'objet LatLng) depuis une liste de points géographiques d'OpenStreetMap
 const getLatLngList = placeList => {
@@ -22,7 +20,7 @@ const getLatLngList = placeList => {
   return output;
 };
 
-const getMarkerList = (placeList) => {
+const getMarkerList = placeList => {
   const output = [];
   for (let i = 0; i < placeList.length; i++) {
     if (placeList[i].lat && placeList[i].lon) {
@@ -30,49 +28,50 @@ const getMarkerList = (placeList) => {
         latitude: Number(placeList[i].lat),
         longitude: Number(placeList[i].lon),
         title: String(
-            (placeList[i].display_name != null && placeList[i].display_name.length > 0) 
+          placeList[i].display_name != null &&
+            placeList[i].display_name.length > 0
             ? placeList[i].display_name.split(',')[0]
-            : ""
-          )
+            : '',
+        ),
       });
     }
   }
   return output;
 };
 
-
 // markers: { LatLng, title }[]       Une liste de positions où afficher des marqueurs avec leur nom.
-// polylines: { LatLng }[][]          Une liste de listes positions représentant des séries de points reliés entre eux (typiquement des chemins à suivre). 
+// polylines: { LatLng }[][]          Une liste de listes positions représentant des séries de points reliés entre eux (typiquement des chemins à suivre).
 // position: LatLng                   Une position vers laquelle la carte doit focus.
 const Map = ({style, markers, polylines, position}) => {
   const map = useRef();
+
+  // Géolocalisation
+  const [deviceLocation, setDeviceLocation] = useState(null);
+  useLocation(isFocused, setDeviceLocation);
+
   const [initialRegion, setInitialRegion] = useState(
     // Si aucune position n'est renseignée, on prend la géolocalisation.
     // Si la géolocalisation est indisponible, on prend la position de la Tour Eiffel.
-    (position != null)    
+    position != null
       ? {
-        ...position,
-        latitudeDelta: 0.03,
-        longitudeDelta: 0.03,
-      }
-      : ((deviceLocation != null) 
-        ? {
+          ...position,
+          latitudeDelta: 0.03,
+          longitudeDelta: 0.03,
+        }
+      : deviceLocation != null
+      ? {
           latitude: deviceLocation.coords.latitude,
           longitude: deviceLocation.coords.longitude,
           latitudeDelta: 0.03,
           longitudeDelta: 0.03,
         }
-        : {
-          latitude: 48.858260200000004,   // Par défaut : Tour Eiffel
-          longitude: 2.2944990543196795,  // TODO: Mettre par défaut la géolocalisation de l'appareil.
-          latitudeDelta: 0.03,
-          longitudeDelta: 0.03,
-        }
-      )
+      : {
+          latitude: 0,
+          longitude: 0,
+          latitudeDelta: 100,
+          longitudeDelta: 100,
+        },
   );
-  // Géolocalisation
-  const [deviceLocation, setDeviceLocation] = useState(null);
-  useLocation(isFocused, setDeviceLocation);
 
   // On update of position
   useEffect(() => {
@@ -84,20 +83,16 @@ const Map = ({style, markers, polylines, position}) => {
       };
       // Si la position vers laquelle focus est la même, pas besoin de faire de transition.
       if (
-        region.latitude != initialRegion.latitude 
-        || region.longitude != initialRegion.longitude
-        || region.latitudeDelta != initialRegion.latitudeDelta 
-        || region.longitudeDelta != initialRegion.longitudeDelta
+        region.latitude != initialRegion.latitude ||
+        region.longitude != initialRegion.longitude ||
+        region.latitudeDelta != initialRegion.latitudeDelta ||
+        region.longitudeDelta != initialRegion.longitudeDelta
       ) {
-        map.current.animateToRegion(
-          region,
-          500,
-        );
+        map.current.animateToRegion(region, 500);
         setInitialRegion(region);
       }
     }
   }, [position]);
-
 
   return (
     <Animated
@@ -106,7 +101,6 @@ const Map = ({style, markers, polylines, position}) => {
       customMapStyle={MapStyle}
       initialRegion={initialRegion}
       style={[style]}>
-
       {/* Localisation de l'appareil */}
       {deviceLocation != null ? (
         <Marker coordinate={deviceLocation.coords}>
@@ -125,8 +119,8 @@ const Map = ({style, markers, polylines, position}) => {
         <Marker
           key={index}
           coordinate={{
-            latitude: marker.latitude, 
-            longitude: marker.longitude
+            latitude: marker.latitude,
+            longitude: marker.longitude,
           }}
           title={marker.title}
           icon={{uri: 'https://static.thenounproject.com/png/8262-200.png'}}
@@ -139,11 +133,9 @@ const Map = ({style, markers, polylines, position}) => {
         strokeColor="#f3c600"
         strokeWidth={wp(1.5)}
       />
-
     </Animated>
   );
 };
-
 
 const styles = StyleSheet.create({
   markerContainer: {
@@ -533,6 +525,5 @@ const MapStyle = [
   },
 ];
 
-
-export { getLatLngList, getMarkerList };
+export {getLatLngList, getMarkerList};
 export default Map;

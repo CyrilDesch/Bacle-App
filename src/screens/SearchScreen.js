@@ -1,15 +1,16 @@
-import BacleAPI from '../api/BacleAPI';"../api/BacleAPI"
+import BacleAPI from '../api/BacleAPI';
+('../api/BacleAPI');
 
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, FlatList } from 'react-native';
-import { Input } from 'react-native-elements';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, {useState} from 'react';
+import {View, StyleSheet, Text, FlatList} from 'react-native';
+import {Input} from 'react-native-elements';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 import SearchMap from '../components/Map/SearchMap';
-
-import Icon from 'react-native-vector-icons/AntDesign';
-
 
 const SearchScreen = () => {
   const [text, setText] = useState('');
@@ -17,11 +18,13 @@ const SearchScreen = () => {
 
   const callApi = async () => {
     const res = await BacleAPI.search(text);
-    const data = res.data.filter(value => (value.category == "tourism" || value.category == "boundary"));
-    
-    console.log("--- BACLE SEARCH -----------------------------------");
+    const data = res.data.filter(
+      value => value.category == 'tourism' || value.category == 'boundary',
+    );
+
+    console.log('--- BACLE SEARCH -----------------------------------');
     console.log(data);
-    console.log("----------------------------------------------------");
+    console.log('----------------------------------------------------');
 
     setData(data);
   };
@@ -41,10 +44,7 @@ const SearchScreen = () => {
         )}
       />
       <SafeAreaView style={styles.container}>
-        <SearchMap
-          style={styles.map}
-          searchData={data}
-        />
+        <SearchMap style={styles.map} searchData={data} />
       </SafeAreaView>
     </View>
   );
@@ -65,6 +65,5 @@ const styles = StyleSheet.create({
     height: hp(100),
   },
 });
-
 
 export default SearchScreen;
