@@ -3,13 +3,12 @@ import React, {useEffect, useState, useRef} from 'react';
 import {StyleSheet, PermissionsAndroid} from 'react-native';
 import {Marker, Polyline, Animated} from 'react-native-maps';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
-import useLocation from '../../hooks/useLocation';
-import {isFocused} from '../../navigationRef';
-import {Icon} from 'react-native-elements';
+import {decode} from '../../decode';
+import Geolocation from '@react-native-community/geolocation';
 
 
 // Permet de récupérer uniquement les latitudes et longitudes (sous forme d'objet LatLng) depuis une liste de points géographiques d'OpenStreetMap
-const getLatLngList = placeList => {
+const getLatLng = (placeList) => {
   const output = [];
   for (let i = 0; i < placeList.length; i++) {
     if (placeList[i].lat && placeList[i].lon) {
@@ -22,128 +21,114 @@ const getLatLngList = placeList => {
   return output;
 };
 
-const getMarkerList = (placeList) => {
-  const output = [];
-  for (let i = 0; i < placeList.length; i++) {
-    if (placeList[i].lat && placeList[i].lon) {
-      output.push({
-        latitude: Number(placeList[i].lat),
-        longitude: Number(placeList[i].lon),
-        title: String(
-            (placeList[i].display_name != null && placeList[i].display_name.length > 0) 
-            ? placeList[i].display_name.split(',')[0]
-            : ""
-          )
-      });
-    }
-  }
-  return output;
-};
 
-
-// markers: { LatLng, title }[]       Une liste de positions où afficher des marqueurs avec leur nom.
-// polylines: { LatLng }[][]          Une liste de listes positions représentant des séries de points reliés entre eux (typiquement des chemins à suivre). 
-// position: LatLng                   Une position vers laquelle la carte doit focus.
-const Map = ({style, markers, polylines, position}) => {
+const Map = ({style, steps, data, currentMarkerFocus}) => {
   const map = useRef();
-  const [initialRegion, setInitialRegion] = useState(
-    // Si aucune position n'est renseignée, on prend la géolocalisation.
-    // Si la géolocalisation est indisponible, on prend la position de la Tour Eiffel.
-    (position != null)    
-      ? {
-        ...position,
-        latitudeDelta: 0.03,
-        longitudeDelta: 0.03,
-      }
-      : ((deviceLocation != null) 
-        ? {
-          latitude: deviceLocation.coords.latitude,
-          longitude: deviceLocation.coords.longitude,
-          latitudeDelta: 0.03,
-          longitudeDelta: 0.03,
-        }
-        : {
-          latitude: 48.858260200000004,   // Par défaut : Tour Eiffel
-          longitude: 2.2944990543196795,  // TODO: Mettre par défaut la géolocalisation de l'appareil.
-          latitudeDelta: 0.03,
-          longitudeDelta: 0.03,
-        }
-      )
-  );
-  // Géolocalisation
-  const [deviceLocation, setDeviceLocation] = useState(null);
-  useLocation(isFocused, setDeviceLocation);
+  const [polyline, setPolyline] = useState([]);
 
-  // On update of position
   useEffect(() => {
-    if (position != null) {
-      let region = {
-        ...position,
-        latitudeDelta: 0.03,
-        longitudeDelta: 0.03,
-      };
-      // Si la position vers laquelle focus est la même, pas besoin de faire de transition.
-      if (
-        region.latitude != initialRegion.latitude 
-        || region.longitude != initialRegion.longitude
-        || region.latitudeDelta != initialRegion.latitudeDelta 
-        || region.longitudeDelta != initialRegion.longitudeDelta
-      ) {
-        map.current.animateToRegion(
-          region,
-          500,
-        );
-        setInitialRegion(region);
+    const chemin = async () => {
+      if (steps != null && steps.length > 1) {
+        let baseUrl = `https://router.hereapi.com/v8/routes?apiKey=xQMtiBGNDxwdDFit6X0LIF3FlEyWRuXscq1BeTVC24E&origin=${
+          steps[0].latitude
+        },${steps[0].longitude}&destination=${
+          steps[steps.length - 1].latitude
+        },${
+          steps[steps.length - 1].longitude
+        }&transportMode=pedestrian&return=polyline`;
+        for (let i = 1; i < steps.length - 1; i++) {
+          baseUrl += `&via=${steps[i].latitude},${steps[i].longitude}`;
+        }
+        console.log(baseUrl);
+        axios
+          .get(baseUrl)
+          .then(response => {
+            let array = [];
+            response.data.routes[0].sections.forEach(element => {
+              array = [...array, ...decode(element.polyline).polyline];
+            });
+            setPolyline(array);
+          })
+          .catch(error => {
+            console.log(error);
+          });
       }
-    }
-  }, [position]);
+    };
 
+    chemin();
+  }, []);
+
+  // ERROR: "Location Permission not granted."
+  // Je voulais mettre "initialRegion" à la géolocalisation de l'appareil si il n'y a pas d'étape dans "steps".
+  const getPosition = () => {
+    console.log("Querying position");
+    Geolocation.getCurrentPosition(
+      (position) => {
+        console.log("Position: ", position);
+      },
+      (error) => {
+        console.log(error.message);
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: 30000,
+        maximumAge: 1000
+      }
+    );
+    return null;
+  }
+
+  useEffect(() => {
+    if (steps != null && steps.length != 0 && currentMarkerFocus != null) {
+      map.current.animateToRegion(
+        {
+          longitude: steps[currentMarkerFocus].longitude,
+          latitude: steps[currentMarkerFocus].latitude,
+          latitudeDelta: 0.03,
+          longitudeDelta: 0.03,
+        },
+        500,
+      );
+    }
+  }, [currentMarkerFocus]);
 
   return (
     <Animated
       ref={map}
       provider="google"
       customMapStyle={MapStyle}
-      initialRegion={initialRegion}
+      initialRegion={ 
+        (steps != null && steps.length != 0) 
+          ? {
+            ...steps[0],
+            latitudeDelta: 0.03,
+            longitudeDelta: 0.03,
+          }
+          : {
+            latitude: 48.858260200000004,   // Par défaut : Tour Eiffel
+            longitude: 2.2944990543196795,  // TODO: Mettre par défaut la géolocalisation de l'appareil.
+            latitudeDelta: 0.03,
+            longitudeDelta: 0.03,
+          }
+      }
       style={[style]}>
-
-      {/* Localisation de l'appareil */}
-      {deviceLocation != null ? (
-        <Marker coordinate={deviceLocation.coords}>
-          <Icon
-            name="walk-outline"
-            reverse={true}
-            type="ionicon"
-            color="#517fa4"
-            size={wp(5)}
-          />
-        </Marker>
-      ) : null}
-
-      {/* Autres marqueurs */}
-      {markers.map((marker, index) => (
+      {/* Markers */}
+      {steps.map((marker, index) => (
         <Marker
           key={index}
-          coordinate={{
-            latitude: marker.latitude, 
-            longitude: marker.longitude
-          }}
-          title={marker.title}
+          coordinate={marker}
+          title={data[index].display_name.split(',')[0]}
           icon={{uri: 'https://static.thenounproject.com/png/8262-200.png'}}
         />
       ))}
-
-      {/* Les polylines */}
       <Polyline
-        coordinates={polylines}
+        coordinates={polyline}
         strokeColor="#f3c600"
         strokeWidth={wp(1.5)}
       />
-
     </Animated>
   );
 };
-
 
 const styles = StyleSheet.create({
   markerContainer: {
@@ -534,5 +519,5 @@ const MapStyle = [
 ];
 
 
-export { getLatLngList, getMarkerList };
+export { getLatLng };
 export default Map;
