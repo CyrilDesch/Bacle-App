@@ -1,5 +1,6 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {StyleSheet, Text, View, Image, Dimensions} from 'react-native';
+import ModalSelector from 'react-native-modal-selector';
 
 import Carousel from 'react-native-snap-carousel';
 import {
@@ -7,29 +8,56 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import TravelMap from '../components/Map/TravelMap';
+import TravelMap from '../../components/Map/TravelMap';
 import Icon from 'react-native-vector-icons/AntDesign';
-
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const TravelScreen = () => {
   const carouselRef = useRef();
   const [focusedPlaceIndex, setFocusedPlaceIndex] = useState(0);
-  const circuit = require('../../customData.json').circuit;
+  const trips = require('../../../customData.json').user.trips;
+  const circuits = require('../../../customData.json').circuits;
+  const insets = useSafeAreaInsets();
+
+  const [current, setCurrent] = useState(circuits[0] ? 0 : null);
+
+  let tripDataSelector = [{key: 0, section: true, label: 'VOS VOYAGES'}];
+  for (let i = 0; i < trips.length; i++) {
+    tripDataSelector.push({key: i + 1, label: trips[i].name});
+  }
+
+  useEffect(() => {
+    setFocusedPlaceIndex(0);
+    carouselRef.current.snapToItem(0);
+  }, [current]);
 
   return (
     <SafeAreaView style={styles.container}>
-      {circuit ? (
+      {circuits[current] ? (
         <TravelMap
           style={styles.map}
-          travelData={circuit}
+          travelData={circuits[current].circuit}
           focusedPlaceIndex={focusedPlaceIndex}
         />
       ) : null}
+      <View style={[styles.header, {marginTop: insets.top + wp(2)}]}>
+        <ModalSelector
+          selectedKey={current + 1}
+          selectStyle={{borderWidth: 0}}
+          selectTextStyle={styles.selectText}
+          cancelText={'FERMER'}
+          data={tripDataSelector}
+          initValue="Selectionner votre voyage"
+          onChange={option => {
+            setCurrent(option.key - 1);
+          }}
+        />
+      </View>
       <View style={styles.slider}>
         <Carousel
           onSnapToItem={index => setFocusedPlaceIndex(index)}
           ref={carouselRef}
-          data={circuit}
+          data={circuits[current].circuit}
           renderItem={({item}) => (
             <View style={styles.cardContainer}>
               <View style={styles.card}>
@@ -147,6 +175,26 @@ const styles = StyleSheet.create({
     marginLeft: wp(1.5),
     fontFamily: 'Montserrat-SemiBold',
     fontSize: wp(3.5),
+  },
+  header: {
+    position: 'absolute',
+    alignSelf: 'center',
+    backgroundColor: 'white',
+    borderWidth: 0,
+    borderRadius: wp(4),
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+  selectText: {
+    fontFamily: 'Montserrat-Medium',
+    fontSize: wp(4),
+    padding: wp(0.5),
   },
 });
 

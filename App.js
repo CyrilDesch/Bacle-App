@@ -3,7 +3,8 @@ import {View, Text} from 'react-native';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import HomeScreen from './src/screens/HomeScreen';
-import TravelScreen from './src/screens/TravelScreen';
+import TravelScreen from './src/screens/ShowTravel/TravelScreen';
+import CreateTravelScreen from './src/screens/CreateTravel/CreateTravelScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import ProfilScreen from './src/screens/ProfilScreen';
 import DetailLieuScreen from './src/screens/DetailLieuScreen';
@@ -40,6 +41,7 @@ const AuthStackScreen = () => {
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 const TravelStack = createNativeStackNavigator();
+const CreateTravelStack = createNativeStackNavigator();
 const SearchStack = createNativeStackNavigator();
 const ProfilStack = createNativeStackNavigator();
 
@@ -59,6 +61,18 @@ const TravelStackScreen = () => {
       screenOptions={{headerShown: false, gestureEnabled: false}}>
       <TravelStack.Screen name="Travel" component={TravelScreen} />
     </TravelStack.Navigator>
+  );
+};
+
+const CreateTravelStackScreen = () => {
+  return (
+    <CreateTravelStack.Navigator
+      screenOptions={{headerShown: false, gestureEnabled: false}}>
+      <CreateTravelStack.Screen
+        name="CreateTravel"
+        component={CreateTravelScreen}
+      />
+    </CreateTravelStack.Navigator>
   );
 };
 
@@ -114,6 +128,9 @@ const TabScreen = () => {
             case 'TravelStack':
               iconName = 'find';
               break;
+            case 'CreateTravelStack':
+              iconName = 'pluscircleo';
+              break;
             case 'SearchStack':
               iconName = 'search1';
               break;
@@ -121,13 +138,17 @@ const TabScreen = () => {
               iconName = 'user';
               break;
           }
-          return <Icon name={iconName} size={wp(8)} color={color} />;
+          return <Icon name={iconName} size={wp(7.5)} color={color} />;
         },
         headerShown: false,
         gestureEnabled: false,
       })}>
       <Tab.Screen name="HomeStack" component={HomeStackScreen} />
       <Tab.Screen name="TravelStack" component={TravelStackScreen} />
+      <Tab.Screen
+        name="CreateTravelStack"
+        component={CreateTravelStackScreen}
+      />
       <Tab.Screen name="SearchStack" component={SearchStackScreen} />
       <Tab.Screen name="ProfilStack" component={ProfilStackScreen} />
     </Tab.Navigator>
