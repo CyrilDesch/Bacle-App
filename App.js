@@ -146,6 +146,7 @@ const TabScreen = () => {
       <Tab.Screen name="HomeStack" component={HomeStackScreen} />
       <Tab.Screen name="TravelStack" component={TravelStackScreen} />
       <Tab.Screen
+        options={{tabBarStyle: {display: 'none'}}}
         name="CreateTravelStack"
         component={CreateTravelStackScreen}
       />

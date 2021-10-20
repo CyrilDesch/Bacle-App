@@ -147,11 +147,12 @@ const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
             try {
               removeError();
               setLoading(true);
+              console.log(showSecondForm[0]);
               if (showSecondForm[1]) {
                 if (lastName.length > 1 && firstName.length > 1)
                   authMethod(email, password, lastName, firstName);
                 else throw 'Veuillez renseigner votre nom et votre prénom.';
-              } else if (showSecondForm[0]) {
+              } else if (showSecondForm) {
                 authValidator(email, password);
                 await emailCheckRequest(email);
                 authMethod(email, password);
@@ -185,7 +186,7 @@ const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
 };
 
 AuthForm.defaultProps = {
-  showSecondForm: [false, false],
+  showSecondForm: null,
 };
 
 const styles = StyleSheet.create({

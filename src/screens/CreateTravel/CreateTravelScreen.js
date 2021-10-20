@@ -1,14 +1,18 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import React from 'react';
+import {StyleSheet, Text} from 'react-native';
 
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import Layout from '../../components/CreateTrip/Layout';
 
 const CreateTravelScreen = () => {
-  return <SafeAreaView style={styles.container}></SafeAreaView>;
+  return (
+    <Layout>
+      <Text>TEST</Text>
+    </Layout>
+  );
 };
 
 const styles = StyleSheet.create({
