@@ -38,7 +38,7 @@ const SearchScreen = () => {
   const selectPlace = (placeIndex) => {
     setSelectedPlaceIndex(placeIndex);
     // TODO: Aller à l'emplacement du lieu.
-  } 
+  }
 
   return (
     <View style={styles.container}>
