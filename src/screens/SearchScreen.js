@@ -48,6 +48,7 @@ const SearchScreen = () => {
         <SearchMap
           style={{...styles.map, top: -insets.top, height: styles.map.height + insets.top}}
           searchData={data}
+          focusedPlaceIndex={selectedPlaceIndex}
         />
       </SafeAreaView>
 
@@ -63,26 +64,25 @@ const SearchScreen = () => {
         />
       </View>
 
-      {/* Résultats */}
-      {/* TODO: Enelever "selectedPlaceIndex === -1" et ajouter un moyen de revenir à la liste après sélection de résultat. */}
-      {(data.length > 1 && selectedPlaceIndex === -1) 
+      {(data.length !== 0)
         ? (
-          <View style={styles.resultArea}>
-            <SearchResultList data={data} onItemPress={(itemIndex) => { selectPlace(itemIndex) }}/>
-          </View>
-        )
-        : null
-      }
-
-      {/* Léger détail du lieu sélectionné */}
-      {(selectedPlaceIndex !== -1)
-        ? (
-          <View style={styles.infoCard}>
-            <Text>
-              {data[selectedPlaceIndex].display_name.split(',')[0]} à
-              {data[selectedPlaceIndex].display_name.split(',')[4]}
-            </Text>
-          </View>
+          (selectedPlaceIndex === -1)
+          // Résultats
+          // TODO: Enlever "selectedPlaceIndex === -1" et ajouter un moyen de revenir à la liste après sélection de résultat.!
+          ? (
+            <View style={styles.resultArea}>
+              <SearchResultList data={data} onItemPress={(itemIndex) => { selectPlace(itemIndex) }}/>
+            </View>
+          )
+          // Léger détail du lieu sélectionné
+          : (
+            <View style={styles.infoCard}>
+              <Text>
+                {data[selectedPlaceIndex].display_name.split(',')[0]} à
+                {data[selectedPlaceIndex].display_name.split(',')[4]}
+              </Text>
+            </View>
+          )
         )
         : null
       }

@@ -10,7 +10,7 @@ import { decode } from '../../decode';
 
 // Abstraction du component Map pour le SearchScreen.
 // travelData: Place[]              Une liste de lieux (typiquement un trajet à représenter sur la carte).
-// focusedPlaceIndex: int           L'indice du lieu dans la liste travelData qui doit être focus.
+// focusedPlaceIndex: int           L'indice du lieu dans le tableau travelData qui doit être focus (-1 = non défini).
 const TravelMap = ({style, travelData, focusedPlaceIndex}) => {
   const [focusPosition, setFocusPosition] = useState({ 
     latitude: 48.858260200000004, 
@@ -54,7 +54,7 @@ const TravelMap = ({style, travelData, focusedPlaceIndex}) => {
 
   // On update of position 
   useEffect(() => {
-      if (travelData !== null && travelData.length !== 0 && focusedPlaceIndex !== null) {
+      if (travelData !== null && travelData.length !== 0 && focusedPlaceIndex !== -1) {
         const positions = getLatLngList([travelData[focusedPlaceIndex]]);
         setFocusPosition(positions[0]);
       }
