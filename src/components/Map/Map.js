@@ -7,7 +7,7 @@ import {isFocused} from '../../navigationRef';
 import {Icon} from 'react-native-elements';
 
 // Permet de récupérer uniquement les latitudes et longitudes (sous forme d'objet LatLng) depuis une liste de points géographiques d'OpenStreetMap
-const getLatLngList = placeList => {
+const getLatLngList = (placeList) => {
   const output = [];
   for (let i = 0; i < placeList.length; i++) {
     if (placeList[i].lat && placeList[i].lon) {
@@ -20,7 +20,8 @@ const getLatLngList = placeList => {
   return output;
 };
 
-const getMarkerList = placeList => {
+
+const getMarkerList = (placeList) => {
   const output = [];
   for (let i = 0; i < placeList.length; i++) {
     if (placeList[i].lat && placeList[i].lon) {
@@ -28,8 +29,7 @@ const getMarkerList = placeList => {
         latitude: Number(placeList[i].lat),
         longitude: Number(placeList[i].lon),
         title: String(
-          placeList[i].display_name != null &&
-            placeList[i].display_name.length > 0
+          (placeList[i].display_name !== null && placeList[i].display_name.length > 0) 
             ? placeList[i].display_name.split(',')[0]
             : '',
         ),
@@ -39,10 +39,49 @@ const getMarkerList = placeList => {
   return output;
 };
 
+
+const getViewWindow = (placeList) => {
+  // TODO: Gérer les zones chevauchant la jonction de longitude -180° et 180°
+  console.log("getViewWindow placeList:", placeList)
+  // Gestion des erreurs
+  if (placeList === null || placeList.length === 0)
+    return null;
+  
+  // Copie de la première boundingbox
+  let maxBoundingBox = [...(placeList[0].boundingbox.map(Number))];  
+
+  // Sélection des extrémités
+  for (let i = 1; i < placeList.length; i++) {
+    const boundingBox = placeList[i].boundingbox.map(Number);
+    for (let j = 0; j < 4; j += 2) {
+      // Min
+      if (boundingBox[j] < maxBoundingBox[j]) {
+        maxBoundingBox[j] = boundingBox[j];
+      }
+      // Max
+      if (boundingBox[j+1] > maxBoundingBox[j+1]) {
+        maxBoundingBox[j+1] = boundingBox[j+1];
+      }
+    }
+  }
+
+  // Calcul de la zone de focus de la carte
+  const viewWindow = {
+    latitude: (maxBoundingBox[1] + maxBoundingBox[0]) * 0.5,
+    longitude: (maxBoundingBox[3] + maxBoundingBox[2]) * 0.5,
+    latitudeDelta: (maxBoundingBox[1] - maxBoundingBox[0]) * 1.1,
+    longitudeDelta: (maxBoundingBox[3] - maxBoundingBox[2]) * 1.1
+  }
+  console.log("Focus window:", viewWindow);
+
+  return viewWindow;
+};
+
+
 // markers: { LatLng, title }[]       Une liste de positions où afficher des marqueurs avec leur nom.
-// polylines: { LatLng }[][]          Une liste de listes positions représentant des séries de points reliés entre eux (typiquement des chemins à suivre).
-// position: LatLng                   Une position vers laquelle la carte doit focus.
-const Map = ({style, markers, polylines, position}) => {
+// polylines: { LatLng }[][]          Une liste de listes positions représentant des séries de points reliés entre eux (typiquement des chemins à suivre). 
+// viewWindow: { LatLngAndDeltas }     Une zone vers laquelle la carte doit focus.
+const Map = ({style, markers, polylines, viewWindow}) => {
   const map = useRef();
 
   // Géolocalisation
@@ -52,47 +91,42 @@ const Map = ({style, markers, polylines, position}) => {
   const [initialRegion, setInitialRegion] = useState(
     // Si aucune position n'est renseignée, on prend la géolocalisation.
     // Si la géolocalisation est indisponible, on prend la position de la Tour Eiffel.
-    position != null
-      ? {
-          ...position,
-          latitudeDelta: 0.03,
-          longitudeDelta: 0.03,
-        }
-      : deviceLocation != null
-      ? {
+    (viewWindow !== null)    
+      ? viewWindow
+      : ((deviceLocation !== null) 
+        ? {
           latitude: deviceLocation.coords.latitude,
           longitude: deviceLocation.coords.longitude,
-          latitudeDelta: 0.03,
-          longitudeDelta: 0.03,
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1,
         }
-      : {
-          latitude: 0,
-          longitude: 0,
-          latitudeDelta: 100,
-          longitudeDelta: 100,
-        },
+        : {
+          latitude: 48.858260200000004,   // Par défaut : Tour Eiffel
+          longitude: 2.2944990543196795,  // TODO: Mettre par défaut la géolocalisation de l'appareil.
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1,
+        }
+      )
   );
 
   // On update of position
   useEffect(() => {
-    if (position != null) {
-      let region = {
-        ...position,
-        latitudeDelta: 0.03,
-        longitudeDelta: 0.03,
-      };
-      // Si la position vers laquelle focus est la même, pas besoin de faire de transition.
+    if (viewWindow !== null) {
+      // Si la position vers laquelle on focus est la même, pas besoin de faire de transition.
       if (
-        region.latitude != initialRegion.latitude ||
-        region.longitude != initialRegion.longitude ||
-        region.latitudeDelta != initialRegion.latitudeDelta ||
-        region.longitudeDelta != initialRegion.longitudeDelta
+        viewWindow.latitude !== initialRegion.latitude 
+        || viewWindow.longitude !== initialRegion.longitude
+        || viewWindow.latitudeDelta !== initialRegion.latitudeDelta 
+        || viewWindow.longitudeDelta !== initialRegion.longitudeDelta
       ) {
-        map.current.animateToRegion(region, 500);
-        setInitialRegion(region);
+        map.current.animateToRegion(
+          viewWindow,
+          500,
+        );
+        setInitialRegion(viewWindow);
       }
     }
-  }, [position]);
+  }, [viewWindow]);
 
   return (
     <Animated
@@ -525,5 +559,6 @@ const MapStyle = [
   },
 ];
 
-export {getLatLngList, getMarkerList};
+
+export { getLatLngList, getMarkerList, getViewWindow };
 export default Map;
