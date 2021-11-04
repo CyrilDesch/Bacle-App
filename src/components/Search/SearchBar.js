@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {search} from '../api/tracker';
+import {search} from '../../api/tracker';
 import {
   StyleSheet,
   View,
@@ -12,27 +12,35 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import {set} from 'date-fns';
+import SearchResultList from './SearchResultList';
 
-const InstantSearchBar = ({onlyCity}) => {
+const SearchBar = ({onlyCity, showResult, setSearchData, onSubmit}) => {
   const [text, setText] = useState('');
-  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    if (!showResult) {
+      setSearchData(data);
+    }
+  }, [data]);
 
   const callSearchAPI = async () => {
-    setLoading(true);
-    const res = await search(text);
-    setLoading(false);
-    const data = res.data.filter(
-      onlyCity
-        ? value =>
-            value.category == 'boundary' &&
-            value.display_name.includes('France')
-        : value =>
-            (value.category == 'tourism' || value.category == 'boundary') &&
-            value.display_name.includes('France'),
-    );
-    setData(data);
+    if (text.length > 1) {
+      setLoading(true);
+      const res = await search(text);
+      setLoading(false);
+      const data = res.data.filter(
+        onlyCity
+          ? value =>
+              value.category == 'boundary' &&
+              value.display_name.includes('France')
+          : value =>
+              (value.category == 'tourism' || value.category == 'boundary') &&
+              value.display_name.includes('France'),
+      );
+      setData(data);
+      onSubmit(data);
+    }
   };
 
   return (
@@ -42,7 +50,12 @@ const InstantSearchBar = ({onlyCity}) => {
         inputStyle={styles.input}
         value={text}
         renderErrorMessage={false}
-        onChangeText={setText}
+        onChangeText={text => {
+          if (data.length != 0) {
+            setData([]);
+          }
+          setText(text);
+        }}
         onSubmitEditing={callSearchAPI}
         placeholder={'Rechercher'}
       />
@@ -52,28 +65,23 @@ const InstantSearchBar = ({onlyCity}) => {
         size="small"
         color="#1c3052"
       />
-      <FlatList
-        contentContainerStyle={{paddingBottom: wp(2)}}
-        data={data}
-        keyExtractor={item => item.osm_id.toString()}
-        renderItem={({item}) => (
-          <Text style={styles.result}>
-            {item.display_name.split(',')[0]}
-            {item.display_name.split(',')[4] &&
-            item.display_name.split(',')[4] > 0
-              ? `à ${item.display_name.split(',')[4]}`
-              : ''}
-          </Text>
-        )}
-      />
+      {showResult && data.length > 0 ? (
+        <View style={{padding: wp(1), marginTop: -wp(3)}}>
+          <SearchResultList data={data} />
+        </View>
+      ) : null}
     </View>
   );
 };
 
+SearchBar.defaultProps = {
+  showResult: true,
+  onlyCity: false,
+};
+
 const styles = StyleSheet.create({
   searchBar: {
-    position: 'absolute',
-    width: wp(90),
+    width: wp(95),
     alignSelf: 'center',
     top: wp(2),
     backgroundColor: 'white',
@@ -103,11 +111,12 @@ const styles = StyleSheet.create({
   result: {
     borderTopWidth: wp(0.2),
     borderTopColor: '#B9B9B9',
-    paddingVertical: wp(2),
+    paddingTop: wp(2.5),
+    marginBottom: wp(2.5),
     marginHorizontal: wp(3.5),
     fontSize: wp(4.5),
     fontFamily: 'Montserrat-Medium',
   },
 });
 
-export default InstantSearchBar;
+export default SearchBar;

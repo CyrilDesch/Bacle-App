@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet} from 'react-native';
 
-import Map, { getMarkerList, getViewWindow } from './Map';
-
-import Map, {getLatLngList, getMarkerList} from './Map';
+import Map, {getMarkerList, getViewWindow} from './Map';
 
 // Abstraction du component Map pour le SearchScreen.
 // searchData: Place[]              Une liste de lieux (typiquement un résulat de recherche à représenter sur la carte).
@@ -21,9 +19,7 @@ const SearchMap = ({style, searchData, focusedPlaceIndex}) => {
       markers={markers}
       polylines={[]}
       viewWindow={getViewWindow(
-        (focusedPlaceIndex === -1) 
-        ? searchData 
-        : [searchData[focusedPlaceIndex]]
+        focusedPlaceIndex === -1 ? searchData : [searchData[focusedPlaceIndex]],
       )}
     />
   );

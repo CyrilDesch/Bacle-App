@@ -2,7 +2,6 @@ import {search} from '../api/tracker';
 
 import React, {useState} from 'react';
 import {View, StyleSheet, Alert} from 'react-native';
-import {Input} from 'react-native-elements';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -12,7 +11,8 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import SearchMap from '../components/Map/SearchMap';
 import SearchResultList from '../components/Search/SearchResultList';
-import LightPlaceDetail from '../components/Place Details/LightPlaceDetail';
+import LightPlaceDetail from '../components/PlaceDetails/LightPlaceDetail';
+import SearchBar from '../components/Search/SearchBar';
 
 const SearchScreen = () => {
   const insets = useSafeAreaInsets();
@@ -28,36 +28,6 @@ const SearchScreen = () => {
       [{text: 'OK'}],
       {cancelable: true},
     );
-  };
-
-  const submitSearch = async () => {
-    // If the search bar is not empty
-    if (text.replace(/\s+/g, '') !== '') {
-      const response = await search(text);
-      console.log('response', response);
-      const newData = response.data.filter(
-        value => value.category === 'tourism' || value.category === 'boundary',
-      );
-
-      console.log('--- BACLE SEARCH -----------------------------------');
-      console.log(newData);
-      console.log('----------------------------------------------------');
-
-      // Pour la sécurité
-      setSelectedPlaceIndex(-1);
-
-      setData(newData);
-
-      // Mise à jour de la sélection de résultat
-      if (newData.length === 1) {
-        setSelectedPlaceIndex(0);
-      } else {
-        // S'il n'y a aucun résultat, on affiche une alerte.
-        if (newData.length === 0) {
-          displayNoResultAlert();
-        }
-      }
-    }
   };
 
   const selectPlace = placeIndex => {
@@ -80,15 +50,23 @@ const SearchScreen = () => {
       </SafeAreaView>
 
       {/* Barre de recherche */}
-      <View
-        style={{...styles.searchBar, top: styles.searchBar.top + insets.top}}>
-        <Input
-          style={styles.searchField}
-          inputContainerStyle={styles.searchFieldContainer}
-          value={text}
-          onChangeText={setText}
-          onSubmitEditing={submitSearch}
-          placeholder={'Rechercher'}
+      <View style={{position: 'absolute', top: insets.top}}>
+        <SearchBar
+          showResult={false}
+          setSearchData={setData}
+          onSubmit={newData => {
+            // Pour la sécurité
+            setSelectedPlaceIndex(-1);
+            // Mise à jour de la sélection de résultat
+            if (newData.length === 1) {
+              setSelectedPlaceIndex(0);
+            } else {
+              // S'il n'y a aucun résultat, on affiche une alerte.
+              if (newData.length === 0) {
+                displayNoResultAlert();
+              }
+            }
+          }}
         />
       </View>
 
@@ -147,7 +125,6 @@ const styles = StyleSheet.create({
     shadowRadius: 1.41,
     elevation: 2,
   },
-  searchField: {},
   searchFieldContainer: {
     borderBottomWidth: 0,
   },

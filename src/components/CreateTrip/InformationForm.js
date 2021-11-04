@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, View, Text, Pressable} from 'react-native';
+import {StyleSheet, View, Text, Pressable, FlatList} from 'react-native';
 import {Input} from 'react-native-elements';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {format} from 'date-fns';
@@ -9,7 +9,7 @@ import {
 } from 'react-native-responsive-screen';
 import Carousel from 'react-native-snap-carousel';
 import {Button} from 'react-native-elements/dist/buttons/Button';
-import InstantSearchBar from '../InstantSearchBar';
+import SearchBar from '../Search/SearchBar';
 
 const InformationForm = ({submit, step}) => {
   const typeEnum = {
@@ -111,7 +111,7 @@ const InformationForm = ({submit, step}) => {
                 </View>
               );
             case typeEnum.SEARCH:
-              return <InstantSearchBar key={inputData.name} onlyCity={true} />;
+              return <SearchBar key={inputData.name} onlyCity={true} />;
           }
         })}
         <Button
