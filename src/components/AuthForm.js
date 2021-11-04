@@ -43,7 +43,7 @@ const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
 
   useEffect(() => {
     setLoading(false);
-    if (showSecondForm[0] && !showSecondForm[1]) {
+    if (showSecondForm && showSecondForm[0] && !showSecondForm[1]) {
       Animated.timing(fadeSubmitButton, {
         duration: 300,
         toValue: 0,
@@ -51,7 +51,7 @@ const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
       }).start();
     }
 
-    if (showSecondForm[0] && showSecondForm[1]) {
+    if (showSecondForm && showSecondForm[0] && showSecondForm[1]) {
       Animated.stagger(500, [
         Animated.parallel([
           Animated.timing(fadeIn, {
@@ -81,10 +81,12 @@ const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
         value={email}
         onChangeText={setEmail}
         placeholder="e.g. margaux@emailaddress.com"
-        editable={!showSecondForm[0]}
+        editable={showSecondForm && !showSecondForm[0]}
         inputContainerStyle={[
           styles.textInput,
-          showSecondForm[0] ? {backgroundColor: '#63636399'} : {},
+          showSecondForm && showSecondForm[0]
+            ? {backgroundColor: '#63636399'}
+            : {},
         ]}
         inputStyle={styles.text}
         labelStyle={styles.label}
@@ -95,10 +97,12 @@ const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
       <Input
         value={password}
         onChangeText={setPassword}
-        editable={!showSecondForm[0]}
+        editable={showSecondForm && !showSecondForm[0]}
         inputContainerStyle={[
           styles.textInput,
-          showSecondForm[0] ? {backgroundColor: '#63636399'} : {},
+          showSecondForm && showSecondForm[0]
+            ? {backgroundColor: '#63636399'}
+            : {},
         ]}
         inputStyle={styles.text}
         labelStyle={styles.label}
@@ -115,7 +119,7 @@ const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
         placeholderTextColor="#989898"
         secureTextEntry={!showPassword}
       />
-      {showSecondForm[1] ? (
+      {showSecondForm && showSecondForm[1] ? (
         <Animated.View
           style={{transform: [{translateY: moveDown}], opacity: fadeIn}}>
           <Input
@@ -147,8 +151,7 @@ const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
             try {
               removeError();
               setLoading(true);
-              console.log(showSecondForm[0]);
-              if (showSecondForm[1]) {
+              if (showSecondForm && showSecondForm[1]) {
                 if (lastName.length > 1 && firstName.length > 1)
                   authMethod(email, password, lastName, firstName);
                 else throw 'Veuillez renseigner votre nom et votre prénom.';

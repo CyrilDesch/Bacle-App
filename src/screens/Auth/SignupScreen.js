@@ -38,7 +38,11 @@ const SignupScreen = () => {
     <ImageBackground
       style={styles.container}
       source={require('../../../assets/test0.jpg')}>
-      <StatusBar translucent={true} backgroundColor={'transparent'} />
+      <StatusBar
+        translucent={true}
+        backgroundColor={'transparent'}
+        barStyle="light-content"
+      />
       <Animated.Text
         style={[styles.title, {transform: [{translateY: titleAnimUp}]}]}>
         Inscrivez-vous pour voyager !

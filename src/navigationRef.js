@@ -10,6 +10,12 @@ export function navigate(name, params) {
   }
 }
 
+export function goBack() {
+  if (navigationRef.isReady()) {
+    navigationRef.goBack();
+  }
+}
+
 export function isFocused() {
   if (navigationRef.isReady()) {
     return navigationRef.isFocused;

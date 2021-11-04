@@ -85,7 +85,9 @@ const tryLocalSignIn =
           type: 'signin',
           payload: {token: token, localLoading: false},
         });
-      } catch {}
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       dispatch({type: 'stop_local_loading'});
     }

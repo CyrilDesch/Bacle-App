@@ -50,6 +50,7 @@ export const getUserRequest = async () => {
     const resp = await trackerApi.get('/user/me');
     return resp.data;
   } catch (err) {
+    console.log(err.response);
     throw 'Une erreur est survenue.';
   }
 };

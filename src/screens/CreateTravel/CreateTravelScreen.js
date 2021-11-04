@@ -1,26 +1,26 @@
-import React from 'react';
-import {StyleSheet, Text} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet} from 'react-native';
 
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+import InformationForm from '../../components/CreateTrip/InformationForm';
 import Layout from '../../components/CreateTrip/Layout';
 
 const CreateTravelScreen = () => {
+  const [step, setStep] = useState(0);
+  const handleBack = () => {
+    if (step > 0) {
+      setStep(step - 1);
+    }
+  };
+  const handleNext = () => {
+    setStep(step + 1);
+  };
   return (
-    <Layout>
-      <Text>TEST</Text>
+    <Layout back={handleBack} step={step}>
+      <InformationForm submit={handleNext} step={step} />
     </Layout>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    flex: 1,
-    marginBottom: wp(13),
-  },
-});
+const styles = StyleSheet.create({});
 
 export default CreateTravelScreen;

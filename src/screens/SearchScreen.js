@@ -1,5 +1,4 @@
-import BacleAPI from '../api/BacleAPI';
-('../api/BacleAPI');
+import {search} from '../api/tracker';
 
 import React, {useState} from 'react';
 import {View, StyleSheet, Text, FlatList} from 'react-native';
@@ -17,7 +16,7 @@ const SearchScreen = () => {
   const [data, setData] = useState([]);
 
   const callApi = async () => {
-    const res = await BacleAPI.search(text);
+    const res = await search(text);
     const data = res.data.filter(
       value => value.category == 'tourism' || value.category == 'boundary',
     );

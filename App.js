@@ -98,7 +98,6 @@ const TabScreen = () => {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
-        lazy: false,
         tabBarStyle: {
           borderTopLeftRadius: wp(5),
           borderTopRightRadius: wp(5),
@@ -143,15 +142,31 @@ const TabScreen = () => {
         headerShown: false,
         gestureEnabled: false,
       })}>
-      <Tab.Screen name="HomeStack" component={HomeStackScreen} />
-      <Tab.Screen name="TravelStack" component={TravelStackScreen} />
       <Tab.Screen
-        options={{tabBarStyle: {display: 'none'}}}
+        options={{lazy: false}}
+        name="HomeStack"
+        component={HomeStackScreen}
+      />
+      <Tab.Screen
+        options={{lazy: false}}
+        name="TravelStack"
+        component={TravelStackScreen}
+      />
+      <Tab.Screen
+        options={{tabBarStyle: {display: 'none'}, unmountOnBlur: true}}
         name="CreateTravelStack"
         component={CreateTravelStackScreen}
       />
-      <Tab.Screen name="SearchStack" component={SearchStackScreen} />
-      <Tab.Screen name="ProfilStack" component={ProfilStackScreen} />
+      <Tab.Screen
+        options={{lazy: false}}
+        name="SearchStack"
+        component={SearchStackScreen}
+      />
+      <Tab.Screen
+        options={{lazy: false}}
+        name="ProfilStack"
+        component={ProfilStackScreen}
+      />
     </Tab.Navigator>
   );
 };

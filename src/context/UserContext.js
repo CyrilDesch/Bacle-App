@@ -1,6 +1,4 @@
 import createDataContext from '../context/createDataContext';
-import trackerApi, {baseURL} from '../api/tracker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const userReducer = (state, action) => {
   switch (action.type) {
