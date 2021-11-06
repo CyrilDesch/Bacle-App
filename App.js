@@ -1,5 +1,4 @@
-import React, {useContext, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import HomeScreen from './src/screens/HomeScreen';
@@ -10,6 +9,7 @@ import ProfilScreen from './src/screens/ProfilScreen';
 import DetailLieuScreen from './src/screens/DetailLieuScreen';
 import SigninScreen from './src/screens/Auth/SigninScreen';
 import SignupScreen from './src/screens/Auth/SignupScreen';
+import WaitScreen from './src/screens/Auth/WaitScreen';
 import {navigationRef} from './src/navigationRef';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
@@ -175,16 +175,16 @@ const App = () => {
   const {tryLocalSignIn, state: auth} = useContext(AuthContext);
   const {saveUser} = useContext(UserContext);
 
+  const [launchFinish, setlaunchFinish] = useState(false);
   useEffect(() => {
     tryLocalSignIn({saveUser});
+    setTimeout(() => {
+      setlaunchFinish(true);
+    }, 2000);
   }, []);
 
-  if (auth.localLoading) {
-    return (
-      <View style={{backgroundColor: '#fe9b18'}}>
-        <Text>Wait</Text>
-      </View>
-    );
+  if (auth.localLoading || !launchFinish) {
+    return <WaitScreen />;
   }
 
   return (

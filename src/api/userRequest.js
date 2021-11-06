@@ -35,7 +35,8 @@ export const signUpRequest = async (email, password, lastName, firstName) => {
     params.append('password', password);
     params.append('firstName', firstName);
     params.append('lastName', lastName);
-    await trackerApi.post('/user/create', params, {
+
+    await trackerApi.post('/user/', params, {
       headers: {'content-type': 'application/x-www-form-urlencoded'},
     });
   } catch (err) {
@@ -50,7 +51,6 @@ export const getUserRequest = async () => {
     const resp = await trackerApi.get('/user/me');
     return resp.data;
   } catch (err) {
-    console.log(err.response);
     throw 'Une erreur est survenue.';
   }
 };

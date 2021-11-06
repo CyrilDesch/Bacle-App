@@ -41,8 +41,6 @@ const getMarkerList = placeList => {
 
 const getViewWindow = placeList => {
   // TODO: Gérer les zones chevauchant la jonction de longitude -180° et 180°
-  console.log(placeList);
-
   // Gestion des erreurs
   if (placeList === null || placeList.length === 0) return null;
 

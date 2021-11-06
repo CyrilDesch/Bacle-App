@@ -15,35 +15,36 @@ instance.interceptors.request.use(
 
     if (token !== undefined) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+    // PROTOCOLE HASH (SI GET, CONTIENT DEJA LES ARGUMENTS)
+    let url = config.baseURL + config.url;
 
-      // PROTOCOLE HASH
-      let url = config.baseURL + config.url + '?';
-
-      if (config.params != undefined) {
-        for (const [key, value] of Object.entries(config.params)) {
-          url = url + key + '=' + value + '&';
+    try {
+      if (config.method == 'post') {
+        url = url + '?';
+        // POST, AJOUT DES ARGUMENTS A L'URL
+        for (const [key, value] of config.data._searchParams) {
+          if (key != 'hash') {
+            url = url + key + '=' + value + '&';
+          }
         }
-      }
-
-      if (config.data != undefined) {
-        // POST
-        for (const [key, value] of Object.entries(config.data)) {
-          url = url + key + '=' + value + '&';
-        }
+      } else {
+        url = config.params != undefined ? url + '&' : url + '?';
       }
 
       url = url + 'secret=' + Config.REACT_APP_API_KEY;
-
       let hash = await RNSimpleCrypto.SHA.sha512(url);
 
       if (config.method == 'get') {
         config.params = {hash: hash, ...config.params};
       } else {
-        config.data = {hash: hash, ...config.data};
+        config.data.append('hash', hash);
       }
-
-      return config;
+    } catch (err) {
+      console.log(err);
     }
+
+    return config;
   },
   err => {
     return Promise.reject(err);

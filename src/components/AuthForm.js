@@ -40,7 +40,6 @@ const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
   useEffect(() => {
     if (state.error && state.error != '') setLoading(false);
   }, [state]);
-
   useEffect(() => {
     setLoading(false);
     if (showSecondForm && showSecondForm[0] && !showSecondForm[1]) {
