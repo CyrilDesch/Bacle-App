@@ -42,6 +42,7 @@ buck-out/
 \.buckd/
 # *.keystore             !!!!!!!!!!!!!!!!A REMETTRE
 !debug.keystore
+prod.keystore
 
 # fastlane
 #
