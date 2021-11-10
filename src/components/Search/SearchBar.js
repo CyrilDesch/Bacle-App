@@ -6,15 +6,25 @@ import {
   FlatList,
   Text,
   ActivityIndicator,
+  Pressable,
 } from 'react-native';
 import {Input} from 'react-native-elements';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import Icon from 'react-native-vector-icons/Ionicons';
 import SearchResultList from './SearchResultList';
 
-const SearchBar = ({onlyCity, showResult, setSearchData, onSubmit}) => {
+const SearchBar = ({
+  onlyCity,
+  onlyCountry,
+  showResult,
+  setSearchData,
+  onSubmit,
+  style,
+  onClose,
+}) => {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -29,22 +39,32 @@ const SearchBar = ({onlyCity, showResult, setSearchData, onSubmit}) => {
       setLoading(true);
       const res = await search(text);
       setLoading(false);
-      const data = res.data.filter(
-        onlyCity
-          ? value =>
-              value.category == 'boundary' &&
-              value.display_name.includes('France')
-          : value =>
-              (value.category == 'tourism' || value.category == 'boundary') &&
-              value.display_name.includes('France'),
-      );
+      let data;
+      if (onlyCity) {
+        data = res.data.filter(
+          value =>
+            value.display_name.split(',').length == 6 &&
+            value.display_name.includes('France'),
+        );
+      } else if (onlyCountry) {
+        data = res.data.filter(
+          value => value.display_name.split(',').length == 1,
+        );
+      } else {
+        data = res.data.filter(
+          value =>
+            (value.category == 'tourism' || value.category == 'boundary') &&
+            value.display_name.includes('France'),
+        );
+      }
       setData(data);
+      console.log(data);
       onSubmit(data);
     }
   };
 
   return (
-    <View style={styles.searchBar}>
+    <View style={[styles.searchBar, style]}>
       <Input
         inputContainerStyle={styles.searchFieldContainer}
         inputStyle={styles.input}
@@ -58,12 +78,23 @@ const SearchBar = ({onlyCity, showResult, setSearchData, onSubmit}) => {
         }}
         onSubmitEditing={callSearchAPI}
         placeholder={'Rechercher'}
-      />
-      <ActivityIndicator
-        style={styles.indicator}
-        animating={loading}
-        size="small"
-        color="#1c3052"
+        rightIcon={
+          loading ? (
+            <ActivityIndicator
+              animating={loading}
+              size="small"
+              color="#1c3052"
+            />
+          ) : data.length > 0 && onClose != null ? (
+            <Pressable
+              onPress={() => {
+                setText('');
+                onClose();
+              }}>
+              <Icon name="close" size={wp(6)} color="black" />
+            </Pressable>
+          ) : null
+        }
       />
       {showResult && data.length > 0 ? (
         <View style={{padding: wp(1), marginTop: -wp(3)}}>
@@ -77,11 +108,15 @@ const SearchBar = ({onlyCity, showResult, setSearchData, onSubmit}) => {
 SearchBar.defaultProps = {
   showResult: true,
   onlyCity: false,
+  onlyCountry: false,
+  onClose: null,
+  onSubmit: () => {},
+  style: null,
 };
 
 const styles = StyleSheet.create({
   searchBar: {
-    width: wp(95),
+    width: '100%',
     alignSelf: 'center',
     top: wp(2),
     backgroundColor: 'white',
@@ -101,12 +136,6 @@ const styles = StyleSheet.create({
   input: {
     fontSize: wp(4.5),
     fontFamily: 'Montserrat-Medium',
-  },
-  indicator: {
-    position: 'absolute',
-    right: wp(3),
-    top: wp(3.5),
-    flex: 1,
   },
   result: {
     borderTopWidth: wp(0.2),

@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     top: 0,
-    backgroundColor: 'gray',
+    backgroundColor: 'black',
     height: hp(100),
     paddingTop: wp(25),
   },

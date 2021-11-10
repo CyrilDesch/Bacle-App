@@ -55,9 +55,19 @@ const InformationForm = ({submit, step}) => {
       title: 'Information',
       data: [
         {
-          name: 'Lieu du voyage',
+          name: 'Pays du voyage',
           type: typeEnum.SEARCH,
           state: name,
+          onlyCity: false,
+          onlyCountry: true,
+          setState: setName,
+        },
+        {
+          name: 'Ville du voyage',
+          type: typeEnum.SEARCH,
+          state: name,
+          onlyCity: true,
+          onlyCountry: false,
           setState: setName,
         },
       ],
@@ -111,7 +121,17 @@ const InformationForm = ({submit, step}) => {
                 </View>
               );
             case typeEnum.SEARCH:
-              return <SearchBar key={inputData.name} onlyCity={true} />;
+              return (
+                <View key={inputData.name} style={styles.inputDateContainer}>
+                  <Text style={styles.labelDate}>{inputData.name}</Text>
+                  <SearchBar
+                    style={styles.searchBar}
+                    key={inputData.name}
+                    onlyCity={inputData.onlyCity}
+                    onlyCountry={inputData.onlyCountry}
+                  />
+                </View>
+              );
           }
         })}
         <Button
@@ -146,6 +166,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold',
     textAlign: 'center',
     color: '#1c3052',
+  },
+  searchBar: {
+    marginBottom: wp(5),
+    borderRadius: wp(2),
+    borderWidth: wp(0.3),
+    borderColor: '#989898',
+    elevation: 0,
+    shadowOpacity: 0,
   },
   textInput: {
     borderWidth: wp(0.3),

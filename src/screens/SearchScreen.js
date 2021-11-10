@@ -17,7 +17,6 @@ import SearchBar from '../components/Search/SearchBar';
 const SearchScreen = () => {
   const insets = useSafeAreaInsets();
 
-  const [text, setText] = useState('');
   const [data, setData] = useState([]);
   const [selectedPlaceIndex, setSelectedPlaceIndex] = useState(-1);
 
@@ -50,8 +49,12 @@ const SearchScreen = () => {
       </SafeAreaView>
 
       {/* Barre de recherche */}
-      <View style={{position: 'absolute', top: insets.top}}>
+      <View style={{position: 'absolute', top: insets.top, width: wp(95)}}>
         <SearchBar
+          onClose={() => {
+            setData([]);
+            setSelectedPlaceIndex(-1);
+          }}
           showResult={false}
           setSearchData={setData}
           onSubmit={newData => {
@@ -108,25 +111,6 @@ const styles = StyleSheet.create({
   map: {
     width: wp(100),
     height: hp(100),
-  },
-  searchBar: {
-    position: 'absolute',
-    width: wp(95),
-    top: wp(2),
-    backgroundColor: 'white',
-    borderRadius: wp(6),
-    height: wp(12),
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
-  },
-  searchFieldContainer: {
-    borderBottomWidth: 0,
   },
   lightDetail: {
     position: 'absolute',
