@@ -24,10 +24,19 @@ const SearchBar = ({
   onSubmit,
   style,
   onClose,
+  setSelected,
+  selected,
 }) => {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+
+  useEffect(() => {
+    if (!selected) {
+      setText('');
+    }
+  }, [selected]);
+
   useEffect(() => {
     if (!showResult) {
       setSearchData(data);
@@ -44,7 +53,7 @@ const SearchBar = ({
         data = res.data.filter(
           value =>
             value.display_name.split(',').length == 6 &&
-            value.display_name.includes('France'),
+            value.display_name.includes(onlyCity.display_name.split(',')[0]),
         );
       } else if (onlyCountry) {
         data = res.data.filter(
@@ -58,7 +67,6 @@ const SearchBar = ({
         );
       }
       setData(data);
-      console.log(data);
       onSubmit(data);
     }
   };
@@ -71,8 +79,9 @@ const SearchBar = ({
         value={text}
         renderErrorMessage={false}
         onChangeText={text => {
-          if (data.length != 0) {
+          if (data.length >= 0) {
             setData([]);
+            setSelected(null);
           }
           setText(text);
         }}
@@ -98,7 +107,14 @@ const SearchBar = ({
       />
       {showResult && data.length > 0 ? (
         <View style={{padding: wp(1), marginTop: -wp(3)}}>
-          <SearchResultList data={data} />
+          <SearchResultList
+            data={data}
+            onItemPress={index => {
+              setText(data[index].display_name.split(',')[0]);
+              setSelected(data[index]);
+              setData([]);
+            }}
+          />
         </View>
       ) : null}
     </View>
@@ -107,8 +123,8 @@ const SearchBar = ({
 
 SearchBar.defaultProps = {
   showResult: true,
-  onlyCity: false,
-  onlyCountry: false,
+  onlyCity: null,
+  onlyCountry: null,
   onClose: null,
   onSubmit: () => {},
   style: null,

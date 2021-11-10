@@ -10,6 +10,7 @@ import {
 import Carousel from 'react-native-snap-carousel';
 import {Button} from 'react-native-elements/dist/buttons/Button';
 import SearchBar from '../Search/SearchBar';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const InformationForm = ({submit, step}) => {
   const typeEnum = {
@@ -21,8 +22,21 @@ const InformationForm = ({submit, step}) => {
   const carouselRef = useRef(null);
   const [name, setName] = useState('');
   const [date, setDate] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
+    if (carouselRef.current.currentIndex > step) {
+      switch (step) {
+        case 0:
+          setSelectedCountry(null);
+          break;
+        case 1:
+          setSelectedCity(null);
+          break;
+      }
+    }
     if (carouselRef.current != null) {
       carouselRef.current.snapToItem(step);
     }
@@ -36,6 +50,7 @@ const InformationForm = ({submit, step}) => {
   const dataForm = [
     {
       title: 'Rentrer les informations du voyage',
+      required: [name, date],
       data: [
         {
           name: 'Nom du voyage',
@@ -53,28 +68,37 @@ const InformationForm = ({submit, step}) => {
     },
     {
       title: 'Information',
+      required: [selectedCountry],
       data: [
         {
           name: 'Pays du voyage',
           type: typeEnum.SEARCH,
           state: name,
-          onlyCity: false,
           onlyCountry: true,
           setState: setName,
+          selected: selectedCountry,
+          onSelect: setSelectedCountry,
         },
+      ],
+    },
+    {
+      title: 'Information',
+      required: [selectedCity],
+      data: [
         {
           name: 'Ville du voyage',
           type: typeEnum.SEARCH,
           state: name,
-          onlyCity: true,
-          onlyCountry: false,
+          onlyCity: selectedCountry,
           setState: setName,
+          selected: selectedCity,
+          onSelect: setSelectedCity,
         },
       ],
     },
   ];
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({item}) => {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>{item.title}</Text>
@@ -129,7 +153,17 @@ const InformationForm = ({submit, step}) => {
                     key={inputData.name}
                     onlyCity={inputData.onlyCity}
                     onlyCountry={inputData.onlyCountry}
+                    setSelected={inputData.onSelect}
+                    selected={inputData.selected}
                   />
+                  {inputData.selected ? (
+                    <Icon
+                      style={styles.valid}
+                      name="checkmark-circle"
+                      size={wp(4)}
+                      color="#228B22"
+                    />
+                  ) : null}
                 </View>
               );
           }
@@ -137,9 +171,25 @@ const InformationForm = ({submit, step}) => {
         <Button
           buttonStyle={styles.button}
           title="Suivant"
-          onPress={submit}
+          onPress={() => {
+            let count = 0;
+            item.required.forEach(element =>
+              element != null ||
+              element.length > 0 ||
+              (element instanceof Date && element.getMilliseconds() > 0)
+                ? count++
+                : null,
+            );
+            if (count == item.required.length) {
+              submit();
+              setErrorMessage('');
+            } else {
+              setErrorMessage('Remplir les champs');
+            }
+          }}
           TouchableComponent={Pressable}
         />
+        <Text>{errorMessage}</Text>
       </View>
     );
   };
@@ -226,6 +276,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Montserrat-Medium',
     color: 'black',
+  },
+  valid: {
+    position: 'absolute',
+    right: 0,
+    top: wp(1.5),
   },
 });
 
