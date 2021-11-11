@@ -1,6 +1,6 @@
 import {search} from '../api/tracker';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Alert} from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -14,12 +14,19 @@ import SearchResultList from '../components/Search/SearchResultList';
 import LightPlaceDetail from '../components/PlaceDetails/LightPlaceDetail';
 import SearchBar from '../components/Search/SearchBar';
 
+
 const SearchScreen = () => {
   const insets = useSafeAreaInsets();
 
-  const [text, setText] = useState('');
-  const [data, setData] = useState([]);
   const [selectedPlaceIndex, setSelectedPlaceIndex] = useState(-1);
+  const [data, setData] = useState([]);
+
+  // Permet de modifier les résultats de recherche en enlevant avant une potentielle sélection.
+  const changeData = (newData) => {
+    if (selectedPlaceIndex !== -1)
+      setSelectedPlaceIndex(-1);
+    setData(newData);
+  };
 
   const displayNoResultAlert = () => {
     Alert.alert(
@@ -28,10 +35,6 @@ const SearchScreen = () => {
       [{text: 'OK'}],
       {cancelable: true},
     );
-  };
-
-  const selectPlace = placeIndex => {
-    setSelectedPlaceIndex(placeIndex);
   };
 
   return (
@@ -53,14 +56,13 @@ const SearchScreen = () => {
       <View style={{position: 'absolute', top: insets.top}}>
         <SearchBar
           showResult={false}
-          setSearchData={setData}
-          onSubmit={newData => {
-            // Pour la sécurité
-            setSelectedPlaceIndex(-1);
+          setSearchData={changeData}
+          onSubmit={(newData) => {
             // Mise à jour de la sélection de résultat
             if (newData.length === 1) {
               setSelectedPlaceIndex(0);
             } else {
+              setSelectedPlaceIndex(-1);
               // S'il n'y a aucun résultat, on affiche une alerte.
               if (newData.length === 0) {
                 displayNoResultAlert();
@@ -71,14 +73,13 @@ const SearchScreen = () => {
       </View>
 
       {data.length !== 0 ? (
-        selectedPlaceIndex === -1 ? (
+        (selectedPlaceIndex === -1) ? (
           // Résultats
-          // TODO: Enlever "selectedPlaceIndex === -1".
           <View style={styles.resultArea}>
             <SearchResultList
               data={data}
               onItemPress={itemIndex => {
-                selectPlace(itemIndex);
+                setSelectedPlaceIndex(itemIndex);
               }}
             />
           </View>
@@ -87,13 +88,14 @@ const SearchScreen = () => {
           <LightPlaceDetail
             style={styles.lightDetail}
             placeData={data[selectedPlaceIndex]}
-            backButtonAction={data.length !== 1 ? () => selectPlace(-1) : null}
+            backButtonAction={data.length !== 1 ? () => setSelectedPlaceIndex(-1) : null}
           />
         )
       ) : null}
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

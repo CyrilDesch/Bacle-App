@@ -41,8 +41,11 @@ const getMarkerList = placeList => {
 
 const getViewWindow = placeList => {
   // TODO: Gérer les zones chevauchant la jonction de longitude -180° et 180°
+
   // Gestion des erreurs
-  if (placeList === null || placeList.length === 0) return null;
+  console.log("placelist", placeList);
+  if (placeList === null || placeList.length === 0) 
+    return null;
 
   // Copie de la première boundingbox
   let maxBoundingBox = [...placeList[0].boundingbox.map(Number)];
@@ -75,7 +78,7 @@ const getViewWindow = placeList => {
 
 // markers: { LatLng, title }[]       Une liste de positions où afficher des marqueurs avec leur nom.
 // polylines: { LatLng }[][]          Une liste de listes positions représentant des séries de points reliés entre eux (typiquement des chemins à suivre).
-// viewWindow: { LatLngAndDeltas }     Une zone vers laquelle la carte doit focus.
+// viewWindow: { LatLngAndDeltas }    Une zone vers laquelle la carte doit focus.
 const Map = ({style, markers, polylines, viewWindow}) => {
   const map = useRef();
 
@@ -103,7 +106,7 @@ const Map = ({style, markers, polylines, viewWindow}) => {
         },
   );
 
-  // On update of position
+  // Lors d'une mise à jour de position
   useEffect(() => {
     if (viewWindow !== null) {
       // Si la position vers laquelle on focus est la même, pas besoin de faire de transition.
