@@ -12,15 +12,15 @@ const authValidator = (email, password) => {
   const emailVerif = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
     email,
   );
-  const passwordVerif = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/.test(
+  const passwordVerif = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(
     password,
   );
   if (!emailVerif && !passwordVerif) {
-    throw "L'adresse email entrée est invalide.\nPour votre sécurité, le mot de passe doit contenir au moin 6 caractères dont une majuscule, une minuscule et un chiffre.";
+    throw "L'adresse email entrée est invalide.\nPour votre sécurité, le mot de passe doit contenir au moin 8 caractères dont une majuscule, une minuscule et un chiffre.";
   } else if (!emailVerif) {
     throw "L'adresse email entrée est invalide.";
   } else if (!passwordVerif) {
-    throw 'Pour votre sécurité, le mot de passe doit contenir au moin 6 caractères dont une majuscule, une minuscule et un chiffre.';
+    throw 'Pour votre sécurité, le mot de passe doit contenir au moin 8 caractères dont une majuscule, une minuscule et un chiffre.';
   }
 };
 
