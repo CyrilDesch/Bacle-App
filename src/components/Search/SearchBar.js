@@ -81,7 +81,9 @@ const SearchBar = ({
         onChangeText={text => {
           if (data.length >= 0) {
             setData([]);
-            setSelected(null);
+            if (setSelected) {
+              setSelected(null);
+            }
           }
           setText(text);
         }}
@@ -111,7 +113,9 @@ const SearchBar = ({
             data={data}
             onItemPress={index => {
               setText(data[index].display_name.split(',')[0]);
-              setSelected(data[index]);
+              if (setSelected) {
+                setSelected(data[index]);
+              }
               setData([]);
             }}
           />
