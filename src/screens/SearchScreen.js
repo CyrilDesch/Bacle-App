@@ -1,6 +1,4 @@
-import {search} from '../api/tracker';
-
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet, Alert} from 'react-native';
 import {
   heightPercentageToDP as hp,

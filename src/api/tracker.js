@@ -55,7 +55,9 @@ export const search = async place => {
   try {
     const req = await instance.get('/search/', {params: {q: place}});
     return req;
-  } catch {}
+  } catch {
+    console.log("Erreur search");
+  }
 };
 
 export default instance;
