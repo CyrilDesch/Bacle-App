@@ -43,9 +43,8 @@ const getViewWindow = placeList => {
   // TODO: Gérer les zones chevauchant la jonction de longitude -180° et 180°
 
   // Gestion des erreurs
-  console.log("placelist", placeList);
-  if (placeList === null || placeList.length === 0) 
-    return null;
+  //console.log("placelist", placeList);
+  if (placeList === null || placeList.length === 0) return null;
 
   // Copie de la première boundingbox
   let maxBoundingBox = [...placeList[0].boundingbox.map(Number)];

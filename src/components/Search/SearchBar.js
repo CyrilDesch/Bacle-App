@@ -47,6 +47,7 @@ const SearchBar = ({
     if (text.length > 1) {
       setLoading(true);
       const res = await search(text);
+      console.log(res);
       setLoading(false);
       let data;
       if (onlyCity) {

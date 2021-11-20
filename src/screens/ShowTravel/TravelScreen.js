@@ -1,8 +1,15 @@
 import React, {useState, useRef, useEffect} from 'react';
-import {StyleSheet, Text, View, Image, Dimensions} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  FlatList,
+  Dimensions,
+} from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 
-import Carousel from 'react-native-snap-carousel';
+import PaginationDot from 'react-native-animated-pagination-dot';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -11,6 +18,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import TravelMap from '../../components/Map/TravelMap';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const TravelScreen = () => {
   const carouselRef = useRef();
@@ -28,9 +36,11 @@ const TravelScreen = () => {
 
   useEffect(() => {
     setFocusedPlaceIndex(0);
-    carouselRef.current.snapToItem(0);
+    carouselRef.current.scrollToIndex({animated: true, index: 0});
+    //TODO MODIF carouselRef.current.snapToItem(0);
   }, [current]);
 
+  console.log(focusedPlaceIndex);
   return (
     <SafeAreaView style={styles.container}>
       {circuits[current] ? (
@@ -54,10 +64,22 @@ const TravelScreen = () => {
         />
       </View>
       <View style={styles.slider}>
-        <Carousel
-          onSnapToItem={index => setFocusedPlaceIndex(index)}
+        <FlatList
+          horizontal
+          pagingEnabled
           ref={carouselRef}
           data={circuits[current].circuit}
+          showsHorizontalScrollIndicator={false}
+          disableIntervalMomentum
+          onMomentumScrollEnd={e => {
+            let pageNumber = Math.floor(
+              e.nativeEvent.contentOffset.x / wp(99.9),
+              0,
+            );
+            if (focusedPlaceIndex !== pageNumber)
+              setFocusedPlaceIndex(pageNumber);
+          }}
+          keyExtractor={item => item.display_name}
           renderItem={({item}) => (
             <View style={styles.cardContainer}>
               <View style={styles.card}>
@@ -84,11 +106,14 @@ const TravelScreen = () => {
               </View>
             </View>
           )}
-          layout={'stack'}
-          layoutCardOffset={18}
-          sliderWidth={wp(100)}
-          itemWidth={wp(80)}
         />
+        <View style={styles.dotBackground}>
+          <PaginationDot
+            activeDotColor="#1c3052"
+            curPage={focusedPlaceIndex}
+            maxPage={circuits[current].circuit.length}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -127,6 +152,8 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   cardContainer: {
+    width: wp(85),
+    marginHorizontal: wp(7.5),
     marginTop: wp(10),
     padding: wp(2),
   },
@@ -195,6 +222,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
     fontSize: wp(4),
     padding: wp(0.5),
+  },
+  dotBackground: {
+    alignItems: 'center',
+    padding: wp(0.5),
+    paddingHorizontal: wp(2),
+    borderRadius: wp(2),
+    backgroundColor: 'white',
+    alignSelf: 'center',
   },
 });
 

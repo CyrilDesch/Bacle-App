@@ -1,50 +1,45 @@
 import React from 'react';
-import { StyleSheet, View, Text, Pressable, Image } from 'react-native';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import {StyleSheet, View, Text, Pressable, Image} from 'react-native';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
 
-
 const LightPlaceDetail = ({style, placeData, backButtonAction}) => {
-
   const getText = () => {
     const title = placeData.display_name.split(',')[0];
-    const address = placeData.display_name.slice(title.length + 2);   // +2 (", ")
+    const address = placeData.display_name.slice(title.length + 2); // +2 (", ")
 
     return (
       <View style={styles.text}>
-        <Text style={styles.title}>
-          {title}
-        </Text>
+        <Text style={styles.title}>{title}</Text>
         <Text style={styles.type}>
           {placeData.type.charAt(0).toUpperCase() + placeData.type.slice(1)}
         </Text>
-        <Text style={styles.address}>
-          {address}
-        </Text>
+        <Text style={styles.address}>{address}</Text>
       </View>
     );
   };
 
   return (
     <View style={{...styles.infoCard, ...style}}>
-
       <View style={styles.buttons}>
         {/* Bouton retour */}
-        {(backButtonAction !== null)
-          ? (
-            <Pressable style={{...styles.button, ...styles.backButton}} onPress={backButtonAction}>
-              <IconIonicons
-                name={'arrow-back-outline'}
-                size={wp(8)}
-                color="black"
-              />
-            </Pressable>
-          )
-          : null
-        }
+        {backButtonAction !== null ? (
+          <Pressable
+            style={{...styles.button, ...styles.backButton}}
+            onPress={backButtonAction}>
+            <IconIonicons
+              name={'arrow-back-outline'}
+              size={wp(8)}
+              color="black"
+            />
+          </Pressable>
+        ) : null}
 
         {/* Bouton Ajout à un voyage */}
-        <Pressable style={{...styles.button, ...styles.addButton}} onPress={() => console.log("Ajout à un voyage")}>
+        <Pressable style={{...styles.button, ...styles.addButton}}>
           <IconIonicons
             name={'add-circle-outline'}
             size={wp(8)}
@@ -63,11 +58,9 @@ const LightPlaceDetail = ({style, placeData, backButtonAction}) => {
       </View>
 
       {getText()}
-
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   infoCard: {
@@ -91,19 +84,15 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexWrap: 'nowrap',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   button: {
     width: wp(9),
     height: wp(9),
     position: 'relative',
   },
-  backButton: {
-
-  },
-  addButton: {
-    
-  },
+  backButton: {},
+  addButton: {},
   imageElevation: {
     position: 'absolute',
     borderRadius: wp(4),
@@ -127,7 +116,7 @@ const styles = StyleSheet.create({
   },
   text: {
     marginBottom: wp(2),
-    marginHorizontal: wp(4)
+    marginHorizontal: wp(4),
   },
   title: {
     fontFamily: 'Montserrat-Bold',
@@ -144,6 +133,5 @@ const styles = StyleSheet.create({
     color: '#a5a5a5',
   },
 });
-
 
 export default LightPlaceDetail;

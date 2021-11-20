@@ -86,7 +86,7 @@ const InformationForm = ({submit, step}) => {
       required: [selectedCity],
       data: [
         {
-          name: 'Ville du voyage',
+          name: 'Ville à proximité \n(pour recommendation)',
           type: typeEnum.SEARCH,
           state: name,
           onlyCity: selectedCountry,
@@ -173,10 +173,10 @@ const InformationForm = ({submit, step}) => {
           title="Suivant"
           onPress={() => {
             let count = 0;
+
             item.required.forEach(element =>
-              element != null ||
-              element.length > 0 ||
-              (element instanceof Date && element.getMilliseconds() > 0)
+              (element != null && element.length > 0) ||
+              (element instanceof Date && element.getTime() > 0)
                 ? count++
                 : null,
             );

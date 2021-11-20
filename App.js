@@ -117,7 +117,7 @@ const TabScreen = () => {
         },
         tabBarShowLabel: false,
         tabBarInactiveTintColor: '#c5c5c5',
-        tabBarActiveTintColor: '#327fa0',
+        tabBarActiveTintColor: '#1c3052',
         tabBarIcon: ({color}) => {
           let iconName;
           switch (route.name) {
@@ -153,7 +153,11 @@ const TabScreen = () => {
         component={TravelStackScreen}
       />
       <Tab.Screen
-        options={{tabBarStyle: {display: 'none'}, unmountOnBlur: true}}
+        options={{
+          tabBarStyle: {display: 'none'},
+          lazy: false,
+          unmountOnBlur: true,
+        }}
         name="CreateTravelStack"
         component={CreateTravelStackScreen}
       />
