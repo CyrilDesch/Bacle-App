@@ -1,27 +1,33 @@
 import React, {useContext} from 'react';
+import {View, StyleSheet, ImageBackground, StatusBar, Text} from 'react-native';
 import {
-  View,
-  StyleSheet,
-  Button,
-  ImageBackground,
-  StatusBar,
-  Text,
-} from 'react-native';
-import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import {Context as AuthContext} from '../../context/AuthContext';
+import {Context as UserContext} from '../../context/UserContext';
 import AuthForm from '../../components/AuthForm';
 
-const SigninScreen = ({navigation}) => {
+const SigninScreen = () => {
   const {signin} = useContext(AuthContext);
+  const {saveUser} = useContext(UserContext);
+
+  const handleSumbit = (email, password) => {
+    signin({email, password, saveUser});
+  };
 
   return (
     <ImageBackground
       style={styles.container}
       source={require('../../../assets/test0.jpg')}>
-      <StatusBar translucent={true} backgroundColor={'transparent'} />
+      <StatusBar
+        translucent={true}
+        backgroundColor={'transparent'}
+        barStyle="light-content"
+      />
       <Text style={styles.title}>Connectez-vous pour voyager !</Text>
       <View style={styles.center}>
-        <AuthForm buttonLabel="Se connecter" authMethod={signin} />
+        <AuthForm buttonLabel="Se connecter" authMethod={handleSumbit} />
       </View>
     </ImageBackground>
   );
@@ -29,9 +35,12 @@ const SigninScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'gray',
-    justifyContent: 'center',
-    flex: 1,
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    backgroundColor: 'black',
+    height: hp(100),
+    paddingTop: wp(25),
   },
   title: {
     fontSize: wp(9),

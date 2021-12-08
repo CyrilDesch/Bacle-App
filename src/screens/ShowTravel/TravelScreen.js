@@ -1,35 +1,85 @@
 import React, {useState, useRef, useEffect} from 'react';
-import {StyleSheet, Text, View, Image, Dimensions} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  FlatList,
+  Dimensions,
+} from 'react-native';
+import ModalSelector from 'react-native-modal-selector';
 
-import Carousel from 'react-native-snap-carousel';
+import PaginationDot from 'react-native-animated-pagination-dot';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import TravelMap from '../components/Map/TravelMap';
+import TravelMap from '../../components/Map/TravelMap';
 import Icon from 'react-native-vector-icons/AntDesign';
-
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const TravelScreen = () => {
   const carouselRef = useRef();
   const [focusedPlaceIndex, setFocusedPlaceIndex] = useState(0);
-  const circuit = require('../../customData.json').circuit;
+  const trips = require('../../../customData.json').user.trips;
+  const circuits = require('../../../customData.json').circuits;
+  const insets = useSafeAreaInsets();
 
+  const [current, setCurrent] = useState(circuits[0] ? 0 : null);
+
+  let tripDataSelector = [{key: 0, section: true, label: 'VOS VOYAGES'}];
+  for (let i = 0; i < trips.length; i++) {
+    tripDataSelector.push({key: i + 1, label: trips[i].name});
+  }
+
+  useEffect(() => {
+    setFocusedPlaceIndex(0);
+    carouselRef.current.scrollToIndex({animated: true, index: 0});
+    //TODO MODIF carouselRef.current.snapToItem(0);
+  }, [current]);
+
+  console.log(focusedPlaceIndex);
   return (
     <SafeAreaView style={styles.container}>
-      {circuit ? (
+      {circuits[current] ? (
         <TravelMap
           style={styles.map}
-          travelData={circuit}
+          travelData={circuits[current].circuit}
           focusedPlaceIndex={focusedPlaceIndex}
         />
       ) : null}
+      <View style={[styles.header, {marginTop: insets.top + wp(2)}]}>
+        <ModalSelector
+          selectedKey={current + 1}
+          selectStyle={{borderWidth: 0}}
+          selectTextStyle={styles.selectText}
+          cancelText={'FERMER'}
+          data={tripDataSelector}
+          initValue="Selectionner votre voyage"
+          onChange={option => {
+            setCurrent(option.key - 1);
+          }}
+        />
+      </View>
       <View style={styles.slider}>
-        <Carousel
-          onSnapToItem={index => setFocusedPlaceIndex(index)}
+        <FlatList
+          horizontal
+          pagingEnabled
           ref={carouselRef}
-          data={circuit}
+          data={circuits[current].circuit}
+          showsHorizontalScrollIndicator={false}
+          disableIntervalMomentum
+          onMomentumScrollEnd={e => {
+            let pageNumber = Math.floor(
+              e.nativeEvent.contentOffset.x / wp(99.9),
+              0,
+            );
+            if (focusedPlaceIndex !== pageNumber)
+              setFocusedPlaceIndex(pageNumber);
+          }}
+          keyExtractor={item => item.display_name}
           renderItem={({item}) => (
             <View style={styles.cardContainer}>
               <View style={styles.card}>
@@ -56,11 +106,14 @@ const TravelScreen = () => {
               </View>
             </View>
           )}
-          layout={'stack'}
-          layoutCardOffset={18}
-          sliderWidth={wp(100)}
-          itemWidth={wp(80)}
         />
+        <View style={styles.dotBackground}>
+          <PaginationDot
+            activeDotColor="#1c3052"
+            curPage={focusedPlaceIndex}
+            maxPage={circuits[current].circuit.length}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -99,6 +152,8 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   cardContainer: {
+    width: wp(85),
+    marginHorizontal: wp(7.5),
     marginTop: wp(10),
     padding: wp(2),
   },
@@ -147,6 +202,34 @@ const styles = StyleSheet.create({
     marginLeft: wp(1.5),
     fontFamily: 'Montserrat-SemiBold',
     fontSize: wp(3.5),
+  },
+  header: {
+    position: 'absolute',
+    alignSelf: 'center',
+    backgroundColor: 'white',
+    borderWidth: 0,
+    borderRadius: wp(4),
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+  selectText: {
+    fontFamily: 'Montserrat-Medium',
+    fontSize: wp(4),
+    padding: wp(0.5),
+  },
+  dotBackground: {
+    alignItems: 'center',
+    padding: wp(0.5),
+    paddingHorizontal: wp(2),
+    borderRadius: wp(2),
+    backgroundColor: 'white',
+    alignSelf: 'center',
   },
 });
 

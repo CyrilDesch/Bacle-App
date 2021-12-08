@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet} from 'react-native';
 
-import Map, { getMarkerList, getViewWindow } from './Map';
+import Map, {getMarkerList, getViewWindow} from './Map';
 
 
 // Abstraction du component Map pour le SearchScreen.
@@ -11,10 +11,8 @@ const SearchMap = ({style, searchData, focusedPlaceIndex}) => {
   const [markers, setMarkers] = useState([]);
 
   useEffect(() => {
-      setMarkers(getMarkerList(searchData))
-    }, 
-    [searchData]
-  );
+    setMarkers(getMarkerList(searchData));
+  }, [searchData]);
 
   return (
     <Map
@@ -22,19 +20,16 @@ const SearchMap = ({style, searchData, focusedPlaceIndex}) => {
       markers={markers}
       polylines={[]}
       viewWindow={getViewWindow(
-        (focusedPlaceIndex === -1) 
-        ? searchData 
-        : [searchData[focusedPlaceIndex]]
+        (focusedPlaceIndex === -1)
+          ? searchData 
+          : [searchData[focusedPlaceIndex]],
       )}
     />
   );
+};
 
-}
 
-
-const styles = StyleSheet.create({
-
-});
+const styles = StyleSheet.create({});
 
 
 export default SearchMap;

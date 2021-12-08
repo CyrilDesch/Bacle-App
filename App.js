@@ -1,14 +1,15 @@
-import React, {useContext, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import HomeScreen from './src/screens/HomeScreen';
-import TravelScreen from './src/screens/TravelScreen';
+import TravelScreen from './src/screens/ShowTravel/TravelScreen';
+import CreateTravelScreen from './src/screens/CreateTravel/CreateTravelScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import ProfilScreen from './src/screens/ProfilScreen';
 import DetailLieuScreen from './src/screens/DetailLieuScreen';
 import SigninScreen from './src/screens/Auth/SigninScreen';
 import SignupScreen from './src/screens/Auth/SignupScreen';
+import WaitScreen from './src/screens/Auth/WaitScreen';
 import {navigationRef} from './src/navigationRef';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
@@ -40,6 +41,7 @@ const AuthStackScreen = () => {
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 const TravelStack = createNativeStackNavigator();
+const CreateTravelStack = createNativeStackNavigator();
 const SearchStack = createNativeStackNavigator();
 const ProfilStack = createNativeStackNavigator();
 
@@ -59,6 +61,18 @@ const TravelStackScreen = () => {
       screenOptions={{headerShown: false, gestureEnabled: false}}>
       <TravelStack.Screen name="Travel" component={TravelScreen} />
     </TravelStack.Navigator>
+  );
+};
+
+const CreateTravelStackScreen = () => {
+  return (
+    <CreateTravelStack.Navigator
+      screenOptions={{headerShown: false, gestureEnabled: false}}>
+      <CreateTravelStack.Screen
+        name="CreateTravel"
+        component={CreateTravelScreen}
+      />
+    </CreateTravelStack.Navigator>
   );
 };
 
@@ -84,7 +98,6 @@ const TabScreen = () => {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
-        lazy: false,
         tabBarStyle: {
           borderTopLeftRadius: wp(5),
           borderTopRightRadius: wp(5),
@@ -104,7 +117,7 @@ const TabScreen = () => {
         },
         tabBarShowLabel: false,
         tabBarInactiveTintColor: '#c5c5c5',
-        tabBarActiveTintColor: '#327fa0',
+        tabBarActiveTintColor: '#1c3052',
         tabBarIcon: ({color}) => {
           let iconName;
           switch (route.name) {
@@ -114,6 +127,9 @@ const TabScreen = () => {
             case 'TravelStack':
               iconName = 'find';
               break;
+            case 'CreateTravelStack':
+              iconName = 'pluscircleo';
+              break;
             case 'SearchStack':
               iconName = 'search1';
               break;
@@ -121,15 +137,40 @@ const TabScreen = () => {
               iconName = 'user';
               break;
           }
-          return <Icon name={iconName} size={wp(8)} color={color} />;
+          return <Icon name={iconName} size={wp(7.5)} color={color} />;
         },
         headerShown: false,
         gestureEnabled: false,
       })}>
-      <Tab.Screen name="HomeStack" component={HomeStackScreen} />
-      <Tab.Screen name="TravelStack" component={TravelStackScreen} />
-      <Tab.Screen name="SearchStack" component={SearchStackScreen} />
-      <Tab.Screen name="ProfilStack" component={ProfilStackScreen} />
+      <Tab.Screen
+        options={{lazy: false}}
+        name="HomeStack"
+        component={HomeStackScreen}
+      />
+      <Tab.Screen
+        options={{lazy: false}}
+        name="TravelStack"
+        component={TravelStackScreen}
+      />
+      <Tab.Screen
+        options={{
+          tabBarStyle: {display: 'none'},
+          lazy: false,
+          unmountOnBlur: true,
+        }}
+        name="CreateTravelStack"
+        component={CreateTravelStackScreen}
+      />
+      <Tab.Screen
+        options={{lazy: false}}
+        name="SearchStack"
+        component={SearchStackScreen}
+      />
+      <Tab.Screen
+        options={{lazy: false}}
+        name="ProfilStack"
+        component={ProfilStackScreen}
+      />
     </Tab.Navigator>
   );
 };
@@ -138,16 +179,16 @@ const App = () => {
   const {tryLocalSignIn, state: auth} = useContext(AuthContext);
   const {saveUser} = useContext(UserContext);
 
+  const [launchFinish, setlaunchFinish] = useState(false);
   useEffect(() => {
     tryLocalSignIn({saveUser});
+    setTimeout(() => {
+      setlaunchFinish(true);
+    }, 2000);
   }, []);
 
-  if (auth.localLoading) {
-    return (
-      <View style={{backgroundColor: '#fe9b18'}}>
-        <Text>Wait</Text>
-      </View>
-    );
+  if (auth.localLoading || !launchFinish) {
+    return <WaitScreen />;
   }
 
   return (

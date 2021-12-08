@@ -1,23 +1,21 @@
 import axios from 'axios';
 
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text, FlatList } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, Text, FlatList} from 'react-native';
 
-import Map, { getLatLngList, getMarkerList } from './Map';
+import Map, {getLatLngList, getMarkerList} from './Map';
 
-import { decode } from '../../decode';
-
+import {decode} from '../../decode';
 
 // Abstraction du component Map pour le SearchScreen.
 // travelData: Place[]              Une liste de lieux (typiquement un trajet à représenter sur la carte).
 // focusedPlaceIndex: int           L'indice du lieu dans le tableau travelData qui doit être focus (-1 = non défini).
 const TravelMap = ({style, travelData, focusedPlaceIndex}) => {
-  const [focusPosition, setFocusPosition] = useState({ 
-    latitude: 48.858260200000004, 
-    longitude: 2.2944990543196795 
+  const [focusPosition, setFocusPosition] = useState({
+    latitude: 48.858260200000004,
+    longitude: 2.2944990543196795,
   });
   const [path, setPath] = useState([]);
-
 
   // On creation
   useEffect(() => {
@@ -50,9 +48,9 @@ const TravelMap = ({style, travelData, focusedPlaceIndex}) => {
     };
 
     chemin();
-  }, []);
+  }, [travelData]);
 
-  // On update of position 
+  // On update of position
   useEffect(() => {
       if (travelData !== null && travelData.length !== 0 && focusedPlaceIndex !== -1) {
         const positions = getLatLngList([travelData[focusedPlaceIndex]]);
@@ -76,13 +74,8 @@ const TravelMap = ({style, travelData, focusedPlaceIndex}) => {
       }}
     />
   );
+};
 
-}
-
-
-const styles = StyleSheet.create({
-
-});
-
+const styles = StyleSheet.create({});
 
 export default TravelMap;

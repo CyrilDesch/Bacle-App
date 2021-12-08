@@ -9,18 +9,19 @@
     "isVerified": "true",
     "trips": [
       {
-        "id": "TR741",
-        "name": "Vacance Lyon",
-        "destination": "Lyon",
-        "days": ["rien capté"],
-        "startDate": "2021-07-05T00:00:00.000+00:0"
-      },
-      {
         "id": "TR787",
-        "name": "Vacance Paris",
+        "name": "Vacances Paris",
         "destination": "Paris",
         "days": ["rien capté"],
         "startDate": "2021-08-22T00:00:00.000+00:0"
+      },
+      
+      {
+        "id": "TR741",
+        "name": "Vacances Lyon",
+        "destination": "Lyon",
+        "days": ["rien capté"],
+        "startDate": "2021-07-05T00:00:00.000+00:0"
       }
     ]
   },
@@ -176,82 +177,285 @@
       }
     }
   ],
-  "circuit": [
+  "circuits": [
     {
-      "place_id": 53581556,
-      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
-      "osm_type": "node",
-      "osm_id": 4533627787,
-      "boundingbox": [
-          "48.8707073",
-          "48.8708073",
-          "2.3052812",
-          "2.3053812"
-      ],
-      "lat": "48.8707573",
-      "lon": "2.3053312",
-      "display_name": "Champs Élysées, Promenade des Champs-Élysées, Quartier du Faubourg-du-Roule, Paris 8e Arrondissement, Paris, Île-de-France, France métropolitaine, 75008, France",
-      "category": "tourism",
-      "type": "attraction",
-      "importance": 0.6389143157033701,
-      "icon": "https://nominatim.openstreetmap.org/ui/mapicons//poi_point_of_interest.p.20.png"
+      "id": "TR787",
+      "circuit": [
+        {
+          "place_id": 53581556,
+          "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+          "osm_type": "node",
+          "osm_id": 4533627787,
+          "boundingbox": [
+              "48.8707073",
+              "48.8708073",
+              "2.3052812",
+              "2.3053812"
+          ],
+          "lat": "48.8707573",
+          "lon": "2.3053312",
+          "display_name": "Champs Élysées, Promenade des Champs-Élysées, Quartier du Faubourg-du-Roule, Paris 8e Arrondissement, Paris, Île-de-France, France métropolitaine, 75008, France",
+          "category": "tourism",
+          "type": "attraction",
+          "importance": 0.6389143157033701,
+          "icon": "https://nominatim.openstreetmap.org/ui/mapicons//poi_point_of_interest.p.20.png"
+        },
+        {
+          "place_id": 44219086,
+          "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+          "osm_type": "node",
+          "osm_id": 3414141480,
+          "boundingbox": [
+              "48.857527",
+              "48.867527",
+              "2.2950067",
+              "2.3050067"
+          ],
+          "lat": "48.862527",
+          "lon": "2.3000067",
+          "display_name": "Pont de l'Alma, Promenade Gisèle Halimi, Quartier du Gros-Caillou, Paris 7e Arrondissement, Paris, Île-de-France, France métropolitaine, 75007, France",
+          "category": "railway",
+          "type": "station",
+          "importance": 0.7343526860531795,
+          "icon": "https://nominatim.openstreetmap.org/ui/mapicons//transport_train_station2.p.20.png"
+        },
+        {
+          "place_id": 84512907,
+          "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+          "osm_type": "way",
+          "osm_id": 5013364,
+          "boundingbox": [
+              "48.8574753",
+              "48.8590453",
+              "2.2933084",
+              "2.2956897"
+          ],
+          "lat": "48.858260200000004",
+          "lon": "2.2944990543196795",
+          "display_name": "Tour Eiffel, 5, Avenue Anatole France, Quartier du Gros-Caillou, Paris 7e Arrondissement, Paris, Île-de-France, France métropolitaine, 75007, France",
+          "category": "tourism",
+          "type": "attraction",
+          "importance": 0.7868325701744197,
+          "icon": "https://nominatim.openstreetmap.org/ui/mapicons//poi_point_of_interest.p.20.png"
+        },
+        {
+          "place_id": 257768528,
+          "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+          "osm_type": "relation",
+          "osm_id": 7515426,
+          "boundingbox": [
+              "48.8593816",
+              "48.8629132",
+              "2.3317162",
+              "2.3400113"
+          ],
+          "lat": "48.8611473",
+          "lon": "2.33802768704666",
+          "display_name": "Musée du Louvre, Rue Croix des Petits Champs, Quartier Les Halles, Paris 1er Arrondissement, Les Halles, Paris, Île-de-France, France métropolitaine, 75001, France",
+          "category": "tourism",
+          "type": "museum",
+          "importance": 0.9436012537671365,
+          "icon": "https://nominatim.openstreetmap.org/ui/mapicons//tourist_museum.p.20.png"
+        }
+      ]
     },
     {
-      "place_id": 44219086,
+      "id": "TR741",
+      "circuit": [
+        {
+          "place_id": 191088028,
+          "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+          "osm_type": "way",
+          "osm_id": 440270631,
+          "boundingbox": [
+              "45.7319114",
+              "45.733344",
+              "4.8173475",
+              "4.8186229"
+          ],
+          "lat": "45.732677800000005",
+          "lon": "4.818160692638674",
+          "display_name": "Musée des Confluences, Autoroute du Soleil, Confluence, Lyon 2e Arrondissement, Lyon, Métropole de Lyon, Circonscription départementale du Rhône, Auvergne-Rhône-Alpes, France métropolitaine, 69002, France",
+          "place_rank": 30,
+          "category": "tourism",
+          "type": "museum",
+          "importance": 0.5903352193791243,
+          "icon": "https://nominatim.openstreetmap.org/ui/mapicons//tourist_museum.p.20.png",
+          "osm_data": {
+              "version": "0.6",
+              "generator": "CGImap 0.8.5 (434899 spike-07.openstreetmap.org)",
+              "copyright": "OpenStreetMap and contributors",
+              "attribution": "http://www.openstreetmap.org/copyright",
+              "license": "http://opendatacommons.org/licenses/odbl/1-0/",
+              "elements": [
+                  {
+                      "type": "way",
+                      "id": 440270631,
+                      "timestamp": "2021-07-02T08:45:07Z",
+                      "version": 11,
+                      "changeset": 107299191,
+                      "user": "gileri",
+                      "uid": 593214,
+                      "nodes": [
+                          1135489412,
+                          4379994011,
+                          6270805307,
+                          4379994002,
+                          6270805308,
+                          4379994003,
+                          4379994004,
+                          4379994010,
+                          4379994006,
+                          1135489406,
+                          1135489405,
+                          4379994013,
+                          6270805298,
+                          1135489404,
+                          1135489403,
+                          1135489402,
+                          3272851124,
+                          3181869862,
+                          1135489421,
+                          1135489420,
+                          1135489417,
+                          1135489416,
+                          6270805313,
+                          6270805303,
+                          6270805292,
+                          6270805304,
+                          6270805312,
+                          1135489414,
+                          1135489413,
+                          1135489412
+                      ],
+                      "tags": {
+                          "fee": "yes",
+                          "name": "Musée des Confluences",
+                          "opening_hours": "Mo-Fr 11:00-19:00; Th 11:00-22:00; Sa-Su 10:00-19:00",
+                          "phone": "+33 4 28 38 12 12",
+                          "ref:FR:museofile": "M7042",
+                          "start_date": "2014-12-19",
+                          "tourism": "museum",
+                          "website": "http://www.museedesconfluences.fr/",
+                          "wheelchair": "yes",
+                          "wikidata": "Q8352",
+                          "wikimedia_commons": "Category:Musée_des_Confluences",
+                          "wikipedia": "fr:Musée des Confluences"
+                      }
+                  }
+              ]
+          }
+      },
+      {
+        "place_id": 85500735,
+        "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
+        "osm_type": "way",
+        "osm_id": 4161405,
+        "boundingbox": [
+            "45.7565467",
+            "45.7587541",
+            "4.8300415",
+            "4.8340267"
+        ],
+        "lat": "45.7575158",
+        "lon": "4.831995238549908",
+        "display_name": "Place Bellecour, Bellecour, Lyon 2e Arrondissement, Lyon, Métropole de Lyon, Circonscription départementale du Rhône, Auvergne-Rhône-Alpes, France métropolitaine, 69002, France",
+        "place_rank": 30,
+        "category": "tourism",
+        "type": "square",
+        "importance": 0.574579673985169,
+        "osm_data": {
+            "version": "0.6",
+            "generator": "CGImap 0.8.5 (921394 spike-06.openstreetmap.org)",
+            "copyright": "OpenStreetMap and contributors",
+            "attribution": "http://www.openstreetmap.org/copyright",
+            "license": "http://opendatacommons.org/licenses/odbl/1-0/",
+            "elements": [
+                {
+                    "type": "way",
+                    "id": 4161405,
+                    "timestamp": "2021-06-07T14:03:28Z",
+                    "version": 40,
+                    "changeset": 105977326,
+                    "user": "Julien39",
+                    "uid": 195017,
+                    "nodes": [
+                        838347913,
+                        7691323150,
+                        838347865,
+                        2712272657,
+                        2712272656,
+                        2712272655,
+                        7691323152,
+                        838347907,
+                        7691323151,
+                        1468604475,
+                        838347843,
+                        838347920,
+                        1468604473,
+                        21702176,
+                        7691323148,
+                        7691323147,
+                        7691323142,
+                        838347842,
+                        1468595392,
+                        1468595393,
+                        838347951,
+                        7691323139,
+                        1468595395,
+                        1468595396,
+                        838347858,
+                        838347873,
+                        7691323140,
+                        7691323141,
+                        7691323143,
+                        7691323144,
+                        838347887,
+                        2712272658,
+                        1468595407,
+                        2712272659,
+                        1468595408,
+                        7691323145,
+                        7691323146,
+                        7691323149,
+                        4603869083,
+                        838347913
+                    ],
+                    "tags": {
+                        "name": "Place Bellecour",
+                        "name:ru": "пл. Белькур",
+                        "place": "square",
+                        "surface": "fine_gravel",
+                        "tourism": "square",
+                        "wikidata": "Q614",
+                        "wikipedia": "fr:Place Bellecour"
+                    }
+                }
+            ]
+        }
+    },{
+      "place_id": 65652729,
       "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
       "osm_type": "node",
-      "osm_id": 3414141480,
+      "osm_id": 5821110983,
       "boundingbox": [
-          "48.857527",
-          "48.867527",
-          "2.2950067",
-          "2.3050067"
+          "45.757381",
+          "45.767381",
+          "4.8164507",
+          "4.8264507"
       ],
-      "lat": "48.862527",
-      "lon": "2.3000067",
-      "display_name": "Pont de l'Alma, Promenade Gisèle Halimi, Quartier du Gros-Caillou, Paris 7e Arrondissement, Paris, Île-de-France, France métropolitaine, 75007, France",
+      "lat": "45.762381",
+      "lon": "4.8214507",
+      "display_name": "Fourvière, Place de Fourvière, Fourvière, Lyon 5e Arrondissement, Lyon, Métropole de Lyon, Circonscription départementale du Rhône, Auvergne-Rhône-Alpes, France métropolitaine, 69005, France",
+      "place_rank": 30,
       "category": "railway",
       "type": "station",
-      "importance": 0.7343526860531795,
-      "icon": "https://nominatim.openstreetmap.org/ui/mapicons//transport_train_station2.p.20.png"
-    },
-    {
-      "place_id": 84512907,
-      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
-      "osm_type": "way",
-      "osm_id": 5013364,
-      "boundingbox": [
-          "48.8574753",
-          "48.8590453",
-          "2.2933084",
-          "2.2956897"
-      ],
-      "lat": "48.858260200000004",
-      "lon": "2.2944990543196795",
-      "display_name": "Tour Eiffel, 5, Avenue Anatole France, Quartier du Gros-Caillou, Paris 7e Arrondissement, Paris, Île-de-France, France métropolitaine, 75007, France",
-      "category": "tourism",
-      "type": "attraction",
-      "importance": 0.7868325701744197,
-      "icon": "https://nominatim.openstreetmap.org/ui/mapicons//poi_point_of_interest.p.20.png"
-    },
-    {
-      "place_id": 257768528,
-      "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
-      "osm_type": "relation",
-      "osm_id": 7515426,
-      "boundingbox": [
-          "48.8593816",
-          "48.8629132",
-          "2.3317162",
-          "2.3400113"
-      ],
-      "lat": "48.8611473",
-      "lon": "2.33802768704666",
-      "display_name": "Musée du Louvre, Rue Croix des Petits Champs, Quartier Les Halles, Paris 1er Arrondissement, Les Halles, Paris, Île-de-France, France métropolitaine, 75001, France",
-      "category": "tourism",
-      "type": "museum",
-      "importance": 0.9436012537671365,
-      "icon": "https://nominatim.openstreetmap.org/ui/mapicons//tourist_museum.p.20.png"
+      "importance": 0.3970855185391935,
+      "icon": "https://nominatim.openstreetmap.org/ui/mapicons//transport_train_station2.p.20.png",
+      "osm_data": []
+  }
+
+      ]
     }
   ]
 }

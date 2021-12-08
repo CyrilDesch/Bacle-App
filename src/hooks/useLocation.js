@@ -79,7 +79,6 @@ export default (shouldTrack, callback) => {
         watchId.current = Geolocation.watchPosition(
           position => {
             callback(position);
-            console.log(position);
           },
           error => {
             console.log(error);

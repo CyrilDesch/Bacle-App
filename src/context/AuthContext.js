@@ -1,5 +1,6 @@
 import createDataContext from '../context/createDataContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getUserRequest, signInRequest, signUpRequest} from '../api/userRequest';
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -25,22 +26,31 @@ const authReducer = (state, action) => {
   }
 };
 
+const addError =
+  dispatch =>
+  ({error}) => {
+    dispatch({type: 'add_error', payload: error});
+  };
+
 const removeError = dispatch => () => {
   dispatch({type: 'remove_error'});
 };
 
 const signup =
   dispatch =>
-  async ({email, password, saveUser}) => {
+  async ({email, password, lastName, firstName, saveUser}) => {
     try {
-      /// MOCK DATA (a remplacer par requete)
-      const user = require('../../customData.json').user;
-      ///
-      await AsyncStorage.setItem('token', user.simulToken);
-      saveUser(user);
-      dispatch({type: 'signup', payload: user.simulToken});
+      await signUpRequest(email, password, firstName, lastName);
+
+      const token = await signInRequest(email, password);
+      await AsyncStorage.setItem('token', token);
+
+      const user = await getUserRequest();
+      saveUser({email: user.jwt.username});
+
+      dispatch({type: 'signup', payload: token});
     } catch (err) {
-      dispatch({type: 'add_error', payload: 'Une erreur est survenue'});
+      dispatch({type: 'add_error', payload: err});
     }
   };
 
@@ -48,20 +58,18 @@ const signin =
   dispatch =>
   async ({email, password, saveUser}) => {
     try {
-      /// MOCK DATA (a remplacer par requete)
-      const user = require('../../customData.json').user;
-      ///
+      const token = await signInRequest(email, password);
+      await AsyncStorage.setItem('token', token);
 
-      if (email == user.email && password == user.password) {
-        await AsyncStorage.setItem('token', user.simulToken);
-        saveUser(user);
-        dispatch({
-          type: 'signin',
-          payload: {token: user.simulToken, localLoading: false},
-        });
-      } else throw new Error();
+      const user = await getUserRequest();
+      saveUser({email: user.jwt.username});
+
+      dispatch({
+        type: 'signin',
+        payload: {token: token, localLoading: false},
+      });
     } catch (err) {
-      dispatch({type: 'add_error', payload: 'Une erreur est survenue'});
+      dispatch({type: 'add_error', payload: err});
     }
   };
 
@@ -71,6 +79,8 @@ const tryLocalSignIn =
     const token = await AsyncStorage.getItem('token');
     if (token) {
       try {
+        const user = await getUserRequest();
+        saveUser({email: user.jwt.username});
         dispatch({
           type: 'signin',
           payload: {token: token, localLoading: false},
@@ -94,6 +104,6 @@ const signout = dispatch => async () => {
 
 export const {Provider, Context} = createDataContext(
   authReducer,
-  {signin, signup, signout, removeError, tryLocalSignIn},
+  {signin, signup, signout, removeError, addError, tryLocalSignIn},
   {token: null, error: '', localLoading: true},
 );

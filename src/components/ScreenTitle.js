@@ -13,14 +13,6 @@ const ScreenTitle = ({title1, title2}) => {
         <Text style={styles.title1}>{title1}</Text>
         <Text style={styles.title2}>{title2}</Text>
       </View>
-      <Shadow style={styles.shadow}>
-        <Image
-          style={styles.profil}
-          source={{
-            uri: 'https://img-19.ccm2.net/WNCe54PoGxObY8PCXUxMGQ0Gwss=/480x270/smart/d8c10e7fd21a485c909a5b4c5d99e611/ccmcms-commentcamarche/20456790.jpg',
-          }}
-        />
-      </Shadow>
     </View>
   );
 };
