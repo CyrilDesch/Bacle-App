@@ -1,12 +1,57 @@
-import React from 'react';
-import {StyleSheet, View, Text, Pressable, Image} from 'react-native';
+import React, { useState } from 'react';
+
+import { StyleSheet, View, Text, Pressable, Image } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
+import { getTripList } from '../../api/trip';
+
+
+/*
+const callAddStageAPI = async () => {
+  if (text.length > 1) {
+    //setLoading(true);
+    const res = await search(text);
+    console.log(res);
+    //setLoading(false);
+    let data;
+    if (onlyCity) {
+      data = res.data.filter(
+        value =>
+          value.display_name.split(',').length == 6 &&
+          value.display_name.includes(onlyCity.display_name.split(',')[0]),
+      );
+    } else if (onlyCountry) {
+      data = res.data.filter(
+        value => value.display_name.split(',').length == 1,
+      );
+    } else {
+      data = res.data.filter(
+        value =>
+          (value.category == 'tourism' || value.category == 'boundary') &&
+          value.display_name.includes('France'),
+      );
+    }
+    setData(data);
+    onSubmit(data);
+  }
+};*/
+
+const chooseTrip = () => {
+
+}
+
+const chooseTripToAddPlace = async () => {
+  const res = await getTripList();
+  return res.data.trips;
+};
+
 
 const LightPlaceDetail = ({style, placeData, backButtonAction}) => {
+  const [isTripListPopupDisplayed, displayTripListPopup] = useState(false); 
+
   const getText = () => {
     const title = placeData.display_name.split(',')[0];
     const address = placeData.display_name.slice(title.length + 2); // +2 (", ")
@@ -33,7 +78,7 @@ const LightPlaceDetail = ({style, placeData, backButtonAction}) => {
             <IconIonicons
               name={'arrow-back-outline'}
               size={wp(8)}
-              color="black"
+              color={"black"}
             />
           </Pressable>
         ) : null}
@@ -41,11 +86,11 @@ const LightPlaceDetail = ({style, placeData, backButtonAction}) => {
         {/* Bouton Ajout à un voyage */}
         <Pressable 
           style={{...styles.button, ...styles.addButton}}
-          onPress={() => {}}>
+          onPress={() => displayTripListPopup(true)}>
           <IconIonicons
             name={'add-circle-outline'}
             size={wp(8)}
-            color="black"
+            color={"black"}
           />
         </Pressable>
       </View>

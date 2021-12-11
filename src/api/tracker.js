@@ -51,7 +51,7 @@ instance.interceptors.request.use(
   },
 );
 
-export const search = async place => {
+export const search = async (place) => {
   try {
     const req = await instance.get('/search/', {params: {q: place}});
     return req;
