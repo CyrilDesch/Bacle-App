@@ -13,11 +13,10 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/AntDesign';
 import SearchResultList from './SearchResultList';
 
 const SearchBar = ({
-  onlyCity,
   onlyCountry,
   showResult,
   setSearchData,
@@ -47,16 +46,10 @@ const SearchBar = ({
     if (text.length > 1) {
       setLoading(true);
       const res = await search(text);
-      console.log(res);
+      console.log(res.data);
       setLoading(false);
       let data;
-      if (onlyCity) {
-        data = res.data.filter(
-          value =>
-            value.display_name.split(',').length == 6 &&
-            value.display_name.includes(onlyCity.display_name.split(',')[0]),
-        );
-      } else if (onlyCountry) {
+      if (onlyCountry) {
         data = res.data.filter(
           value => value.display_name.split(',').length == 1,
         );
@@ -73,43 +66,46 @@ const SearchBar = ({
   };
 
   return (
-    <View style={[styles.searchBar, style]}>
-      <Input
-        inputContainerStyle={styles.searchFieldContainer}
-        inputStyle={styles.input}
-        value={text}
-        renderErrorMessage={false}
-        onChangeText={text => {
-          if (data.length >= 0) {
-            setData([]);
-            if (setSelected) {
-              setSelected(null);
+    <>
+      <View style={[styles.searchBar, style]}>
+        <Input
+          inputContainerStyle={styles.searchFieldContainer}
+          inputStyle={styles.input}
+          value={text}
+          renderErrorMessage={false}
+          onChangeText={text => {
+            if (data.length >= 0) {
+              setData([]);
+              if (setSelected) {
+                setSelected(null);
+              }
             }
+            setText(text);
+          }}
+          onSubmitEditing={callSearchAPI}
+          placeholder={'Rechercher'}
+          leftIcon={<Icon name="search1" size={wp(5)} color="#00000090" />}
+          rightIcon={
+            loading ? (
+              <ActivityIndicator
+                animating={loading}
+                size="small"
+                color="#1c3052"
+              />
+            ) : text.length > 0 && onClose != null ? (
+              <Pressable
+                onPress={() => {
+                  setText('');
+                  onClose();
+                }}>
+                <Icon name="closecircle" size={wp(5)} color="#00000090" />
+              </Pressable>
+            ) : null
           }
-          setText(text);
-        }}
-        onSubmitEditing={callSearchAPI}
-        placeholder={'Rechercher'}
-        rightIcon={
-          loading ? (
-            <ActivityIndicator
-              animating={loading}
-              size="small"
-              color="#1c3052"
-            />
-          ) : data.length > 0 && onClose != null ? (
-            <Pressable
-              onPress={() => {
-                setText('');
-                onClose();
-              }}>
-              <Icon name="close" size={wp(6)} color="black" />
-            </Pressable>
-          ) : null
-        }
-      />
+        />
+      </View>
       {showResult && data.length > 0 ? (
-        <View style={{padding: wp(1), marginTop: -wp(3)}}>
+        <View style={styles.result}>
           <SearchResultList
             data={data}
             onItemPress={index => {
@@ -122,13 +118,12 @@ const SearchBar = ({
           />
         </View>
       ) : null}
-    </View>
+    </>
   );
 };
 
 SearchBar.defaultProps = {
   showResult: true,
-  onlyCity: null,
   onlyCountry: null,
   onClose: null,
   onSubmit: () => {},
@@ -137,6 +132,8 @@ SearchBar.defaultProps = {
 
 const styles = StyleSheet.create({
   searchBar: {
+    zIndex: 2,
+    paddingHorizontal: wp(1),
     width: '100%',
     alignSelf: 'center',
     top: wp(2),
@@ -159,13 +156,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
   },
   result: {
-    borderTopWidth: wp(0.2),
-    borderTopColor: '#B9B9B9',
-    paddingTop: wp(2.5),
-    marginBottom: wp(2.5),
-    marginHorizontal: wp(3.5),
-    fontSize: wp(4.5),
-    fontFamily: 'Montserrat-Medium',
+    zIndex: 1,
+    position: 'absolute',
+    width: '100%',
+    top: wp(22),
+    paddingHorizontal: wp(1),
   },
 });
 

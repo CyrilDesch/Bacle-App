@@ -10,12 +10,13 @@ import {
 const SearchResultList = ({data, onItemPress}) => {
   return (
     <FlatList
+      contentContainerStyle={styles.container}
       data={data}
       ItemSeparatorComponent={() => {
         return (
           <View
             style={{
-              borderTopWidth: wp(0.1),
+              borderTopWidth: wp(0.3),
               borderTopColor: '#B9B9B9',
             }}
           />
@@ -29,6 +30,19 @@ const SearchResultList = ({data, onItemPress}) => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    marginBottom: wp(5),
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    borderRadius: wp(2),
+    borderTopWidth: 0,
+    borderWidth: wp(0.3),
+    borderColor: '#989898',
+    elevation: 0,
+    shadowOpacity: 0,
+  },
+});
 
 export default SearchResultList;
