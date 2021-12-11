@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, View, Text, Pressable, FlatList} from 'react-native';
 import {Input} from 'react-native-elements';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {format} from 'date-fns';
+import {format, sub} from 'date-fns';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -27,20 +27,14 @@ const InformationForm = ({submit, step}) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    if (carouselRef.current.currentIndex > step) {
-      switch (step) {
-        case 0:
-          setSelectedCountry(null);
-          break;
-        case 1:
-          setSelectedCity(null);
-          break;
-      }
-    }
     if (carouselRef.current != null) {
       carouselRef.current.snapToItem(step);
     }
   }, [step]);
+
+  useEffect(() => {
+    setSelectedCity(null);
+  }, [selectedCountry]);
 
   const [show, setShow] = useState(false);
   const defaultDate = new Date();
@@ -59,7 +53,7 @@ const InformationForm = ({submit, step}) => {
           setState: setName,
         },
         {
-          name: 'Date du voyage',
+          name: 'Date de départ',
           type: typeEnum.DATE,
           state: date,
           setState: setDate,
@@ -86,10 +80,9 @@ const InformationForm = ({submit, step}) => {
       required: [selectedCity],
       data: [
         {
-          name: 'Ville à proximité \n(pour recommendation)',
+          name: 'Ville de destination',
           type: typeEnum.SEARCH,
           state: name,
-          onlyCity: selectedCountry,
           setState: setName,
           selected: selectedCity,
           onSelect: setSelectedCity,
@@ -98,7 +91,7 @@ const InformationForm = ({submit, step}) => {
     },
   ];
 
-  const renderItem = ({item}) => {
+  const renderItem = ({item, index}) => {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>{item.title}</Text>
@@ -151,7 +144,6 @@ const InformationForm = ({submit, step}) => {
                   <SearchBar
                     style={styles.searchBar}
                     key={inputData.name}
-                    onlyCity={inputData.onlyCity}
                     onlyCountry={inputData.onlyCountry}
                     setSelected={inputData.onSelect}
                     selected={inputData.selected}
@@ -170,18 +162,30 @@ const InformationForm = ({submit, step}) => {
         })}
         <Button
           buttonStyle={styles.button}
-          title="Suivant"
+          title={dataForm.length - 1 != index ? 'Suivant' : 'Créer'}
           onPress={() => {
             let count = 0;
 
             item.required.forEach(element =>
-              (element != null && element.length > 0) ||
+              (element != null && Object.values(element).length > 0) ||
               (element instanceof Date && element.getTime() > 0)
                 ? count++
                 : null,
             );
+
             if (count == item.required.length) {
-              submit();
+              if (index == dataForm.length - 1) {
+                submit({
+                  name: name,
+                  defaultStartLoc: {
+                    lat: selectedCity.lat,
+                    lon: selectedCity.long,
+                  },
+                  startDate: date,
+                });
+              } else {
+                submit();
+              }
               setErrorMessage('');
             } else {
               setErrorMessage('Remplir les champs');

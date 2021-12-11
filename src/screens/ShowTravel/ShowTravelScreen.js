@@ -37,10 +37,8 @@ const TravelScreen = () => {
   useEffect(() => {
     setFocusedPlaceIndex(0);
     carouselRef.current.scrollToIndex({animated: true, index: 0});
-    //TODO MODIF carouselRef.current.snapToItem(0);
   }, [current]);
 
-  console.log(focusedPlaceIndex);
   return (
     <SafeAreaView style={styles.container}>
       {circuits[current] ? (
@@ -135,7 +133,7 @@ const styles = StyleSheet.create({
   },
   slider: {
     position: 'absolute',
-    bottom: wp(5),
+    bottom: wp(3.5),
     alignSelf: 'center',
   },
   card: {
@@ -152,9 +150,9 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   cardContainer: {
-    width: wp(85),
-    marginHorizontal: wp(7.5),
-    marginTop: wp(10),
+    width: wp(90),
+    marginHorizontal: wp(5),
+    marginTop: wp(5),
     padding: wp(2),
   },
   image: {
@@ -225,10 +223,10 @@ const styles = StyleSheet.create({
   },
   dotBackground: {
     alignItems: 'center',
-    padding: wp(0.5),
-    paddingHorizontal: wp(2),
+    padding: wp(0.2),
+    paddingHorizontal: wp(1),
     borderRadius: wp(2),
-    backgroundColor: 'white',
+    backgroundColor: '#FFFFFF90',
     alignSelf: 'center',
   },
 });

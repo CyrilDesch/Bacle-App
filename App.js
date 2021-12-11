@@ -2,7 +2,9 @@ import React, {useContext, useEffect, useState} from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import HomeScreen from './src/screens/HomeScreen';
-import TravelScreen from './src/screens/ShowTravel/TravelScreen';
+import ShowTravelScreen from './src/screens/ShowTravel/ShowTravelScreen';
+import TravelDetailScreen from './src/screens/ShowTravel/TravelDetailScreen';
+import SelectTravelScreen from './src/screens/ShowTravel/SelectTravelScreen';
 import CreateTravelScreen from './src/screens/CreateTravel/CreateTravelScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import ProfilScreen from './src/screens/ProfilScreen';
@@ -16,6 +18,7 @@ import {
   Context as AuthContext,
   Provider as AuthProvider,
 } from './src/context/AuthContext';
+import {Provider as TripProvider} from './src/context/TripContext';
 import {
   Context as UserContext,
   Provider as UserProvider,
@@ -59,7 +62,9 @@ const TravelStackScreen = () => {
   return (
     <TravelStack.Navigator
       screenOptions={{headerShown: false, gestureEnabled: false}}>
-      <TravelStack.Screen name="Travel" component={TravelScreen} />
+      <TravelStack.Screen name="SelectTravel" component={SelectTravelScreen} />
+      <TravelStack.Screen name="TravelDetail" component={TravelDetailScreen} />
+      <TravelStack.Screen name="ShowTravel" component={ShowTravelScreen} />
     </TravelStack.Navigator>
   );
 };
@@ -141,36 +146,21 @@ const TabScreen = () => {
         },
         headerShown: false,
         gestureEnabled: false,
+        lazy: true,
       })}>
-      <Tab.Screen
-        options={{lazy: false}}
-        name="HomeStack"
-        component={HomeStackScreen}
-      />
-      <Tab.Screen
-        options={{lazy: false}}
-        name="TravelStack"
-        component={TravelStackScreen}
-      />
+      <Tab.Screen name="HomeStack" component={HomeStackScreen} />
+      <Tab.Screen name="TravelStack" component={TravelStackScreen} />
       <Tab.Screen
         options={{
           tabBarStyle: {display: 'none'},
-          lazy: false,
           unmountOnBlur: true,
+          lazy: false,
         }}
         name="CreateTravelStack"
         component={CreateTravelStackScreen}
       />
-      <Tab.Screen
-        options={{lazy: false}}
-        name="SearchStack"
-        component={SearchStackScreen}
-      />
-      <Tab.Screen
-        options={{lazy: false}}
-        name="ProfilStack"
-        component={ProfilStackScreen}
-      />
+      <Tab.Screen name="SearchStack" component={SearchStackScreen} />
+      <Tab.Screen name="ProfilStack" component={ProfilStackScreen} />
     </Tab.Navigator>
   );
 };
@@ -213,7 +203,9 @@ export default () => {
     <SafeAreaProvider>
       <AuthProvider>
         <UserProvider>
-          <App />
+          <TripProvider>
+            <App />
+          </TripProvider>
         </UserProvider>
       </AuthProvider>
     </SafeAreaProvider>

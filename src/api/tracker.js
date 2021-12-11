@@ -18,14 +18,15 @@ instance.interceptors.request.use(
     }
     // PROTOCOLE HASH (SI GET, CONTIENT DEJA LES ARGUMENTS)
     let url = config.baseURL + config.url;
-
     try {
       if (config.method == 'post') {
         url = url + '?';
         // POST, AJOUT DES ARGUMENTS A L'URL
         for (const [key, value] of config.data._searchParams) {
           if (key != 'hash') {
-            url = url + key + '=' + value + '&';
+            const text = value.toString().replace('+', ' ');
+            console.log(text);
+            url = url + key + '=' + text + '&';
           }
         }
       } else {
@@ -56,7 +57,7 @@ export const search = async place => {
     const req = await instance.get('/search/', {params: {q: place}});
     return req;
   } catch {
-    console.log("Erreur search");
+    console.log('Erreur search');
   }
 };
 
