@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   Pressable,
+  FlatList
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -20,7 +21,7 @@ const LieuxRoute = () => (
     <FlatList
       contentContainerStyle={{padding: wp(5)}}
       keyExtractor={item => item._id}
-      data={tripState.listTrips}
+      data={tripState.tripList}
       renderItem={({item, index}) => (
         <View>
           <Pressable
@@ -67,7 +68,7 @@ const renderScene = SceneMap({
 
 const TravelDetailScreen = ({navigation}) => {
   const {state: tripState} = useContext(TripContext);
-  const trip = tripState.listTrips[tripState.selectedTrip];
+  const trip = tripState.tripList[tripState.selectedTrip];
   const [index, setIndex] = useState(0);
   const routes = [
     {key: 'lieux', title: 'Lieux'},

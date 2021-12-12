@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { StyleSheet, View, Text, Pressable, Image } from 'react-native';
 import {
@@ -6,7 +6,6 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
-import { getTripList } from '../../api/trip';
 
 
 /*
@@ -39,23 +38,12 @@ const callAddStageAPI = async () => {
   }
 };*/
 
-const chooseTrip = () => {
 
-}
-
-const chooseTripToAddPlace = async () => {
-  const res = await getTripList();
-  return res.data.trips;
-};
-
-
-const LightPlaceDetail = ({style, placeData, backButtonAction}) => {
-  const [isTripListPopupDisplayed, displayTripListPopup] = useState(false); 
+const LightPlaceDetail = ({style, placeData, backButtonAction, navigation}) => {
+  const title = placeData.display_name.split(',')[0];
+  const address = placeData.display_name.slice(title.length + 2); // +2 (", ")
 
   const getText = () => {
-    const title = placeData.display_name.split(',')[0];
-    const address = placeData.display_name.slice(title.length + 2); // +2 (", ")
-
     return (
       <View style={styles.text}>
         <Text style={styles.title}>{title}</Text>
@@ -66,6 +54,17 @@ const LightPlaceDetail = ({style, placeData, backButtonAction}) => {
       </View>
     );
   };
+
+  const onAddToTripButtonPress = () => {
+    const place = {
+      name: title,
+      notes: "",
+      lat: placeData.lat,
+      lon: placeData.lon,
+      displayAddress: address,
+    };
+    navigation.navigate('AddPlaceToTrip', {place: place});
+  }
 
   return (
     <View style={{...styles.infoCard, ...style}}>
@@ -86,7 +85,7 @@ const LightPlaceDetail = ({style, placeData, backButtonAction}) => {
         {/* Bouton Ajout à un voyage */}
         <Pressable 
           style={{...styles.button, ...styles.addButton}}
-          onPress={() => displayTripListPopup(true)}>
+          onPress={onAddToTripButtonPress}>
           <IconIonicons
             name={'add-circle-outline'}
             size={wp(8)}

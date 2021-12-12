@@ -1,17 +1,26 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+
 import HomeScreen from './src/screens/HomeScreen';
+
 import ShowTravelScreen from './src/screens/ShowTravel/ShowTravelScreen';
 import TravelDetailScreen from './src/screens/ShowTravel/TravelDetailScreen';
 import SelectTravelScreen from './src/screens/ShowTravel/SelectTravelScreen';
+
 import CreateTravelScreen from './src/screens/CreateTravel/CreateTravelScreen';
-import SearchScreen from './src/screens/SearchScreen';
+
+import SearchScreen from './src/screens/Search/SearchScreen';
+import AddPlaceToTripScreen from './src/screens/Search/AddPlaceToTripScreen';
+
 import ProfilScreen from './src/screens/ProfilScreen';
+
 import DetailLieuScreen from './src/screens/DetailLieuScreen';
+
 import SigninScreen from './src/screens/Auth/SigninScreen';
 import SignupScreen from './src/screens/Auth/SignupScreen';
 import WaitScreen from './src/screens/Auth/WaitScreen';
+
 import {navigationRef} from './src/navigationRef';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
@@ -27,6 +36,7 @@ import {
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
 
 const AppStack = createNativeStackNavigator();
 
@@ -86,6 +96,7 @@ const SearchStackScreen = () => {
     <SearchStack.Navigator
       screenOptions={{headerShown: false, gestureEnabled: false}}>
       <SearchStack.Screen name="Search" component={SearchScreen} />
+      <TravelStack.Screen name="AddPlaceToTrip" component={AddPlaceToTripScreen} />
     </SearchStack.Navigator>
   );
 };

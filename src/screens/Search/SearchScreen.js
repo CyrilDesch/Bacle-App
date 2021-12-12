@@ -7,13 +7,13 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-import SearchMap from '../components/Map/SearchMap';
-import SearchResultList from '../components/Search/SearchResultList';
-import LightPlaceDetail from '../components/PlaceDetails/LightPlaceDetail';
-import SearchBar from '../components/Search/SearchBar';
+import SearchMap from '../../components/Map/SearchMap';
+import SearchResultList from '../../components/Search/SearchResultList';
+import LightPlaceDetail from '../../components/PlaceDetails/LightPlaceDetail';
+import SearchBar from '../../components/Search/SearchBar';
 
 
-const SearchScreen = () => {
+const SearchScreen = ({navigation}) => {
   const insets = useSafeAreaInsets();
 
   const [selectedPlaceIndex, setSelectedPlaceIndex] = useState(-1);
@@ -91,6 +91,7 @@ const SearchScreen = () => {
             style={styles.lightDetail}
             placeData={data[selectedPlaceIndex]}
             backButtonAction={data.length !== 1 ? () => setSelectedPlaceIndex(-1) : null}
+            navigation={navigation}
           />
         )
       ) : null}
