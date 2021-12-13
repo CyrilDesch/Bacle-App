@@ -5,7 +5,7 @@ import {
   View,
   TouchableOpacity,
   Pressable,
-  FlatList
+  FlatList,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -16,56 +16,6 @@ import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Context as TripContext} from '../../context/TripContext';
 
-const LieuxRoute = () => (
-  <View style={{backgroundColor: '#f2f2f2', flex: 1}}>
-    <FlatList
-      contentContainerStyle={{padding: wp(5)}}
-      keyExtractor={item => item._id}
-      data={tripState.tripList}
-      renderItem={({item, index}) => (
-        <View>
-          <Pressable
-            onPress={() => {
-              selectTrip(index);
-              navigation.navigate('TravelDetail');
-            }}>
-            <Text>NOM DU VOYAGE: {item.name}</Text>
-          </Pressable>
-        </View>
-      )}
-    />
-  </View>
-);
-
-const PlanningRoute = () => (
-  <View style={{flex: 1, backgroundColor: '#673ab7'}} />
-);
-
-const InfosRoute = () => <View style={{flex: 1, backgroundColor: '#673ab7'}} />;
-
-const renderTabBar = props => (
-  <TabBar
-    {...props}
-    pressColor={'transparent'}
-    renderLabel={({route}) => (
-      <Text style={[styles.titleTab]}>{route.title}</Text>
-    )}
-    tabStyle={styles.tabStyle}
-    indicatorStyle={{
-      backgroundColor: '#1c3052',
-      width: wp(22),
-      marginLeft: wp(5.7),
-    }}
-    style={{backgroundColor: 'transparent'}}
-  />
-);
-
-const renderScene = SceneMap({
-  lieux: LieuxRoute,
-  planning: PlanningRoute,
-  infos: InfosRoute,
-});
-
 const TravelDetailScreen = ({navigation}) => {
   const {state: tripState} = useContext(TripContext);
   const trip = tripState.tripList[tripState.selectedTrip];
@@ -75,6 +25,62 @@ const TravelDetailScreen = ({navigation}) => {
     {key: 'planning', title: 'Planning'},
     {key: 'infos', title: 'Infos'},
   ];
+
+  const LieuxRoute = () => (
+    <View style={{backgroundColor: '#f2f2f2', flex: 1}}>
+      <FlatList
+        ListHeaderComponent={
+          <Pressable>
+            <Text style={styles.buttonAddPlace}>+ Ajouter un lieu</Text>
+          </Pressable>
+        }
+        contentContainerStyle={{padding: wp(5)}}
+        keyExtractor={item =>
+          item.name + item.localization + new Date().toDateString()
+        }
+        data={trip.places}
+        renderItem={({item, index}) => (
+          <View>
+            <Text>{item.name}</Text>
+          </View>
+        )}
+        ListEmptyComponent={
+          <Text style={styles.textEmpty}>Aucun lieu ajouté</Text>
+        }
+      />
+    </View>
+  );
+
+  const PlanningRoute = () => (
+    <View style={{flex: 1, backgroundColor: '#673ab7'}} />
+  );
+
+  const InfosRoute = () => (
+    <View style={{flex: 1, backgroundColor: '#673ab7'}} />
+  );
+
+  const renderTabBar = props => (
+    <TabBar
+      {...props}
+      pressColor={'transparent'}
+      renderLabel={({route}) => (
+        <Text style={[styles.titleTab]}>{route.title}</Text>
+      )}
+      tabStyle={styles.tabStyle}
+      indicatorStyle={{
+        backgroundColor: '#1c3052',
+        width: wp(22),
+        marginLeft: wp(5.7),
+      }}
+      style={{backgroundColor: 'transparent'}}
+    />
+  );
+
+  const renderScene = SceneMap({
+    lieux: LieuxRoute,
+    planning: PlanningRoute,
+    infos: InfosRoute,
+  });
 
   return (
     <>
@@ -108,6 +114,7 @@ const TravelDetailScreen = ({navigation}) => {
           </View>
           <View style={styles.secondLine}>
             <TabView
+              swipeEnabled={false}
               renderTabBar={renderTabBar}
               navigationState={{index, routes}}
               renderScene={renderScene}
@@ -166,6 +173,23 @@ const styles = StyleSheet.create({
   tabStyle: {
     width: wp(33),
     margin: 0,
+  },
+  textEmpty: {
+    alignSelf: 'center',
+    color: '#9f9f9f',
+    fontSize: wp(4.5),
+    marginTop: hp(10),
+    fontFamily: 'Montserrat-Medium',
+  },
+  buttonAddPlace: {
+    backgroundColor: '#1c3052',
+    paddingHorizontal: wp(4),
+    paddingVertical: wp(1.5),
+    borderRadius: wp(2),
+    alignSelf: 'center',
+    color: 'white',
+    fontSize: wp(3.5),
+    fontFamily: 'Montserrat-Regular',
   },
 });
 

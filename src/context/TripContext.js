@@ -4,7 +4,6 @@ import trackerApi from '../api/tracker';
 
 const TripReducer = (state, action) => {
   switch (action.type) {
-
     case 'saveTripList':
       return {...state, tripList: action.payload, loading: false};
 
@@ -77,14 +76,17 @@ const addPlaceToTrip = dispatch => async (tripList, tripIndex, place) => {
   newTripList.push(tripList.slice(tripIndex + 1));
 
   try {
-    const resp = await trackerApi.post('/user/' + tripList[tripIndex]._id, params, {
-      headers: {'content-type': 'application/x-www-form-urlencoded'},
-    });
+    const resp = await trackerApi.post(
+      '/user/' + tripList[tripIndex]._id,
+      params,
+      {
+        headers: {'content-type': 'application/x-www-form-urlencoded'},
+      },
+    );
     dispatch({type: 'saveTripList', payload: newTripList});
 
     return 1;
-  }
-  catch (err) {
+  } catch (err) {
     dispatch({
       type: 'add_error',
       payload: errorHandler(err),
@@ -92,7 +94,7 @@ const addPlaceToTrip = dispatch => async (tripList, tripIndex, place) => {
 
     return -1;
   }
-}
+};
 
 export const {Provider, Context} = createDataContext(
   TripReducer,

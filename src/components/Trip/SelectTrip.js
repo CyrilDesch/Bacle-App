@@ -2,14 +2,12 @@ import React from 'react';
 import {FlatList, Text, View, Pressable} from 'react-native';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 
-
 // onSelection: (item, index) => {}
 const SelectTrip = ({trips, onSelection}) => {
-
   return (
     <FlatList
       contentContainerStyle={{padding: wp(5)}}
-      keyExtractor={item => item._id}
+      keyExtractor={item => item._id + new Date().toDateString()}
       data={trips}
       renderItem={({item, index}) => (
         <View>
@@ -24,6 +22,5 @@ const SelectTrip = ({trips, onSelection}) => {
     />
   );
 };
-
 
 export default SelectTrip;
