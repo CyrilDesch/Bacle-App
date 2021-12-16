@@ -7,6 +7,7 @@ import {
 import {Context as AuthContext} from '../../context/AuthContext';
 import {Context as UserContext} from '../../context/UserContext';
 import AuthForm from '../../components/AuthForm';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const SignupScreen = () => {
   const {signup} = useContext(AuthContext);
@@ -35,31 +36,41 @@ const SignupScreen = () => {
   };
 
   return (
-    <ImageBackground
-      style={styles.container}
-      source={require('../../../assets/test0.jpg')}>
-      <StatusBar
-        translucent={true}
-        backgroundColor={'transparent'}
-        barStyle="light-content"
-      />
-      <Animated.Text
-        style={[styles.title, {transform: [{translateY: titleAnimUp}]}]}>
-        Inscrivez-vous pour voyager !
-      </Animated.Text>
-      <Animated.View
-        style={[styles.center, {transform: [{translateY: viewAnimUp}]}]}>
-        <AuthForm
-          buttonLabel="S'inscrire"
-          authMethod={handleSumbit}
-          showSecondForm={showSecondForm}
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.containerKeyBoardAware}
+      extraScrollHeight={hp(3)}
+      enableAutomaticScroll
+      enableOnAndroid>
+      <ImageBackground
+        style={styles.container}
+        source={require('../../../assets/test0.jpg')}>
+        <StatusBar
+          translucent={true}
+          backgroundColor={'transparent'}
+          barStyle="light-content"
         />
-      </Animated.View>
-    </ImageBackground>
+        <Animated.Text
+          style={[styles.title, {transform: [{translateY: titleAnimUp}]}]}>
+          Inscrivez-vous pour voyager !
+        </Animated.Text>
+        <Animated.View
+          style={[styles.center, {transform: [{translateY: viewAnimUp}]}]}>
+          <AuthForm
+            buttonLabel="S'inscrire"
+            authMethod={handleSumbit}
+            showSecondForm={showSecondForm}
+          />
+        </Animated.View>
+      </ImageBackground>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  containerKeyBoardAware: {
+    width: wp(100),
+    height: hp(100),
+  },
   container: {
     position: 'absolute',
     left: 0,

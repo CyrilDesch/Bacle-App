@@ -44,8 +44,8 @@ const AuthStackScreen = () => {
   return (
     <AuthStack.Navigator
       screenOptions={{headerShown: false, gestureEnabled: false}}>
-      <AuthStack.Screen name="SignUp" component={SignupScreen} />
       <AuthStack.Screen name="SignIn" component={SigninScreen} />
+      <AuthStack.Screen name="SignUp" component={SignupScreen} />
     </AuthStack.Navigator>
   );
 };

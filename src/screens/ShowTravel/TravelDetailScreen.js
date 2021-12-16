@@ -35,9 +35,7 @@ const TravelDetailScreen = ({navigation}) => {
           </Pressable>
         }
         contentContainerStyle={{padding: wp(5)}}
-        keyExtractor={item =>
-          item.name + item.localization + new Date().toDateString()
-        }
+        keyExtractor={item => item._id}
         data={trip.places}
         renderItem={({item, index}) => (
           <Text style={styles.itemListPlace}>{item.name}</Text>

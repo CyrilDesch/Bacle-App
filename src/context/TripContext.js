@@ -88,17 +88,6 @@ const addPlaceToTrip = dispatch => async (tripList, tripIndex, place) => {
   params.append('lon', place.lon);
   params.append('displayAddress', place.displayAddress);
 
-  // Les voyages avant celui qui est modifié
-  const newTripList = tripList.slice(0, tripIndex);
-
-  // Le voyage modifié
-  const editedTrip = tripList[tripIndex];
-  editedTrip.places.push(place);
-  newTripList.push(editedTrip);
-
-  // Les voyages après celui qui est modifié
-  newTripList.push(tripList.slice(tripIndex + 1));
-
   try {
     const resp = await trackerApi.post(
       '/user/' + tripList[tripIndex]._id,
@@ -107,15 +96,26 @@ const addPlaceToTrip = dispatch => async (tripList, tripIndex, place) => {
         headers: {'content-type': 'application/x-www-form-urlencoded'},
       },
     );
-    dispatch({type: 'saveTripList', payload: resp.data.place});
+
+    // Les voyages avant celui qui est modifié
+    const newTripList = tripList.slice(0, tripIndex);
+
+    // Le voyage modifié
+    const editedTrip = tripList[tripIndex];
+    editedTrip.places.push(resp.data.place);
+    newTripList.push(editedTrip);
+
+    // Les voyages après celui qui est modifié
+    newTripList.push(tripList.slice(tripIndex + 1));
+
+    dispatch({type: 'saveTripList', payload: newTripList});
     return 1;
   } catch (err) {
     dispatch({
       type: 'add_error',
       payload: errorHandler(err),
     });
-
-    return -1;
+    return 0;
   }
 };
 
