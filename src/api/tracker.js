@@ -23,9 +23,8 @@ instance.interceptors.request.use(
         url = url + '?';
         // POST, AJOUT DES ARGUMENTS A L'URL
         for (const [key, value] of config.data._searchParams) {
+          const text = (value + '').replace('+', ' ');
           if (key != 'hash') {
-            const text = value.toString().replace('+', ' ');
-            console.log(text);
             url = url + key + '=' + text + '&';
           }
         }
@@ -52,7 +51,7 @@ instance.interceptors.request.use(
   },
 );
 
-export const search = async (place) => {
+export const search = async place => {
   try {
     const req = await instance.get('/search/', {params: {q: place}});
     return req;

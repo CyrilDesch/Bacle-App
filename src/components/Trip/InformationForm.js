@@ -1,5 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, View, Text, Pressable, FlatList} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 import {Input} from 'react-native-elements';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {format, sub} from 'date-fns';
@@ -12,7 +19,7 @@ import {Button} from 'react-native-elements/dist/buttons/Button';
 import SearchBar from '../Search/SearchBar';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const InformationForm = ({submit, step}) => {
+const InformationForm = ({submit, step, loading}) => {
   const typeEnum = {
     TEXT: 1,
     DATE: 2,
@@ -40,6 +47,8 @@ const InformationForm = ({submit, step}) => {
   const defaultDate = new Date();
   defaultDate.setHours(0, 0, 0, 0);
   defaultDate.setFullYear(defaultDate.getFullYear());
+  const maximumDate = new Date();
+  maximumDate.setFullYear(defaultDate.getFullYear() + 30);
 
   const dataForm = [
     {
@@ -132,8 +141,8 @@ const InformationForm = ({submit, step}) => {
                       }
                     }}
                     onCancel={() => setShow(false)}
-                    minimumDate={new Date(1910, 0, 1)}
-                    maximumDate={new Date(2010, 11, 31)}
+                    minimumDate={defaultDate}
+                    maximumDate={maximumDate}
                   />
                 </View>
               );
@@ -165,7 +174,6 @@ const InformationForm = ({submit, step}) => {
           title={dataForm.length - 1 != index ? 'Suivant' : 'Créer'}
           onPress={() => {
             let count = 0;
-
             item.required.forEach(element =>
               (element != null && Object.values(element).length > 0) ||
               (element instanceof Date && element.getTime() > 0)
@@ -179,7 +187,7 @@ const InformationForm = ({submit, step}) => {
                   name: name,
                   defaultStartLoc: {
                     lat: selectedCity.lat,
-                    lon: selectedCity.long,
+                    lon: selectedCity.lon,
                   },
                   startDate: date,
                 });
@@ -193,6 +201,7 @@ const InformationForm = ({submit, step}) => {
           }}
           TouchableComponent={Pressable}
         />
+        {loading ? <ActivityIndicator /> : null}
         <Text>{errorMessage}</Text>
       </View>
     );

@@ -22,18 +22,26 @@ const getLatLngList = placeList => {
 
 const getMarkerList = placeList => {
   const output = [];
-  for (let i = 0; i < placeList.length; i++) {
-    if (placeList[i].lat && placeList[i].lon) {
-      output.push({
-        latitude: Number(placeList[i].lat),
-        longitude: Number(placeList[i].lon),
-        title: String(
-          placeList[i].display_name !== null &&
-            placeList[i].display_name.length > 0
-            ? placeList[i].display_name.split(',')[0]
-            : '',
-        ),
-      });
+  //SI DONNEES DE OPENSTREETMAP
+  if (placeList[0] && placeList[0].lat) {
+    for (let i = 0; i < placeList.length; i++) {
+      if (placeList[i].lat && placeList[i].lon) {
+        output.push({
+          latitude: Number(placeList[i].lat),
+          longitude: Number(placeList[i].lon),
+        });
+      }
+    }
+  }
+  //SI DONNEES DE L'API BACLE
+  if (placeList[0] && placeList[0].localization) {
+    for (let i = 0; i < placeList.length; i++) {
+      if (placeList[i].localization.lat && placeList[i].localization.lon) {
+        output.push({
+          latitude: Number(placeList[i].localization.lat),
+          longitude: Number(placeList[i].localization.lon),
+        });
+      }
     }
   }
   return output;
@@ -75,7 +83,7 @@ const getViewWindow = placeList => {
   return viewWindow;
 };
 
-// markers: { LatLng, title }[]       Une liste de positions où afficher des marqueurs avec leur nom.
+// markers: { LatLng }[]       Une liste de positions où afficher des marqueurs avec leur nom.
 // polylines: { LatLng }[][]          Une liste de listes positions représentant des séries de points reliés entre eux (typiquement des chemins à suivre).
 // viewWindow: { LatLngAndDeltas }    Une zone vers laquelle la carte doit focus.
 const Map = ({style, markers, polylines, viewWindow}) => {
@@ -149,15 +157,16 @@ const Map = ({style, markers, polylines, viewWindow}) => {
             latitude: marker.latitude,
             longitude: marker.longitude,
           }}
-          title={marker.title}
-          icon={{uri: 'https://static.thenounproject.com/png/8262-200.png'}}
+          icon={{
+            uri: 'https://cdn.icon-icons.com/icons2/875/PNG/128/big-placeholder_icon-icons.com_68247.png',
+          }}
         />
       ))}
 
       {/* Les polylines */}
       <Polyline
         coordinates={polylines}
-        strokeColor="#f3c600"
+        strokeColor="#1c3052"
         strokeWidth={wp(1.5)}
       />
     </Animated>

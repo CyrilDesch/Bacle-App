@@ -52,14 +52,24 @@ const TravelMap = ({style, travelData, focusedPlaceIndex}) => {
 
   // On update of position
   useEffect(() => {
-      if (travelData !== null && travelData.length !== 0 && focusedPlaceIndex !== -1) {
+    if (
+      travelData !== null &&
+      travelData.length !== 0 &&
+      focusedPlaceIndex !== -1
+    ) {
+      if (travelData[focusedPlaceIndex].lat) {
+        // LIST PROVENANT D'OPENSTREETMAP
         const positions = getLatLngList([travelData[focusedPlaceIndex]]);
         setFocusPosition(positions[0]);
+      } else {
+        // LIST PROVENANT DE L'API BACLE
+        const positions = getLatLngList([
+          travelData[focusedPlaceIndex].localization,
+        ]);
+        setFocusPosition(positions[0]);
       }
-    },
-    [focusedPlaceIndex]
-  );
-
+    }
+  }, [focusedPlaceIndex]);
 
   // Render
   return (
@@ -68,9 +78,9 @@ const TravelMap = ({style, travelData, focusedPlaceIndex}) => {
       markers={getMarkerList(travelData)}
       polylines={path}
       viewWindow={{
-        ...focusPosition, 
+        ...focusPosition,
         latitudeDelta: 0.05,
-        longitudeDelta: 0.05
+        longitudeDelta: 0.05,
       }}
     />
   );

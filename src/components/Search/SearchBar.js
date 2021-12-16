@@ -46,7 +46,6 @@ const SearchBar = ({
     if (text.length > 1) {
       setLoading(true);
       const res = await search(text);
-      console.log(res.data);
       setLoading(false);
       let data;
       if (onlyCountry) {
@@ -54,11 +53,7 @@ const SearchBar = ({
           value => value.display_name.split(',').length == 1,
         );
       } else {
-        data = res.data.filter(
-          value =>
-            (value.category == 'tourism' || value.category == 'boundary') &&
-            value.display_name.includes('France'),
-        );
+        data = res.data;
       }
       setData(data);
       onSubmit(data);

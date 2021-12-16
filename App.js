@@ -37,7 +37,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-
 const AppStack = createNativeStackNavigator();
 
 const AuthStack = createNativeStackNavigator();
@@ -94,9 +93,20 @@ const CreateTravelStackScreen = () => {
 const SearchStackScreen = () => {
   return (
     <SearchStack.Navigator
-      screenOptions={{headerShown: false, gestureEnabled: false}}>
+      initialRouteName="Search"
+      screenOptions={({route}) => {
+        console.log(route);
+        return {
+          tabBarVisible: true,
+          headerShown: false,
+          gestureEnabled: false,
+        };
+      }}>
       <SearchStack.Screen name="Search" component={SearchScreen} />
-      <TravelStack.Screen name="AddPlaceToTrip" component={AddPlaceToTripScreen} />
+      <SearchStack.Screen
+        name="AddPlaceToTrip"
+        component={AddPlaceToTripScreen}
+      />
     </SearchStack.Navigator>
   );
 };

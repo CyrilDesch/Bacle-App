@@ -15,8 +15,8 @@ const SelectTravelScreen = ({navigation}) => {
     <Text>Wait</Text>
   ) : (
     <SelectTrip
-      trips = {tripState.tripList}
-      onSelection = {(item, index) => {
+      trips={tripState.tripList}
+      onSelection={(item, index) => {
         selectTrip(index);
         navigation.navigate('TravelDetail');
       }}
