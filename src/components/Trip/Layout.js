@@ -16,48 +16,55 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {goBack} from '../../navigationRef';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const Layout = ({children, back, step}) => {
   return (
-    <SafeAreaView>
-      <StatusBar
-        translucent={true}
-        backgroundColor={'transparent'}
-        barStyle="light-content"
-      />
-      <ImageBackground
-        style={styles.background}
-        source={require('../../../assets/test0.jpg')}>
-        <View style={styles.background2}></View>
-      </ImageBackground>
-      <View style={styles.headerBar}>
-        <Text style={styles.title}>Création du voyage</Text>
-      </View>
-      <View style={styles.container}>
-        <LottieView
-          style={styles.animation}
-          source={require('../../animations/travel.json')}
-          autoPlay
-          loop
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.container}
+      extraScrollHeight={hp(3)}
+      enableAutomaticScroll
+      enableOnAndroid>
+      <SafeAreaView>
+        <StatusBar
+          translucent={true}
+          backgroundColor={'transparent'}
+          barStyle="light-content"
         />
-        <View style={styles.inline}>
-          <TouchableOpacity style={{height: wp(8)}} onPress={back}>
-            {step > 0 ? (
-              <Icon
-                name="chevron-back"
-                size={wp(8)}
-                color="#1c3052"
-                style={{marginLeft: -wp(2)}}
-              />
-            ) : null}
-          </TouchableOpacity>
-          <TouchableOpacity style={{height: wp(8)}} onPress={goBack}>
-            <Icon name="close" size={wp(8)} color="#1c3052" />
-          </TouchableOpacity>
+        <ImageBackground
+          style={styles.background}
+          source={require('../../../assets/test0.jpg')}>
+          <View style={styles.background2}></View>
+        </ImageBackground>
+        <View style={styles.headerBar}>
+          <Text style={styles.title}>Création du voyage</Text>
         </View>
-        {children}
-      </View>
-    </SafeAreaView>
+        <View style={[styles.container, {paddingTop: wp(2)}]}>
+          <LottieView
+            style={styles.animation}
+            source={require('../../animations/travel.json')}
+            autoPlay
+            loop
+          />
+          <View style={styles.inline}>
+            <TouchableOpacity style={{height: wp(8)}} onPress={back}>
+              {step > 0 ? (
+                <Icon
+                  name="chevron-back"
+                  size={wp(8)}
+                  color="#1c3052"
+                  style={{marginLeft: -wp(2)}}
+                />
+              ) : null}
+            </TouchableOpacity>
+            <TouchableOpacity style={{height: wp(8)}} onPress={goBack}>
+              <Icon name="close" size={wp(8)} color="#1c3052" />
+            </TouchableOpacity>
+          </View>
+          {children}
+        </View>
+      </SafeAreaView>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -93,7 +100,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopLeftRadius: wp(8),
     borderTopRightRadius: wp(8),
-    paddingTop: wp(3),
   },
   title: {
     fontSize: wp(7),

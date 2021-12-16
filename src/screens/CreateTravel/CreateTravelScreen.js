@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 
 import InformationForm from '../../components/Trip/InformationForm';
@@ -6,7 +6,11 @@ import Layout from '../../components/Trip/Layout';
 import {Context as TripContext} from '../../context/TripContext';
 
 const CreateTravelScreen = () => {
-  const {saveTrip} = useContext(TripContext);
+  const {
+    saveTrip,
+    startLoading,
+    state: {loadingToPost},
+  } = useContext(TripContext);
   const [step, setStep] = useState(0);
 
   const handleBack = () => {
@@ -19,13 +23,18 @@ const CreateTravelScreen = () => {
     if (trip == null) {
       setStep(step + 1);
     } else {
+      startLoading();
       saveTrip(trip);
     }
   };
 
   return (
     <Layout back={handleBack} step={step}>
-      <InformationForm submit={handleNext} step={step} />
+      <InformationForm
+        loading={loadingToPost}
+        submit={handleNext}
+        step={step}
+      />
     </Layout>
   );
 };

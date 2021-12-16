@@ -1,26 +1,46 @@
 import createDataContext from '../context/createDataContext';
 import errorHandler from '../errorHandler';
 import trackerApi from '../api/tracker';
+import {goBack, navigate} from '../navigationRef';
 
 const TripReducer = (state, action) => {
   switch (action.type) {
     case 'saveTripList':
-      return {...state, tripList: action.payload, loading: false};
-
+      return {
+        ...state,
+        tripList: action.payload,
+        loadingToPost: false,
+        loadingToGet: false,
+      };
     case 'saveTrip':
       return {
         ...state,
         selectedTrip: state.tripList.length,
         tripList: [...state.tripList, action.payload],
         errorMessage: '',
+        loadingToPost: false,
+        loadingToGet: false,
       };
-
     case 'selectTrip':
       return {...state, selectedTrip: action.payload};
-
+    case 'start_loading':
+      return {...state, loadingToPost: true, loadingToGet: true};
+    case 'add_error':
+      return {
+        ...state,
+        errorMessage: action.payload,
+        loadingToPost: false,
+        loadingToGet: false,
+      };
+    case 'remove_error':
+      return {...state, errorMessage: ''};
     default:
       return state;
   }
+};
+
+const startLoading = dispatch => () => {
+  dispatch({type: 'start_loading'});
 };
 
 const selectTrip = dispatch => index => {
@@ -32,7 +52,8 @@ const getTrips = dispatch => async () => {
     const resp = await trackerApi.get('/user/trips', {
       headers: {'content-type': 'application/x-www-form-urlencoded'},
     });
-    dispatch({type: 'saveTripList', payload: resp.data.trips});
+    const tripList = [...resp.data.trips].reverse();
+    dispatch({type: 'saveTripList', payload: tripList});
   } catch (err) {
     console.log(err);
   }
@@ -41,14 +62,17 @@ const getTrips = dispatch => async () => {
 const saveTrip = dispatch => async trip => {
   const params = new URLSearchParams();
   params.append('name', trip.name);
-  params.append('defaultStartLoc', trip.defaultStartLoc);
+  params.append('defaultStartLat', trip.defaultStartLoc.lat);
+  params.append('defaultStartLon', trip.defaultStartLoc.lon);
   params.append('startDate', trip.startDate);
   try {
     const resp = await trackerApi.post('/user/trip', params, {
       headers: {'content-type': 'application/x-www-form-urlencoded'},
     });
     dispatch({type: 'saveTrip', payload: resp.data.trip});
+    navigate('TravelDetail');
   } catch (err) {
+    console.log(err.response);
     dispatch({
       type: 'add_error',
       payload: errorHandler(err),
@@ -64,17 +88,6 @@ const addPlaceToTrip = dispatch => async (tripList, tripIndex, place) => {
   params.append('lon', place.lon);
   params.append('displayAddress', place.displayAddress);
 
-  // Les voyages avant celui qui est modifié
-  const newTripList = tripList.slice(0, tripIndex);
-
-  // Le voyage modifié
-  const editedTrip = tripList[tripIndex];
-  editedTrip.places.push(place);
-  newTripList.push(editedTrip);
-
-  // Les voyages après celui qui est modifié
-  newTripList.push(tripList.slice(tripIndex + 1));
-
   try {
     const resp = await trackerApi.post(
       '/user/' + tripList[tripIndex]._id,
@@ -83,26 +96,39 @@ const addPlaceToTrip = dispatch => async (tripList, tripIndex, place) => {
         headers: {'content-type': 'application/x-www-form-urlencoded'},
       },
     );
-    dispatch({type: 'saveTripList', payload: newTripList});
 
+    // Les voyages avant celui qui est modifié
+    const newTripList = tripList.slice(0, tripIndex);
+
+    // Le voyage modifié
+    const editedTrip = tripList[tripIndex];
+    editedTrip.places.push(resp.data.place);
+    newTripList.push(editedTrip);
+
+    // Les voyages après celui qui est modifié
+    newTripList.push(tripList.slice(tripIndex + 1));
+
+    dispatch({type: 'saveTripList', payload: newTripList});
     return 1;
   } catch (err) {
     dispatch({
       type: 'add_error',
       payload: errorHandler(err),
     });
-
-    return -1;
+    return 0;
   }
 };
 
+const removeError = () => {};
+
 export const {Provider, Context} = createDataContext(
   TripReducer,
-  {saveTrip, getTrips, selectTrip, addPlaceToTrip},
+  {saveTrip, getTrips, selectTrip, addPlaceToTrip, removeError, startLoading},
   {
     tripList: [],
     selectedTrip: null,
-    loading: true,
+    loadingToGet: false,
+    loadingToPost: false,
     errorMessage: '',
   },
 );

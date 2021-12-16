@@ -30,19 +30,15 @@ const TravelDetailScreen = ({navigation}) => {
     <View style={{backgroundColor: '#f2f2f2', flex: 1}}>
       <FlatList
         ListHeaderComponent={
-          <Pressable>
+          <Pressable onPress={() => navigation.navigate('SearchStack')}>
             <Text style={styles.buttonAddPlace}>+ Ajouter un lieu</Text>
           </Pressable>
         }
         contentContainerStyle={{padding: wp(5)}}
-        keyExtractor={item =>
-          item.name + item.localization + new Date().toDateString()
-        }
+        keyExtractor={item => item._id}
         data={trip.places}
         renderItem={({item, index}) => (
-          <View>
-            <Text>{item.name}</Text>
-          </View>
+          <Text style={styles.itemListPlace}>{item.name}</Text>
         )}
         ListEmptyComponent={
           <Text style={styles.textEmpty}>Aucun lieu ajouté</Text>
@@ -52,11 +48,15 @@ const TravelDetailScreen = ({navigation}) => {
   );
 
   const PlanningRoute = () => (
-    <View style={{flex: 1, backgroundColor: '#673ab7'}} />
+    <View style={{flex: 1, backgroundColor: '#f2f2f2'}}>
+      <Text style={styles.textEmpty}>Indisponible</Text>
+    </View>
   );
 
   const InfosRoute = () => (
-    <View style={{flex: 1, backgroundColor: '#673ab7'}} />
+    <View style={{flex: 1, backgroundColor: '#f2f2f2'}}>
+      <Text style={styles.textEmpty}>Indisponible</Text>
+    </View>
   );
 
   const renderTabBar = props => (
@@ -91,7 +91,7 @@ const TravelDetailScreen = ({navigation}) => {
           </Pressable>
           <Text style={styles.title}>{`Voyage\n${trip.name}`}</Text>
           <View style={styles.firstLine}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('ShowTravel')}>
               <View style={styles.round}>
                 <Icon name="map" size={wp(6.5)} />
               </View>
@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
   },
   buttonAddPlace: {
+    marginBottom: wp(3),
     backgroundColor: '#1c3052',
     paddingHorizontal: wp(4),
     paddingVertical: wp(1.5),
@@ -190,6 +191,15 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: wp(3.5),
     fontFamily: 'Montserrat-Regular',
+  },
+  itemListPlace: {
+    marginBottom: wp(3),
+    backgroundColor: 'white',
+    paddingHorizontal: wp(3),
+    paddingVertical: wp(1.5),
+    borderRadius: wp(2),
+    fontSize: wp(4),
+    fontFamily: 'Montserrat-Medium',
   },
 });
 

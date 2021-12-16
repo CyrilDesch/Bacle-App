@@ -7,6 +7,7 @@ import {
 import {Context as AuthContext} from '../../context/AuthContext';
 import {Context as UserContext} from '../../context/UserContext';
 import AuthForm from '../../components/AuthForm';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const SigninScreen = () => {
   const {signin} = useContext(AuthContext);
@@ -17,23 +18,33 @@ const SigninScreen = () => {
   };
 
   return (
-    <ImageBackground
-      style={styles.container}
-      source={require('../../../assets/test0.jpg')}>
-      <StatusBar
-        translucent={true}
-        backgroundColor={'transparent'}
-        barStyle="light-content"
-      />
-      <Text style={styles.title}>Connectez-vous pour voyager !</Text>
-      <View style={styles.center}>
-        <AuthForm buttonLabel="Se connecter" authMethod={handleSumbit} />
-      </View>
-    </ImageBackground>
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.containerKeyBoardAware}
+      extraScrollHeight={hp(3)}
+      enableAutomaticScroll
+      enableOnAndroid>
+      <ImageBackground
+        style={styles.container}
+        source={require('../../../assets/test0.jpg')}>
+        <StatusBar
+          translucent={true}
+          backgroundColor={'transparent'}
+          barStyle="light-content"
+        />
+        <Text style={styles.title}>Connectez-vous pour voyager !</Text>
+        <View style={styles.center}>
+          <AuthForm buttonLabel="Se connecter" authMethod={handleSumbit} />
+        </View>
+      </ImageBackground>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  containerKeyBoardAware: {
+    width: wp(100),
+    height: hp(100),
+  },
   container: {
     position: 'absolute',
     left: 0,

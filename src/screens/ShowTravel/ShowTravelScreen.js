@@ -1,72 +1,56 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, useContext} from 'react';
 import {
   StyleSheet,
   Text,
   View,
   Image,
   FlatList,
-  Dimensions,
+  StatusBar,
+  Pressable,
+  TouchableOpacity,
 } from 'react-native';
-import ModalSelector from 'react-native-modal-selector';
 
 import PaginationDot from 'react-native-animated-pagination-dot';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import TravelMap from '../../components/Map/TravelMap';
-import Icon from 'react-native-vector-icons/AntDesign';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {ScrollView} from 'react-native-gesture-handler';
+import AntIcon from 'react-native-vector-icons/AntDesign';
+import {Context as TripContext} from '../../context/TripContext';
+import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 
-const TravelScreen = () => {
+const TravelScreen = ({navigation}) => {
   const carouselRef = useRef();
   const [focusedPlaceIndex, setFocusedPlaceIndex] = useState(0);
-  const trips = require('../../../customData.json').user.trips;
-  const circuits = require('../../../customData.json').circuits;
-  const insets = useSafeAreaInsets();
-
-  const [current, setCurrent] = useState(circuits[0] ? 0 : null);
-
-  let tripDataSelector = [{key: 0, section: true, label: 'VOS VOYAGES'}];
-  for (let i = 0; i < trips.length; i++) {
-    tripDataSelector.push({key: i + 1, label: trips[i].name});
-  }
-
-  useEffect(() => {
-    setFocusedPlaceIndex(0);
-    carouselRef.current.scrollToIndex({animated: true, index: 0});
-  }, [current]);
+  const {state: tripState} = useContext(TripContext);
 
   return (
-    <SafeAreaView style={styles.container}>
-      {circuits[current] ? (
-        <TravelMap
-          style={styles.map}
-          travelData={circuits[current].circuit}
-          focusedPlaceIndex={focusedPlaceIndex}
-        />
-      ) : null}
-      <View style={[styles.header, {marginTop: insets.top + wp(2)}]}>
-        <ModalSelector
-          selectedKey={current + 1}
-          selectStyle={{borderWidth: 0}}
-          selectTextStyle={styles.selectText}
-          cancelText={'FERMER'}
-          data={tripDataSelector}
-          initValue="Selectionner votre voyage"
-          onChange={option => {
-            setCurrent(option.key - 1);
-          }}
-        />
+    <View style={styles.container}>
+      <StatusBar
+        translucent={true}
+        backgroundColor={'transparent'}
+        barStyle="dark-content"
+      />
+      <View style={styles.buttonBack}>
+        <TouchableOpacity
+          style={{zIndex: 1000000}}
+          onPress={() => navigation.goBack()}>
+          <IoniconsIcon name="chevron-back" color="white" size={wp(6)} />
+        </TouchableOpacity>
       </View>
+
+      <TravelMap
+        style={styles.map}
+        travelData={tripState.tripList[tripState.selectedTrip].places}
+        focusedPlaceIndex={focusedPlaceIndex}
+      />
       <View style={styles.slider}>
         <FlatList
           horizontal
           pagingEnabled
           ref={carouselRef}
-          data={circuits[current].circuit}
+          data={tripState.tripList[tripState.selectedTrip].places}
           showsHorizontalScrollIndicator={false}
           disableIntervalMomentum
           onMomentumScrollEnd={e => {
@@ -77,7 +61,7 @@ const TravelScreen = () => {
             if (focusedPlaceIndex !== pageNumber)
               setFocusedPlaceIndex(pageNumber);
           }}
-          keyExtractor={item => item.display_name}
+          keyExtractor={item => item._id}
           renderItem={({item}) => (
             <View style={styles.cardContainer}>
               <View style={styles.card}>
@@ -90,15 +74,13 @@ const TravelScreen = () => {
                   />
                 </View>
                 <View style={styles.firstLine}>
-                  <Icon name="star" size={wp(5)} color="#ffbe00" />
+                  <AntIcon name="star" size={wp(5)} color="#ffbe00" />
                   <Text style={styles.textNote}>4 sur 5</Text>
                 </View>
                 <View style={styles.secondLine}>
-                  <Text style={styles.title}>
-                    {item.display_name.split(',')[0]}
-                  </Text>
+                  <Text style={styles.title}>{item.name.split(',')[0]}</Text>
                   <Text style={styles.type}>
-                    {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
+                    {item.notes.charAt(0).toUpperCase() + item.notes.slice(1)}
                   </Text>
                 </View>
               </View>
@@ -109,11 +91,11 @@ const TravelScreen = () => {
           <PaginationDot
             activeDotColor="#1c3052"
             curPage={focusedPlaceIndex}
-            maxPage={circuits[current].circuit.length}
+            maxPage={tripState.tripList[tripState.selectedTrip].places.length}
           />
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -228,6 +210,18 @@ const styles = StyleSheet.create({
     borderRadius: wp(2),
     backgroundColor: '#FFFFFF90',
     alignSelf: 'center',
+  },
+  buttonBack: {
+    backgroundColor: '#00000080',
+    height: wp(8),
+    width: wp(8),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: wp(5),
+    position: 'absolute',
+    top: wp(6),
+    left: wp(3),
+    zIndex: 1000,
   },
 });
 
