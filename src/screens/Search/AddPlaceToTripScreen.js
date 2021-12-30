@@ -4,13 +4,9 @@ import {Context as TripContext} from '../../context/TripContext';
 import SelectTrip from '../../components/Trip/SelectTrip';
 
 const AddPlaceToTripScreen = ({route, navigation}) => {
-  const {state: tripState, getTrips, addPlaceToTrip} = useContext(TripContext);
+  const {state: tripState, addPlaceToTrip} = useContext(TripContext);
   const [processState, setProcessState] = useState(0); // 0: en cours, 1: succès, 2: échec
   const {place} = route.params;
-
-  useEffect(() => {
-    getTrips();
-  }, []);
 
   return tripState.loading ? (
     <Text>Wait</Text>

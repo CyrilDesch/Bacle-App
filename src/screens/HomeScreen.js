@@ -1,26 +1,50 @@
-import React from 'react';
-import {StyleSheet, Text, StatusBar} from 'react-native';
+import trackerApi from '../api/tracker';
+import React, {useState, useContext, useEffect, useRef} from 'react';
+import {StyleSheet, Text, StatusBar, View, Pressable} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomFlatList from '../components/CustomFlatList';
-import ScreenTitle from '../components/ScreenTitle';
 
 const HomeScreen = ({navigation}) => {
-  const tendanceTemp = require('../../customData.json').tendance;
+  const scrollList = useRef(null);
+  const [indexSelectedSection, setIndexSelectedSection] = useState(0);
+  const sectionList = ['Tout', 'En France', 'En Angleterre', 'En Espagne'];
+  const [tendanceTemp, setTendanceTemp] = useState([]);
   let tendanceShow = [];
+
+  const getTendance = async clear => {
+    const resp = await trackerApi.get('/suggestion', {
+      headers: {'content-type': 'application/x-www-form-urlencoded'},
+    });
+    if (clear) {
+      setTendanceTemp(resp.data.suggestions);
+    } else {
+      setTendanceTemp([...tendanceTemp, ...resp.data.suggestions]);
+    }
+  };
+
+  useEffect(() => {
+    getTendance(true);
+  }, [indexSelectedSection]);
+
   for (let i = 0; i < tendanceTemp.length; i++) {
     if (i % 2 == 0) {
-      if (tendanceTemp.length - 1 != i)
+      if (tendanceTemp.length - 1 != i) {
         tendanceShow.push({
           item1: tendanceTemp[i],
           item2: tendanceTemp[i + 1],
         });
-      else tendanceShow.push({item1: tendanceTemp[i]});
+      } else tendanceShow.push({item1: tendanceTemp[i]});
     }
   }
+
+  const onEndReached = () => {
+    getTendance(false);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -29,11 +53,46 @@ const HomeScreen = ({navigation}) => {
         backgroundColor="transparent"
         barStyle="dark-content"
       />
-      <ScreenTitle title1="Où" title2="voulez-vous aller ?" />
-      <Text style={styles.titleSection}>
-        <Text style={styles.bold}>Voyage</Text> Tendance
-      </Text>
-      <CustomFlatList data={tendanceShow} />
+      <View>
+        <Text style={styles.title}>
+          À la recherche d'une nouvelle destination ?
+        </Text>
+        <FlatList
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{paddingHorizontal: wp(5)}}
+          horizontal
+          data={sectionList}
+          keyExtractor={item => item}
+          renderItem={({item, index}) => (
+            <Pressable
+              onPress={() => {
+                scrollList.current.scrollToIndex({index: 0});
+                setIndexSelectedSection(index);
+              }}>
+              <Text
+                style={[
+                  styles.sectionTitle,
+                  indexSelectedSection == index
+                    ? {
+                        backgroundColor: '#1c3052',
+                        color: 'white',
+                      }
+                    : {},
+                ]}>
+                {item}
+              </Text>
+            </Pressable>
+          )}
+        />
+      </View>
+      <View style={styles.tripList}>
+        <CustomFlatList
+          listRef={scrollList}
+          data={tendanceShow}
+          navigation={navigation}
+          onEndReached={onEndReached}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -41,21 +100,28 @@ const HomeScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f5f5f5',
-  },
-  map: {
     flex: 1,
-    width: wp(100),
-    height: hp(100),
   },
-  titleSection: {
-    alignSelf: 'flex-start',
-    fontSize: wp(6),
-    marginLeft: wp(5),
-    marginTop: wp(5),
-    fontFamily: 'Montserrat-Medium',
-  },
-  bold: {
+  title: {
+    fontSize: wp(7),
+    paddingHorizontal: wp(5),
+    paddingVertical: wp(4),
     fontFamily: 'Montserrat-Bold',
+  },
+  sectionTitle: {
+    backgroundColor: '#E3E3E3',
+    borderRadius: wp(5),
+    fontSize: wp(3.75),
+    paddingHorizontal: wp(3.5),
+    paddingVertical: wp(2),
+    fontFamily: 'Montserrat-SemiBold',
+    color: '#2C2628',
+    marginRight: wp(2),
+  },
+  tripList: {
+    marginTop: wp(4),
+    flex: 1,
+    marginBottom: wp(15),
   },
 });
 

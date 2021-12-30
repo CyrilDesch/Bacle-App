@@ -16,7 +16,7 @@ const TripReducer = (state, action) => {
       return {
         ...state,
         selectedTrip: state.tripList.length,
-        tripList: [...state.tripList, action.payload],
+        tripList: [action.payload, ...state.tripList],
         errorMessage: '',
         loadingToPost: false,
         loadingToGet: false,
@@ -52,7 +52,7 @@ const getTrips = dispatch => async () => {
     const resp = await trackerApi.get('/user/trips', {
       headers: {'content-type': 'application/x-www-form-urlencoded'},
     });
-    const tripList = [...resp.data.trips].reverse();
+    const tripList = [...resp.data.trips];
     dispatch({type: 'saveTripList', payload: tripList});
   } catch (err) {
     console.log(err);
@@ -98,19 +98,15 @@ const addPlaceToTrip = dispatch => async (tripList, tripIndex, place) => {
     );
 
     // Les voyages avant celui qui est modifié
-    const newTripList = tripList.slice(0, tripIndex);
-
-    // Le voyage modifié
     const editedTrip = tripList[tripIndex];
     editedTrip.places.push(resp.data.place);
-    newTripList.push(editedTrip);
-
-    // Les voyages après celui qui est modifié
-    newTripList.push(tripList.slice(tripIndex + 1));
+    const newTripList = updateList(tripList, tripIndex, editedTrip);
 
     dispatch({type: 'saveTripList', payload: newTripList});
     return 1;
   } catch (err) {
+    console.log(err);
+    console.log(err.response);
     dispatch({
       type: 'add_error',
       payload: errorHandler(err),
@@ -119,11 +115,52 @@ const addPlaceToTrip = dispatch => async (tripList, tripIndex, place) => {
   }
 };
 
+const startRouting = dispatch => async (tripList, tripIndex) => {
+  try {
+    const resp = await trackerApi.get(
+      `/user/${tripList[tripIndex]._id}/routing`,
+      {
+        headers: {'content-type': 'application/x-www-form-urlencoded'},
+      },
+    );
+
+    // Les voyages avant celui qui est modifié
+    const editedTrip = tripList[tripIndex];
+    editedTrip.days.push(resp.data.days);
+    const newTripList = updateList(tripList, tripIndex, editedTrip);
+    dispatch({type: 'saveTripList', payload: newTripList});
+  } catch (err) {
+    console.log(err.response);
+  }
+};
+
 const removeError = () => {};
+
+const updateList = (tripList, tripIndex, editedTrip) => {
+  // Les voyages avant celui qui est modifié
+  const newTripList = tripList.slice(0, tripIndex);
+
+  // Le voyage modifié
+  newTripList.push(editedTrip);
+
+  // Les voyages après celui qui est modifié
+  const endOfList = tripList.slice(tripIndex + 1);
+  if (endOfList.length > 0) newTripList.push(endOfList);
+
+  return newTripList;
+};
 
 export const {Provider, Context} = createDataContext(
   TripReducer,
-  {saveTrip, getTrips, selectTrip, addPlaceToTrip, removeError, startLoading},
+  {
+    saveTrip,
+    getTrips,
+    selectTrip,
+    addPlaceToTrip,
+    removeError,
+    startLoading,
+    startRouting,
+  },
   {
     tripList: [],
     selectedTrip: null,

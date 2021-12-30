@@ -2,126 +2,126 @@ import React, {useState} from 'react';
 import {Pressable} from 'react-native';
 import {FlatList, Image, StyleSheet, View, Text} from 'react-native';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
-import {Shadow} from 'react-native-neomorph-shadows';
+import LinearGradient from 'react-native-linear-gradient';
 
-const CustomFlatList = ({data}) => {
-  const [currentPage, setCurrentPage] = useState(0);
+const CustomFlatList = ({data, navigation, onEndReached, listRef}) => {
   return (
     <FlatList
-      horizontal
+      ref={listRef}
+      onEndReached={onEndReached}
       contentContainerStyle={styles.list}
+      onEndReachedThreshold={0.6}
       overScrollMode="never"
-      showsHorizontalScrollIndicator={false}
-      onScroll={e => {
-        let pageNumber =
-          Math.min(
-            Math.max(
-              Math.floor(e.nativeEvent.contentOffset.x / wp(30) + 0.5) + 1,
-              0,
-            ),
-            data.length,
-          ) - 1;
-        if (currentPage !== pageNumber) setCurrentPage(pageNumber);
-      }}
-      keyExtractor={item => item.item1.id}
+      numColumns={2}
+      showsVerticalScrollIndicator={false}
+      columnWrapperStyle={{justifyContent: 'space-between'}}
+      keyExtractor={item => item.item1.name + Date.now()}
       data={data}
-      renderItem={({item, index}) => (
-        <View>
-          <Pressable
-            onPress={() =>
-              navigation.navigate('DetailLieu', {lieu: item.item1})
-            }>
-            <Shadow
-              style={
-                index % 2 == 0 ? styles.imageContainer1 : styles.imageContainer2
+      renderItem={({item, index}) => {
+        console.log(item);
+        return (
+          <View>
+            <Pressable
+              onPress={() =>
+                navigation.navigate('DetailLieu', {lieu: item.item1})
               }>
               <Image
                 style={index % 2 == 0 ? styles.image1 : styles.image2}
-                source={{uri: item.item1.urlImage}}
+                source={{
+                  uri: item.item1.images
+                    ? item.item1.images.mobile
+                    : 'http://www.ibrisco.com/img/not-available.png',
+                }}
               />
+              <LinearGradient
+                locations={index % 2 == 0 ? [0.5, 1.0] : [0.2, 1.0]}
+                colors={['rgba(0,0,0,0.00)', 'rgba(0,0,0,0.9)']}
+                style={
+                  index % 2 == 0
+                    ? styles.linearGradient1
+                    : styles.linearGradient2
+                }></LinearGradient>
+
               <Text style={styles.name}>{item.item1.name}</Text>
-            </Shadow>
-          </Pressable>
-          <Pressable
-            onPress={() =>
-              navigation.navigate('DetailLieu', {lieu: item.item2})
-            }>
-            <Shadow
-              style={
-                index % 2 == 0 ? styles.imageContainer2 : styles.imageContainer1
-              }>
-              <Image
-                style={index % 2 == 0 ? styles.image2 : styles.image1}
-                source={{uri: item.item2.urlImage}}
-              />
-              <Text style={styles.name}>{item.item2.name}</Text>
-            </Shadow>
-          </Pressable>
-        </View>
-      )}
+            </Pressable>
+            {item.item2 ? (
+              <Pressable
+                onPress={() =>
+                  navigation.navigate('DetailLieu', {lieu: item.item2})
+                }>
+                <Image
+                  style={index % 2 == 0 ? styles.image2 : styles.image1}
+                  source={{
+                    uri: item.item2.images
+                      ? item.item2.images.mobile
+                      : 'http://www.ibrisco.com/img/not-available.png',
+                  }}></Image>
+                <LinearGradient
+                  locations={index % 2 == 0 ? [0.2, 1.0] : [0.5, 1.0]}
+                  colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.9)']}
+                  style={
+                    index % 2 == 0
+                      ? styles.linearGradient2
+                      : styles.linearGradient1
+                  }></LinearGradient>
+                <Text style={styles.name}>{item.item2.name}</Text>
+              </Pressable>
+            ) : null}
+          </View>
+        );
+      }}
     />
   );
 };
 
 const styles = StyleSheet.create({
   list: {
-    paddingLeft: wp(5),
-    paddingBottom: wp(4),
-  },
-  imageContainer1: {
-    marginRight: wp(5),
-    marginTop: wp(5),
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 3.84,
-    backgroundColor: 'white',
-    borderRadius: wp(5),
-    width: wp(48),
-    height: wp(50),
-  },
-  imageContainer2: {
-    marginRight: wp(5),
-    marginTop: wp(5),
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 2,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 3.84,
-    backgroundColor: 'white',
-    width: wp(48),
-    height: wp(30),
-    borderRadius: wp(5),
+    paddingHorizontal: wp(5),
   },
   image1: {
-    width: wp(48),
+    position: 'relative',
+    width: wp(43.5),
     height: wp(50),
     borderRadius: wp(5),
+    marginBottom: wp(3),
+    backgroundColor: '#1c3052a4',
   },
   image2: {
-    width: wp(48),
+    position: 'relative',
+    width: wp(43.5),
     height: wp(30),
     borderRadius: wp(5),
-  },
-  center: {
-    alignItems: 'center',
+    marginBottom: wp(3),
+    backgroundColor: '#1c3052a4',
   },
   name: {
     position: 'absolute',
-    fontSize: wp(3.2),
-    fontFamily: 'Montserrat-Regular',
+    fontSize: wp(4),
+    fontFamily: 'Montserrat-Bold',
     color: 'white',
-    bottom: wp(2),
-    left: wp(2),
-    backgroundColor: '#00000080',
-    padding: wp(0.5),
-    paddingHorizontal: wp(1),
-    borderRadius: wp(2),
+    bottom: wp(6),
+    right: wp(2),
+    padding: wp(1),
+    paddingHorizontal: wp(2),
+    borderRadius: wp(3),
+  },
+  linearGradient1: {
+    top: 0,
+    bottom: 0,
+    position: 'absolute',
+    width: wp(43.5),
+    height: wp(50),
+    borderRadius: wp(5),
+    marginBottom: wp(3),
+  },
+  linearGradient2: {
+    top: 0,
+    bottom: 0,
+    position: 'absolute',
+    width: wp(43.5),
+    height: wp(30),
+    borderRadius: wp(5),
+    marginBottom: wp(3),
   },
 });
 

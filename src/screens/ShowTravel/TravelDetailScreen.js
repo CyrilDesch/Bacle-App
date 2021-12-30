@@ -17,8 +17,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {Context as TripContext} from '../../context/TripContext';
 
 const TravelDetailScreen = ({navigation}) => {
-  const {state: tripState} = useContext(TripContext);
+  const {state: tripState, startRouting} = useContext(TripContext);
   const trip = tripState.tripList[tripState.selectedTrip];
+  console.log(trip.days);
   const [index, setIndex] = useState(0);
   const routes = [
     {key: 'lieux', title: 'Lieux'},
@@ -31,7 +32,7 @@ const TravelDetailScreen = ({navigation}) => {
       <FlatList
         ListHeaderComponent={
           <Pressable onPress={() => navigation.navigate('SearchStack')}>
-            <Text style={styles.buttonAddPlace}>+ Ajouter un lieu</Text>
+            <Text style={styles.buttonAddPlace}>+ Rechercher un lieu</Text>
           </Pressable>
         }
         contentContainerStyle={{padding: wp(5)}}
@@ -98,11 +99,16 @@ const TravelDetailScreen = ({navigation}) => {
               <Text style={styles.buttonTitle}>Afficher le voyage</Text>
             </TouchableOpacity>
             <View style={styles.space} />
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                startRouting(tripState.tripList, tripState.selectedTrip)
+              }>
               <View style={styles.round}>
                 <Icon name="flag" size={wp(6.5)} />
               </View>
-              <Text style={styles.buttonTitle}>Démarrer le voyage</Text>
+              <Text style={styles.buttonTitle}>
+                Lancer la planification automatique
+              </Text>
             </TouchableOpacity>
             <View style={styles.space} />
             <TouchableOpacity>
