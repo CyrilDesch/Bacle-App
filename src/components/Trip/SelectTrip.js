@@ -9,27 +9,25 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 // onSelection: (item, index) => {}
 const SelectTrip = ({trips, onSelection}) => {
   return (
-    <SafeAreaView style={{height: hp(92)}}>
-      <FlatList
-        contentContainerStyle={{
-          paddingHorizontal: wp(5),
-          paddingVertical: wp(2),
-        }}
-        keyExtractor={item => item._id + new Date().toDateString()}
-        data={trips}
-        ListEmptyComponent={<Text>Veuillez créer un voyage</Text>}
-        renderItem={({item, index}) => (
-          <Pressable
-            onPress={() => {
-              onSelection(item, index);
-            }}>
-            <View style={styles.container}>
-              <Text style={styles.text}>Nom du voyage : {item.name}</Text>
-            </View>
-          </Pressable>
-        )}
-      />
-    </SafeAreaView>
+    <FlatList
+      contentContainerStyle={{
+        paddingHorizontal: wp(5),
+        paddingVertical: wp(2),
+      }}
+      keyExtractor={item => item._id + new Date().toDateString()}
+      data={trips}
+      ListEmptyComponent={<Text>Veuillez créer un voyage</Text>}
+      renderItem={({item, index}) => (
+        <Pressable
+          onPress={() => {
+            onSelection(item, index);
+          }}>
+          <View style={styles.container}>
+            <Text style={styles.text}>Nom du voyage : {item.name}</Text>
+          </View>
+        </Pressable>
+      )}
+    />
   );
 };
 
