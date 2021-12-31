@@ -12,7 +12,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import TimePicker from 'react-native-simple-time-picker';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { Context as TripContext } from '../../context/TripContext';
 import SelectTrip from '../../components/Trip/SelectTrip';
@@ -25,8 +25,9 @@ const AddPlaceToTripScreen = ({route, navigation}) => {
   const {state: tripState, getTrips, addPlaceToTrip} = useContext(TripContext);
   const [processState, setProcessState] = useState(0);      // 0: en cours, 1: succès, 2: échec
   const [selectedTripIndex, setSelectedTripIndex] = useState(-1);
+  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [selectedHours, setSelectedHours] = useState(0);
-  const [selectedMinutes, setSelectedMinutes] = useState(0);
+  const [selectedMinutes, setSelectedMinutes] = useState(30);
   const {place} = route.params;
 
   useEffect(() => {
@@ -49,22 +50,30 @@ const AddPlaceToTripScreen = ({route, navigation}) => {
     );
   };
 
+
   const placeProperties = () => {
     return (
       <View>
-        <Pressable onPress={() => {}}>
+        <Pressable onPress={() => { console.log("back"); }}>
           <Text>BACK</Text>
         </Pressable>
         <Text style={styles.title}>Nom du voyage</Text>
         <Text style={styles.subtitle}>Nom du lieu</Text>
         <Text>Temps estimé à passé sur le lieu</Text>
-        <TimePicker
-          selectedHours={selectedHours}
-          selectedMinutes={selectedMinutes}
-          onChange={(hours, minutes) => {
-            setSelectedHours(hours);
-            setSelectedMinutes(minutes);
+        <Button
+          title={selectedHours + ":" + selectedMinutes}
+          onPress={() => { setTimePickerVisibility(true); }}
+        />
+        <DateTimePickerModal
+          isVisible={isTimePickerVisible}
+          mode="time"
+          date={new Date(0, 0, 0, selectedHours, selectedMinutes)}
+          onConfirm={(date) => {
+            setSelectedHours(date.getHours());
+            setSelectedMinutes(date.getMinutes());
+            setTimePickerVisibility(false);
           }}
+          onCancel={() => { setTimePickerVisibility(false); }}
         />
         <Button
           title="Enregistrer"
@@ -88,6 +97,7 @@ const AddPlaceToTripScreen = ({route, navigation}) => {
           title="Ok"
           onPress={() => {
             setProcessState(0);
+            setSelectedTripIndex(-1);
             navigation.navigate('Search');
           }}
         />
@@ -106,6 +116,7 @@ const AddPlaceToTripScreen = ({route, navigation}) => {
           title="Annuler"
           onPress={() => {
             setProcessState(0);
+            setSelectedTripIndex(-1);
             navigation.navigate('Search');
           }}
         />
@@ -135,14 +146,14 @@ const AddPlaceToTripScreen = ({route, navigation}) => {
       )
 
       // Processus réussi
-      : ((processState === 1) ? (
+      : (processState === 1) ? (
         successFeedback()
       ) 
 
       // Proccessus échoué
       : (
         failureFeedback()
-      ))
+      )
     }
     </SafeAreaView>
   );
