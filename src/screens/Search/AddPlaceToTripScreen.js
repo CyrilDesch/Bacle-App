@@ -1,12 +1,32 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Text, View, Button} from 'react-native';
-import {Context as TripContext} from '../../context/TripContext';
+import React, { useContext, useEffect, useState } from 'react';
+import {
+  Text, 
+  View, 
+  Button,
+  StyleSheet,
+  Pressable
+} from 'react-native';
+
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import TimePicker from 'react-native-simple-time-picker';
+
+import { Context as TripContext } from '../../context/TripContext';
 import SelectTrip from '../../components/Trip/SelectTrip';
 
 
+// TODO: Possibilité de renseigner le temps estimé à rester pour un lieu. 
+// Par exemple avec un écran intermédiaire qui a comme titre le nom du voyage et du lieu
+// + sélection du temps + un bouton ajouter le lieu
 const AddPlaceToTripScreen = ({route, navigation}) => {
   const {state: tripState, getTrips, addPlaceToTrip} = useContext(TripContext);
-  const [processState, setProcessState] = useState(0); // 0: en cours, 1: succès, 2: échec
+  const [processState, setProcessState] = useState(0);      // 0: en cours, 1: succès, 2: échec
+  const [selectedTripIndex, setSelectedTripIndex] = useState(-1);
+  const [selectedHours, setSelectedHours] = useState(0);
+  const [selectedMinutes, setSelectedMinutes] = useState(0);
   const {place} = route.params;
 
   useEffect(() => {
@@ -19,18 +39,51 @@ const AddPlaceToTripScreen = ({route, navigation}) => {
       <SelectTrip
         trips={tripState.tripList}
         onSelection={(item, index) => {
-          addPlaceToTrip(tripState.tripList, index, place).then(status => {
-            setProcessState(status);
-          });
+          setSelectedTripIndex(index);
         }}
+        // onSelection={(item, index) => {
+        //   addPlaceToTrip(tripState.tripList, index, place).then(status => {
+        //     setProcessState(status);
+        //   });
       />
     );
-  }
+  };
+
+  const placeProperties = () => {
+    return (
+      <View>
+        <Pressable onPress={() => {}}>
+          <Text>BACK</Text>
+        </Pressable>
+        <Text style={styles.title}>Nom du voyage</Text>
+        <Text style={styles.subtitle}>Nom du lieu</Text>
+        <Text>Temps estimé à passé sur le lieu</Text>
+        <TimePicker
+          selectedHours={selectedHours}
+          selectedMinutes={selectedMinutes}
+          onChange={(hours, minutes) => {
+            setSelectedHours(hours);
+            setSelectedMinutes(minutes);
+          }}
+        />
+        <Button
+          title="Enregistrer"
+          onPress={() => {
+            addPlaceToTrip(tripState.tripList, selectedTripIndex, place).then(status => {
+              setProcessState(status);
+            });
+          }}
+        />
+      </View>
+    );
+  } 
 
   const successFeedback = () => {
     return (
       <View>
-        <Text>Le lieu a été ajouté avec succès.</Text>
+        <Text style={styles.feedbackText}>
+          Le lieu a été ajouté avec succès.
+        </Text>
         <Button
           title="Ok"
           onPress={() => {
@@ -45,7 +98,9 @@ const AddPlaceToTripScreen = ({route, navigation}) => {
   const failureFeedback = () => {
     return (
       <View>
-        <Text>Le lieu n'a pas pu être ajouté.</Text>
+        <Text style={styles.feedbackText}>
+          Le lieu n'a pas pu être ajouté.
+        </Text>
         <Button title="Réessayer" onPress={() => setProcessState(0)} />
         <Button
           title="Annuler"
@@ -59,16 +114,61 @@ const AddPlaceToTripScreen = ({route, navigation}) => {
   };
 
 
-  return tripState.loading ? (
-    <Text>Wait</Text>
-  ) : processState === 0 ? (
-    selectTrip()
-  ) : processState === 1 ? (
-    successFeedback()
-  ) : (
-    failureFeedback()
+  return (
+    <SafeAreaView>
+    {
+      // Processus en cours
+      (processState === 0) ? (
+        // Aucun voyage n'a été sélectionné
+        (selectedTripIndex === -1) ? (   
+          (tripState.loading) ? (
+            <Text>Wait</Text>
+          ) 
+          : (
+            selectTrip()
+          )
+        ) 
+        // Un voyage a été sélectionné 
+        : (
+          placeProperties()
+        )
+      )
+
+      // Processus réussi
+      : ((processState === 1) ? (
+        successFeedback()
+      ) 
+
+      // Proccessus échoué
+      : (
+        failureFeedback()
+      ))
+    }
+    </SafeAreaView>
   );
 };
+
+
+const styles = StyleSheet.create({
+  title: {
+    marginBottom: wp(6),
+    fontSize: wp(6),
+    fontWeight: '800'
+  },
+  subtitle: {
+    position: 'relative',
+    top: wp(-4),
+    marginBottom: wp(6),
+    fontSize: wp(5),
+    fontWeight: '600'
+  }, 
+  feedbackText: {
+    marginBottom: wp(3),
+  },
+  button: {
+    width: wp(10)
+  }
+});
 
 
 export default AddPlaceToTripScreen;
