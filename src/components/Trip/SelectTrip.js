@@ -23,7 +23,7 @@ const SelectTrip = ({trips, onSelection}) => {
             onSelection(item, index);
           }}>
           <View style={styles.container}>
-            <Text style={styles.text}>Nom du voyage : {item.name}</Text>
+            <Text style={styles.text}>{item.name}</Text>
           </View>
         </Pressable>
       )}
