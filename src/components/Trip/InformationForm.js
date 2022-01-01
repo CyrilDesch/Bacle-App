@@ -201,7 +201,11 @@ const InformationForm = ({submit, step, loading}) => {
           }}
           TouchableComponent={Pressable}
         />
-        {loading ? <ActivityIndicator /> : null}
+        {loading ? (
+          <View style={{marginTop: wp(2)}}>
+            <ActivityIndicator color="#1c3052" />
+          </View>
+        ) : null}
         <Text>{errorMessage}</Text>
       </View>
     );

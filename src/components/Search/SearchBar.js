@@ -14,7 +14,7 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
-import SearchResultList from './SearchResultList';
+import SearchResultListInput from './SearchResultListInput';
 
 const SearchBar = ({
   onlyCountry,
@@ -101,7 +101,7 @@ const SearchBar = ({
       </View>
       {showResult && data.length > 0 ? (
         <View style={styles.result}>
-          <SearchResultList
+          <SearchResultListInput
             data={data}
             onItemPress={index => {
               setText(data[index].display_name.split(',')[0]);

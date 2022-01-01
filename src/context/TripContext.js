@@ -15,7 +15,7 @@ const TripReducer = (state, action) => {
     case 'saveTrip':
       return {
         ...state,
-        selectedTrip: state.tripList.length,
+        selectedTrip: 0,
         tripList: [action.payload, ...state.tripList],
         errorMessage: '',
         loadingToPost: false,
@@ -70,7 +70,7 @@ const saveTrip = dispatch => async trip => {
       headers: {'content-type': 'application/x-www-form-urlencoded'},
     });
     dispatch({type: 'saveTrip', payload: resp.data.trip});
-    navigate('TravelDetail');
+    navigate('TravelDetail', 'TravelStack');
   } catch (err) {
     console.log(err.response);
     dispatch({
@@ -126,7 +126,7 @@ const startRouting = dispatch => async (tripList, tripIndex) => {
 
     // Les voyages avant celui qui est modifié
     const editedTrip = tripList[tripIndex];
-    editedTrip.days.push(resp.data.days);
+    editedTrip.days = resp.data.days;
     const newTripList = updateList(tripList, tripIndex, editedTrip);
     dispatch({type: 'saveTripList', payload: newTripList});
   } catch (err) {

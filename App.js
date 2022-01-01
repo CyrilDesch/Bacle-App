@@ -95,7 +95,6 @@ const SearchStackScreen = () => {
     <SearchStack.Navigator
       initialRouteName="Search"
       screenOptions={({route}) => {
-        console.log(route);
         return {
           tabBarVisible: true,
           headerShown: false,

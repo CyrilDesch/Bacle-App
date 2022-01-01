@@ -44,6 +44,7 @@ const Layout = ({children, back, step}) => {
             style={styles.animation}
             source={require('../../animations/travel.json')}
             autoPlay
+            resizeMode="cover"
             loop
           />
           <View style={styles.inline}>
@@ -72,7 +73,8 @@ const styles = StyleSheet.create({
   animation: {
     position: 'absolute',
     alignSelf: 'center',
-    height: wp(40),
+    height: wp(30),
+    marginTop: wp(4),
   },
   background: {
     alignItems: 'center',

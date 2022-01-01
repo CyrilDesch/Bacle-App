@@ -4,9 +4,15 @@ import {createNavigationContainerRef} from '@react-navigation/native';
 
 export const navigationRef = createNavigationContainerRef();
 
-export function navigate(name, params) {
+export function navigate(name, route) {
   if (navigationRef.isReady()) {
-    navigationRef.navigate(name, params);
+    if (route) {
+      navigationRef.navigate(route, {
+        screen: name,
+      });
+    } else {
+      navigationRef.navigate(name);
+    }
   }
 }
 

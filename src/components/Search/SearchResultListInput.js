@@ -7,25 +7,29 @@ import {
 } from 'react-native-responsive-screen';
 
 // Représentation de la liste des résultats de recherche
-const SearchResultList = ({data, onItemPress}) => {
+const SearchResultListInput = ({data, onItemPress}) => {
   return (
-    <FlatList
-      contentContainerStyle={styles.container}
-      data={data}
-      keyExtractor={item => item.osm_id.toString()}
-      renderItem={({item, index}) => (
-        <SearchResultItem item={item} onPress={() => onItemPress(index)} />
-      )}
-    />
+    <View style={styles.container}>
+      <FlatList
+        contentContainerStyle={{paddingBottom: wp(2)}}
+        persistentScrollbar
+        data={data}
+        keyExtractor={item => item.osm_id.toString()}
+        renderItem={({item, index}) => (
+          <SearchResultItem item={item} onPress={() => onItemPress(index)} />
+        )}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    maxHeight: wp(65),
     backgroundColor: 'white',
-    paddingBottom: wp(1),
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
+    borderWidth: wp(0.3),
     borderRadius: wp(2),
     borderTopWidth: 0,
     borderColor: '#989898',
@@ -34,4 +38,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchResultList;
+export default SearchResultListInput;

@@ -5,7 +5,6 @@ import {
   View,
   TouchableOpacity,
   Pressable,
-  FlatList,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -14,51 +13,21 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Planning from '../../components/ShowTrip/Planning';
+import Lieux from '../../components/ShowTrip/Lieux';
 import {Context as TripContext} from '../../context/TripContext';
 
 const TravelDetailScreen = ({navigation}) => {
   const {state: tripState, startRouting} = useContext(TripContext);
   const trip = tripState.tripList[tripState.selectedTrip];
-  console.log(trip.days);
   const [index, setIndex] = useState(0);
+
+  console.log(trip.places);
+
   const routes = [
     {key: 'lieux', title: 'Lieux'},
     {key: 'planning', title: 'Planning'},
-    {key: 'infos', title: 'Infos'},
   ];
-
-  const LieuxRoute = () => (
-    <View style={{backgroundColor: '#f2f2f2', flex: 1}}>
-      <FlatList
-        ListHeaderComponent={
-          <Pressable onPress={() => navigation.navigate('SearchStack')}>
-            <Text style={styles.buttonAddPlace}>+ Rechercher un lieu</Text>
-          </Pressable>
-        }
-        contentContainerStyle={{padding: wp(5)}}
-        keyExtractor={item => item._id}
-        data={trip.places}
-        renderItem={({item, index}) => (
-          <Text style={styles.itemListPlace}>{item.name}</Text>
-        )}
-        ListEmptyComponent={
-          <Text style={styles.textEmpty}>Aucun lieu ajouté</Text>
-        }
-      />
-    </View>
-  );
-
-  const PlanningRoute = () => (
-    <View style={{flex: 1, backgroundColor: '#f2f2f2'}}>
-      <Text style={styles.textEmpty}>Indisponible</Text>
-    </View>
-  );
-
-  const InfosRoute = () => (
-    <View style={{flex: 1, backgroundColor: '#f2f2f2'}}>
-      <Text style={styles.textEmpty}>Indisponible</Text>
-    </View>
-  );
 
   const renderTabBar = props => (
     <TabBar
@@ -70,24 +39,26 @@ const TravelDetailScreen = ({navigation}) => {
       tabStyle={styles.tabStyle}
       indicatorStyle={{
         backgroundColor: '#1c3052',
-        width: wp(22),
-        marginLeft: wp(5.7),
+        width: wp(30),
+        marginLeft: wp(10),
       }}
       style={{backgroundColor: 'transparent'}}
     />
   );
 
   const renderScene = SceneMap({
-    lieux: LieuxRoute,
-    planning: PlanningRoute,
-    infos: InfosRoute,
+    lieux: () => <Lieux trip={trip} navigation={navigation} />,
+    planning: () => <Planning trip={trip} />,
   });
 
   return (
     <>
       <View style={{backgroundColor: 'white'}}>
         <SafeAreaView>
-          <Pressable onPress={() => navigation.goBack()}>
+          <Pressable
+            onPress={() =>
+              navigation.navigate('TravelStack', {screen: 'SelectTravel'})
+            }>
             <Icon name="chevron-back" size={wp(8)} />
           </Pressable>
           <Text style={styles.title}>{`Voyage\n${trip.name}`}</Text>
@@ -177,35 +148,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
   },
   tabStyle: {
-    width: wp(33),
+    width: wp(50),
     margin: 0,
-  },
-  textEmpty: {
-    alignSelf: 'center',
-    color: '#9f9f9f',
-    fontSize: wp(4.5),
-    marginTop: hp(10),
-    fontFamily: 'Montserrat-Medium',
-  },
-  buttonAddPlace: {
-    marginBottom: wp(3),
-    backgroundColor: '#1c3052',
-    paddingHorizontal: wp(4),
-    paddingVertical: wp(1.5),
-    borderRadius: wp(2),
-    alignSelf: 'center',
-    color: 'white',
-    fontSize: wp(3.5),
-    fontFamily: 'Montserrat-Regular',
-  },
-  itemListPlace: {
-    marginBottom: wp(3),
-    backgroundColor: 'white',
-    paddingHorizontal: wp(3),
-    paddingVertical: wp(1.5),
-    borderRadius: wp(2),
-    fontSize: wp(4),
-    fontFamily: 'Montserrat-Medium',
   },
 });
 

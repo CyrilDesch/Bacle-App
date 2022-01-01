@@ -4,7 +4,6 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {SafeAreaView} from 'react-native-safe-area-context';
 
 // onSelection: (item, index) => {}
 const SelectTrip = ({trips, onSelection}) => {
@@ -23,7 +22,7 @@ const SelectTrip = ({trips, onSelection}) => {
             onSelection(item, index);
           }}>
           <View style={styles.container}>
-            <Text style={styles.text}>Nom du voyage : {item.name}</Text>
+            <Text style={styles.text}>Voyage {item.name}</Text>
           </View>
         </Pressable>
       )}
