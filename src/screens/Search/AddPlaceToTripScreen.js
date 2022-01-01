@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import {
   Text, 
   View, 
-  Button,
   StyleSheet,
   TextInput,
   TouchableOpacity
 } from 'react-native';
+import { useBackHandler } from '@react-native-community/hooks'
 
 import {
   widthPercentageToDP as wp,
@@ -38,6 +38,20 @@ const AddPlaceToTripScreen = ({route, navigation}) => {
     getTrips();
   }, []);
 
+  const backButtonAction = () => {
+    setSelectedTripIndex(-1);
+  };
+
+  // Changement du comportement du retour arrière.
+  useBackHandler(() => {
+    if (processState === 0 && selectedTripIndex !== -1) {
+      // Comportement custom
+      backButtonAction();
+      return true;
+    }
+    // Comportement normal
+    return false;
+  })
 
   const selectTrip = () => {
     return (
@@ -53,11 +67,6 @@ const AddPlaceToTripScreen = ({route, navigation}) => {
         />
       </>
     );
-  };
-
-  const backButtonAction = () => {
-    setSelectedTripIndex(-1);
-    //setProcessState(0);
   };
 
   const placeProperties = () => {
