@@ -12,14 +12,22 @@ import CustomFlatList from '../components/CustomFlatList';
 const HomeScreen = ({navigation}) => {
   const scrollList = useRef(null);
   const [indexSelectedSection, setIndexSelectedSection] = useState(0);
-  const sectionList = ['Tout', 'En France', 'En Angleterre', 'En Espagne'];
+  const sectionList = ['Tout', 'France', 'Angleterre', 'Espagne', 'Italie'];
+  const sectionListCode = ['', 'fr', 'gb', 'es', 'it'];
   const [tendanceTemp, setTendanceTemp] = useState([]);
   let tendanceShow = [];
 
   const getTendance = async clear => {
-    const resp = await trackerApi.get('/suggestion', {
-      headers: {'content-type': 'application/x-www-form-urlencoded'},
-    });
+    const resp = await trackerApi.get(
+      `/suggestion?limit=20${
+        sectionListCode[indexSelectedSection] != ''
+          ? '&country_code=' + sectionListCode[indexSelectedSection]
+          : ''
+      }`,
+      {
+        headers: {'content-type': 'application/x-www-form-urlencoded'},
+      },
+    );
     if (clear) {
       setTendanceTemp(resp.data.suggestions);
     } else {

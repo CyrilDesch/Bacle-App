@@ -23,14 +23,14 @@ const TravelMap = ({style, travelData, focusedPlaceIndex}) => {
     const chemin = async () => {
       if (travelData !== null && travelData.length > 1) {
         let baseUrl = `https://router.hereapi.com/v8/routes?apiKey=xQMtiBGNDxwdDFit6X0LIF3FlEyWRuXscq1BeTVC24E&origin=${
-          travelData[0].lat
-        },${travelData[0].lon}&destination=${
-          travelData[travelData.length - 1].lat
+          travelData[0].localization.lat
+        },${travelData[0].localization.lon}&destination=${
+          travelData[travelData.length - 1].localization.lat
         },${
-          travelData[travelData.length - 1].lon
+          travelData[travelData.length - 1].localization.lon
         }&transportMode=pedestrian&return=polyline`;
         for (let i = 1; i < travelData.length - 1; i++) {
-          baseUrl += `&via=${travelData[i].lat},${travelData[i].lon}`;
+          baseUrl += `&via=${travelData[i].localization.lat},${travelData[i].localization.lon}`;
         }
         axios
           .get(baseUrl)
@@ -57,9 +57,11 @@ const TravelMap = ({style, travelData, focusedPlaceIndex}) => {
       travelData.length !== 0 &&
       focusedPlaceIndex !== -1
     ) {
-      if (travelData[focusedPlaceIndex].lat) {
+      if (travelData[focusedPlaceIndex].localization.lat) {
         // LIST PROVENANT D'OPENSTREETMAP
-        const positions = getLatLngList([travelData[focusedPlaceIndex]]);
+        const positions = getLatLngList([
+          travelData[focusedPlaceIndex].localization,
+        ]);
         setFocusPosition(positions[0]);
       } else {
         // LIST PROVENANT DE L'API BACLE

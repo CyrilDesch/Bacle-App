@@ -16,6 +16,7 @@ const WaitScreen = () => {
       />
       <LottieView
         style={styles.animation}
+        resizeMode="cover"
         source={require('../../animations/launchAnim.json')}
         autoPlay
         loop
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   animation: {
-    width: wp(50),
+    width: wp(60),
   },
 });
 

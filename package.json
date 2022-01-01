@@ -1,6 +1,6 @@
 {
-  "name": "ptut",
-  "version": "0.0.5",
+  "name": "bacle",
+  "version": "0.0.6",
   "private": true,
   "scripts": {
     "android": "react-native run-android",

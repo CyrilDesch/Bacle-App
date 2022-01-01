@@ -4,7 +4,6 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {SafeAreaView} from 'react-native-safe-area-context';
 
 // onSelection: (item, index) => {}
 const SelectTrip = ({trips, onSelection}) => {

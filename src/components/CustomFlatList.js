@@ -1,16 +1,36 @@
-import React, {useState} from 'react';
-import {Pressable} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {ActivityIndicator, Pressable} from 'react-native';
 import {FlatList, Image, StyleSheet, View, Text} from 'react-native';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import LinearGradient from 'react-native-linear-gradient';
 
 const CustomFlatList = ({data, navigation, onEndReached, listRef}) => {
+  const [endList, setEndList] = useState(false);
+  useEffect(() => {
+    if (data.length % 10 == 0) {
+      setEndList(false);
+    } else {
+      setEndList(true);
+    }
+  }, [data]);
   return (
     <FlatList
       ref={listRef}
-      onEndReached={onEndReached}
+      onEndReached={() => {
+        if (data.length % 10 == 0) {
+          onEndReached();
+        }
+      }}
       contentContainerStyle={styles.list}
-      onEndReachedThreshold={0.6}
+      ListFooterComponentStyle={{paddingBottom: wp(3), paddingTop: wp(1)}}
+      ListFooterComponent={
+        !endList ? (
+          <ActivityIndicator size="large" color="#999999" />
+        ) : (
+          <Text style={styles.text}>Terminé</Text>
+        )
+      }
+      onEndReachedThreshold={0.5}
       overScrollMode="never"
       numColumns={2}
       showsVerticalScrollIndicator={false}
@@ -18,7 +38,6 @@ const CustomFlatList = ({data, navigation, onEndReached, listRef}) => {
       keyExtractor={item => item.item1.name + Date.now()}
       data={data}
       renderItem={({item, index}) => {
-        console.log(item);
         return (
           <View>
             <Pressable
@@ -122,6 +141,12 @@ const styles = StyleSheet.create({
     height: wp(30),
     borderRadius: wp(5),
     marginBottom: wp(3),
+  },
+  text: {
+    fontSize: wp(3.5),
+    fontFamily: 'Montserrat-Medium',
+    color: '#999999',
+    textAlign: 'center',
   },
 });
 

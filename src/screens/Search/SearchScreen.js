@@ -12,7 +12,6 @@ import SearchResultList from '../../components/Search/SearchResultList';
 import LightPlaceDetail from '../../components/PlaceDetails/LightPlaceDetail';
 import SearchBar from '../../components/Search/SearchBar';
 
-
 const SearchScreen = ({navigation}) => {
   const insets = useSafeAreaInsets();
 
@@ -20,9 +19,8 @@ const SearchScreen = ({navigation}) => {
   const [data, setData] = useState([]);
 
   // Permet de modifier les résultats de recherche en enlevant avant une potentielle sélection.
-  const changeData = (newData) => {
-    if (selectedPlaceIndex !== -1)
-      setSelectedPlaceIndex(-1);
+  const changeData = newData => {
+    if (selectedPlaceIndex !== -1) setSelectedPlaceIndex(-1);
     setData(newData);
   };
 
@@ -59,7 +57,7 @@ const SearchScreen = ({navigation}) => {
           }}
           showResult={false}
           setSearchData={changeData}
-          onSubmit={(newData) => {
+          onSubmit={newData => {
             // Mise à jour de la sélection de résultat
             if (newData.length === 1) {
               setSelectedPlaceIndex(0);
@@ -75,7 +73,7 @@ const SearchScreen = ({navigation}) => {
       </View>
 
       {data.length !== 0 ? (
-        (selectedPlaceIndex === -1) ? (
+        selectedPlaceIndex === -1 ? (
           // Résultats
           <View style={styles.resultArea}>
             <SearchResultList
@@ -90,7 +88,9 @@ const SearchScreen = ({navigation}) => {
           <LightPlaceDetail
             style={styles.lightDetail}
             placeData={data[selectedPlaceIndex]}
-            backButtonAction={data.length !== 1 ? () => setSelectedPlaceIndex(-1) : null}
+            backButtonAction={
+              data.length !== 1 ? () => setSelectedPlaceIndex(-1) : null
+            }
             navigation={navigation}
           />
         )
@@ -98,7 +98,6 @@ const SearchScreen = ({navigation}) => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -120,10 +119,12 @@ const styles = StyleSheet.create({
   },
   resultArea: {
     position: 'absolute',
-    bottom: wp(-6),
+    bottom: wp(-2),
     backgroundColor: 'white',
     borderRadius: wp(4),
-    height: wp(50),
+    borderBottomEndRadius: 0,
+    borderBottomStartRadius: 0,
+    height: wp(60),
     width: wp(100),
     padding: wp(2),
     paddingBottom: wp(6),

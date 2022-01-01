@@ -12,7 +12,6 @@ export let token;
 instance.interceptors.request.use(
   async config => {
     token = await AsyncStorage.getItem('token');
-
     if (token !== undefined) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -29,12 +28,13 @@ instance.interceptors.request.use(
           }
         }
       } else {
-        url = config.params != undefined ? url + '&' : url + '?';
+        url += url.includes('?') ? '&' : '?';
       }
 
       url = url + 'secret=' + Config.REACT_APP_API_KEY;
       let hash = await RNSimpleCrypto.SHA.sha512(url);
 
+      console.log(url);
       if (config.method == 'get') {
         config.params = {hash: hash, ...config.params};
       } else {
@@ -43,6 +43,7 @@ instance.interceptors.request.use(
     } catch (err) {
       console.log(err);
     }
+    console.log(config.params);
 
     return config;
   },
@@ -53,9 +54,9 @@ instance.interceptors.request.use(
 
 export const search = async place => {
   try {
-    const req = await instance.get('/search/', {params: {q: place}});
+    const req = await instance.get(`/search/?q=${place}`);
     return req;
-  } catch {
+  } catch (err) {
     console.log('Erreur search');
   }
 };
