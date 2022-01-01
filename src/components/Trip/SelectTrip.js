@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, Text, View, Pressable, StyleSheet} from 'react-native';
+import {FlatList, Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -17,14 +17,14 @@ const SelectTrip = ({trips, onSelection}) => {
       data={trips}
       ListEmptyComponent={<Text>Veuillez créer un voyage</Text>}
       renderItem={({item, index}) => (
-        <Pressable
+        <TouchableOpacity
           onPress={() => {
             onSelection(item, index);
           }}>
           <View style={styles.container}>
             <Text style={styles.text}>{item.name}</Text>
           </View>
-        </Pressable>
+        </TouchableOpacity>
       )}
     />
   );

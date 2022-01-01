@@ -14,13 +14,6 @@ const SelectTravelScreen = ({navigation}) => {
   }, []);
 
   return (
-    // <SafeAreaView>
-    // {
-    //   tripState.loading ? (
-    //     <Text style={styles.text}>Wait</Text>
-    //   ) : (
-    //     <>
-    //       <Text style={{...styles.text, ...styles.title}}>Sélectionnez un voyage</Text>
     <>
       {tripState.loading ? (
         <SafeAreaView>
@@ -29,7 +22,7 @@ const SelectTravelScreen = ({navigation}) => {
       ) : (
         <>
           <View style={[styles.header, {paddingTop: insets.top}]}>
-            <Text style={styles.title}>Vos voyages</Text>
+            <Text style={styles.title}>Sélectionnez un voyage</Text>
           </View>
           <SelectTrip
             trips={tripState.tripList}
@@ -39,25 +32,6 @@ const SelectTravelScreen = ({navigation}) => {
             }}
           />
         </>
-//       )
-//     }
-//     </SafeAreaView>
-//   );
-// };
-
-
-// const styles = StyleSheet.create({
-//   text: {
-//     fontSize: wp(4),
-//     fontFamily: 'Montserrat-Medium',
-//   },
-//   title: {
-//     fontWeight: 'bold',
-//     fontSize: wp(7),
-//     textAlign: 'center',
-//     marginBottom: wp(3),
-//   },
-// });
       )}
     </>
   );
@@ -74,7 +48,8 @@ const styles = StyleSheet.create({
     paddingTop: wp(0.5),
     padding: wp(2),
     textAlign: 'center',
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: 'Montserrat-Medium',
+    fontWeight: 'bold',
   },
 });
 

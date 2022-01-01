@@ -4,21 +4,20 @@ import {
   View, 
   Button,
   StyleSheet,
-  Pressable,
-  TextInput
+  TextInput,
+  TouchableOpacity
 } from 'react-native';
 
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import IconIonicons from 'react-native-vector-icons/Ionicons';
 
 import { Context as TripContext } from '../../context/TripContext';
 import SelectTrip from '../../components/Trip/SelectTrip';
-import CustomPressable from '../../components/CustomPressable';
 
 
 // TODO: Possibilité de renseigner le temps estimé à rester pour un lieu. 
@@ -27,12 +26,13 @@ import CustomPressable from '../../components/CustomPressable';
 const AddPlaceToTripScreen = ({route, navigation}) => {
   const {state: tripState, getTrips, addPlaceToTrip} = useContext(TripContext);
   const [processState, setProcessState] = useState(0);      // 0: en cours, 1: succès, 2: échec
-  const [selectedTripIndex, setSelectedTripIndex] = useState(-1);
+  const [selectedTripIndex, setSelectedTripIndex] = useState(-1);   // Si l'index est -1, il faut sélectionner un voyage.
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [selectedHours, setSelectedHours] = useState(0);
   const [selectedMinutes, setSelectedMinutes] = useState(30);
   const [notes, setNotes] = useState("");
   const {place} = route.params;
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     getTrips();
@@ -42,7 +42,9 @@ const AddPlaceToTripScreen = ({route, navigation}) => {
   const selectTrip = () => {
     return (
       <>
-        <Text style={{...styles.text, ...styles.title}}>Sélectionnez un voyage</Text>
+        <View style={[styles.header, {paddingTop: insets.top}]}>
+          <Text style={{...styles.text, ...styles.title}}>Sélectionnez un voyage</Text>
+        </View>
         <SelectTrip
           trips={tripState.tripList}
           onSelection={(item, index) => {
@@ -54,117 +56,139 @@ const AddPlaceToTripScreen = ({route, navigation}) => {
   };
 
   const backButtonAction = () => {
-    console.log("back");
+    setSelectedTripIndex(-1);
+    //setProcessState(0);
   };
 
   const placeProperties = () => {
     return (
-      <View style={styles.container}>
+      <SafeAreaView>
+        <View style={styles.container}>
 
-        <Text style={styles.title}>{tripState.tripList[selectedTripIndex].name}</Text>
-        <Text style={styles.subtitle}>{place.name}</Text>
+          <Text style={styles.title}>{tripState.tripList[selectedTripIndex].name}</Text>
+          <Text style={styles.subtitle}>{place.name}</Text>
 
-        <Text style={{...styles.text, ...styles.centered}}>Temps estimé à passer sur le lieu</Text>
-        <Pressable
-          style={styles.timePressable}
-          onPress={() => { setTimePickerVisibility(true); }}>
-          <Text style={{...styles.text, ...styles.timeText}}>{selectedHours + ":" + selectedMinutes}</Text>
-        </Pressable>
-        <DateTimePickerModal
-          isVisible={isTimePickerVisible}
-          mode="time"
-          date={new Date(0, 0, 0, selectedHours, selectedMinutes)}
-          onConfirm={(date) => {
-            setSelectedHours(date.getHours());
-            setSelectedMinutes(date.getMinutes());
-            setTimePickerVisibility(false);
-          }}
-          onCancel={() => { setTimePickerVisibility(false); }}
-        />
-
-        <Text style={{...styles.text, ...styles.centered}}>Notes</Text>
-        <TextInput
-          style={styles.textArea}
-          multiline={true}
-          numberOfLines={10}
-          onChangeText={(text) => { setNotes(text); }}
-          value={notes}/>
-
-        <Pressable
-          style={styles.submitButton}
-          onPress={() => {
-            addPlaceToTrip(tripState.tripList, selectedTripIndex, place).then(status => {
-              setProcessState(status);
-            });
-          }}>
-          <Text style={{...styles.text, ...styles.submitText}}>
-            Enregistrer
-          </Text>
-        </Pressable>
-
-        {/* Back button */}
-        <Pressable 
-          style={styles.backButton}
-          onPress={backButtonAction}>
-          <IconIonicons
-            name={'arrow-back-outline'}
-            size={wp(8)}
-            color={"black"}
+          <Text style={{...styles.text, ...styles.centered}}>Temps estimé à passer sur le lieu</Text>
+          <TouchableOpacity
+            style={styles.timePressable}
+            onPress={() => { setTimePickerVisibility(true); }}>
+            <Text style={{...styles.text, ...styles.timeText}}>{selectedHours + ":" + selectedMinutes}</Text>
+          </TouchableOpacity>
+          <DateTimePickerModal
+            isVisible={isTimePickerVisible}
+            mode="time"
+            date={new Date(0, 0, 0, selectedHours, selectedMinutes)}
+            onConfirm={(date) => {
+              setSelectedHours(date.getHours());
+              setSelectedMinutes(date.getMinutes());
+              setTimePickerVisibility(false);
+            }}
+            onCancel={() => { setTimePickerVisibility(false); }}
           />
-        </Pressable>
 
-      </View>
+          <Text style={{...styles.text, ...styles.centered}}>Notes</Text>
+          <TextInput
+            style={styles.textArea}
+            multiline={true}
+            numberOfLines={10}
+            onChangeText={(text) => { setNotes(text); }}
+            value={notes}/>
+
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={() => {
+              addPlaceToTrip(tripState.tripList, selectedTripIndex, place).then(status => {
+                setProcessState(status);
+              });
+            }}>
+            <Text style={{...styles.text, ...styles.submitText}}>
+              Enregistrer
+            </Text>
+          </TouchableOpacity>
+
+          {/* Back button */}
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={backButtonAction}>
+            <IconIonicons
+              name={'arrow-back-outline'}
+              size={wp(8)}
+              color={"black"}
+            />
+          </TouchableOpacity>
+
+        </View>
+      </SafeAreaView>
     );
   } 
 
   const successFeedback = () => {
     return (
-      <View style={styles.feedbackPage}>
-        <Text style={{...styles.text, ...styles.feedbackText}}>
-          Le lieu a été ajouté avec succès.
-        </Text>
-        <CustomPressable
-          style={{...styles.submitButton}}
-          onPress={() => {
-            setProcessState(0);
-            setSelectedTripIndex(-1);
-            navigation.navigate('Search');
-          }}>
-          <Text style={styles.submitText}>Ok</Text>
-        </CustomPressable>
-      </View>
+      <SafeAreaView>
+        <Text style={styles.title}>{tripState.tripList[selectedTripIndex].name}</Text>
+        <Text style={styles.subtitle}>{place.name}</Text>
+
+        <View style={styles.feedbackPage}>
+          <Text style={{...styles.text, ...styles.feedbackText}}>
+            Le lieu a été ajouté avec succès.
+          </Text>
+          <TouchableOpacity
+            style={{...styles.submitButton}}
+            onPress={() => {
+              setProcessState(0);
+              setSelectedTripIndex(-1);
+              navigation.navigate('Search');
+            }}>
+            <Text style={styles.submitText}>Ok</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
     );
   };
 
   const failureFeedback = () => {
     return (
-      <View style={styles.feedbackPage}>
-        <Text style={{...styles.text, ...styles.feedbackText}}>
-          Le lieu n'a pas pu être ajouté.
-        </Text>
-        <Button title="Réessayer" onPress={() => setProcessState(0)} />
-        <Button
-          title="Annuler"
-          onPress={() => {
-            setProcessState(0);
-            setSelectedTripIndex(-1);
-            navigation.navigate('Search');
-          }}
-        />
-      </View>
+      <SafeAreaView>
+        <Text style={styles.title}>{tripState.tripList[selectedTripIndex].name}</Text>
+        <Text style={styles.subtitle}>{place.name}</Text>
+
+        <View style={styles.feedbackPage}>
+          <Text style={{...styles.text, ...styles.feedbackText}}>
+            Le lieu n'a pas pu être ajouté.
+          </Text>
+          <View style={styles.buttons}>
+            <TouchableOpacity 
+              style={{...styles.submitButton}}
+              onPress={() => setProcessState(0)}>
+              <Text style={styles.submitText}>Réessayer</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{...styles.submitButton}}
+              onPress={() => {
+                setProcessState(0);
+                setSelectedTripIndex(-1);
+                navigation.navigate('Search');
+              }}>
+              <Text style={styles.submitText}>Annuler</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </SafeAreaView>
     );
   };
 
 
   return (
-    <SafeAreaView>
+    <>
     {
       // Processus en cours
       (processState === 0) ? (
         // Aucun voyage n'a été sélectionné
         (selectedTripIndex === -1) ? (   
           (tripState.loading) ? (
-            <Text>Wait</Text>
+            <SafeAreaView>
+              <Text>Wait</Text>
+            </SafeAreaView>
           ) 
           : (
             selectTrip()
@@ -186,7 +210,7 @@ const AddPlaceToTripScreen = ({route, navigation}) => {
         failureFeedback()
       )
     }
-    </SafeAreaView>
+    </>
   );
 };
 
@@ -202,11 +226,18 @@ const styles = StyleSheet.create({
   centered: {
     textAlign: 'center',
   },
+  header: {
+    backgroundColor: 'white',
+    borderBottomColor: '#e3e3e3',
+    borderBottomWidth: wp(0.5),
+  },
   title: {
-    marginBottom: wp(3),
     fontSize: wp(7),
-    fontWeight: 'bold',
+    paddingTop: wp(0.5),
+    padding: wp(2),
     textAlign: 'center',
+    fontFamily: 'Montserrat-Medium',
+    fontWeight: 'bold',
   },
   subtitle: {
     position: 'relative',    
@@ -217,7 +248,7 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   }, 
   feedbackPage: {
-    height: '100%',
+    height: '80%',
     justifyContent: 'center',
   },
   feedbackText: {
@@ -254,7 +285,7 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     marginTop: wp(5),
-    width: wp(45),
+    width: wp(40),
     backgroundColor: '#fff',
     padding: wp(2),
     borderRadius: wp(3),
