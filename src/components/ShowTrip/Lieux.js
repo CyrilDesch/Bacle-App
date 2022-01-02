@@ -6,15 +6,15 @@ import {
 } from 'react-native-responsive-screen';
 
 const Lieux = ({trip, navigation}) => (
-  <View style={{backgroundColor: '#f2f2f2', flex: 1}}>
+  <View style={{flex: 1, backgroundColor: '#f2f2f2'}}>
     <FlatList
       overScrollMode="never"
       ListHeaderComponent={
         <Pressable onPress={() => navigation.navigate('SearchStack')}>
-          <Text style={styles.buttonAddPlace}>+ Rechercher un lieu</Text>
+          <Text style={styles.buttonAddPlace}>+ Ajoutez un lieu</Text>
         </Pressable>
       }
-      contentContainerStyle={{padding: wp(5), paddingBottom: wp(11)}}
+      contentContainerStyle={{padding: wp(5), paddingBottom: wp(2)}}
       keyExtractor={item => item._id}
       data={trip.places}
       renderItem={({item, index}) => (

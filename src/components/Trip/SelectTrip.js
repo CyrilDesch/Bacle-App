@@ -4,6 +4,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 // onSelection: (item, index) => {}
 const SelectTrip = ({trips, onSelection}) => {
@@ -11,7 +12,7 @@ const SelectTrip = ({trips, onSelection}) => {
     <FlatList
       contentContainerStyle={{
         paddingHorizontal: wp(5),
-        paddingVertical: wp(2),
+        paddingVertical: wp(3),
       }}
       keyExtractor={item => item._id + new Date().toDateString()}
       data={trips}
@@ -23,6 +24,7 @@ const SelectTrip = ({trips, onSelection}) => {
           }}>
           <View style={styles.container}>
             <Text style={styles.text}>{item.name}</Text>
+            <Icon name="arrow-forward-circle-outline" size={wp(7)} />
           </View>
         </TouchableOpacity>
       )}
@@ -35,10 +37,14 @@ const styles = StyleSheet.create({
     width: wp(90),
     alignSelf: 'center',
     backgroundColor: 'white',
-    borderRadius: wp(5),
-    marginBottom: wp(2),
+    borderRadius: wp(3),
+    marginBottom: wp(2.5),
     justifyContent: 'center',
     padding: wp(4),
+    paddingHorizontal: wp(6),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   text: {
     fontSize: wp(4),

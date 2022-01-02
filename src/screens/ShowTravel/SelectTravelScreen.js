@@ -15,23 +15,21 @@ const SelectTravelScreen = ({navigation}) => {
 
   return (
     <>
+      <View style={[styles.header, {paddingTop: insets.top}]}>
+        <Text style={styles.title}>Sélectionnez un voyage</Text>
+      </View>
       {tripState.loading ? (
         <SafeAreaView>
           <Text>Wait</Text>
         </SafeAreaView>
       ) : (
-        <>
-          <View style={[styles.header, {paddingTop: insets.top}]}>
-            <Text style={styles.title}>Sélectionnez un voyage</Text>
-          </View>
-          <SelectTrip
-            trips={tripState.tripList}
-            onSelection={(item, index) => {
-              selectTrip(index);
-              navigation.navigate('TravelDetail');
-            }}
-          />
-        </>
+        <SelectTrip
+          trips={tripState.tripList}
+          onSelection={(item, index) => {
+            selectTrip(index);
+            navigation.navigate('TravelDetail');
+          }}
+        />
       )}
     </>
   );
@@ -44,12 +42,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: wp(0.5),
   },
   title: {
-    fontSize: wp(7),
-    paddingTop: wp(0.5),
-    padding: wp(2),
+    fontSize: wp(5.5),
+    paddingHorizontal: wp(5),
+    paddingTop: wp(2),
+    paddingBottom: wp(3),
+    fontFamily: 'Montserrat-Bold',
     textAlign: 'center',
-    fontFamily: 'Montserrat-Medium',
-    fontWeight: 'bold',
   },
 });
 

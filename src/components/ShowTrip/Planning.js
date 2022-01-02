@@ -7,61 +7,63 @@ import {
 
 const Planning = ({trip}) => (
   <View style={{flex: 1, backgroundColor: '#f2f2f2'}}>
-    <View style={{backgroundColor: '#f2f2f2', flex: 1}}>
-      <FlatList
-        overScrollMode="never"
-        contentContainerStyle={{
-          paddingHorizontal: wp(5),
-          paddingBottom: wp(11),
-        }}
-        keyExtractor={item => item._id}
-        data={trip.days}
-        renderItem={({item: day, index}) => (
-          <>
-            <Text style={styles.sectionTitle}>Jour {index + 1}</Text>
-            <View style={styles.card}>
-              <FlatList
-                scrollEnabled={false}
-                keyExtractor={item => item._id}
-                data={day.places}
-                renderItem={({item: place, index}) => (
-                  <>
-                    {place.name ? (
-                      <View style={styles.item}>
-                        <View
-                          style={[
-                            styles.line,
-                            index == 1
-                              ? {
-                                  height: wp(7),
-                                  alignSelf: 'flex-end',
-                                }
-                              : {},
-                            index == day.places.length - 1
+    <FlatList
+      overScrollMode="never"
+      contentContainerStyle={{
+        paddingHorizontal: wp(5),
+        paddingBottom: wp(5),
+      }}
+      keyExtractor={item => item._id}
+      data={trip.days}
+      renderItem={({item: day, index}) => (
+        <>
+          <Text style={styles.sectionTitle}>Jour {index + 1}</Text>
+          <View style={styles.card}>
+            <FlatList
+              scrollEnabled={false}
+              keyExtractor={item => item._id}
+              data={day.places}
+              renderItem={({item: place, index}) => (
+                <>
+                  {place.name ? (
+                    <View style={styles.item}>
+                      <View
+                        style={[
+                          styles.line,
+                          index == 1
+                            ? {
+                                height: wp(7),
+                                alignSelf: 'flex-end',
+                              }
+                            : {},
+                          index == day.places.length - 1
+                            ? index != 1
                               ? {
                                   height: wp(7),
                                   alignSelf: 'flex-start',
                                 }
-                              : {},
-                          ]}
-                        />
-                        <View style={styles.circle}>
-                          <View style={styles.innerCircle} />
-                        </View>
-                        <Text style={styles.itemListPlace}>{place.name}</Text>
+                              : {
+                                  height: wp(0),
+                                }
+                            : {},
+                        ]}
+                      />
+                      <View style={styles.circle}>
+                        <View style={styles.innerCircle} />
                       </View>
-                    ) : null}
-                  </>
-                )}
-              />
-            </View>
-          </>
-        )}
-        ListEmptyComponent={
-          <Text style={styles.textEmpty}>Aucun lieu ajouté</Text>
-        }
-      />
-    </View>
+                      <Text style={styles.itemListPlace}>{place.name}</Text>
+                    </View>
+                  ) : null}
+                </>
+              )}
+            />
+          </View>
+        </>
+      )}
+      ListEmptyComponent={
+        <Text style={styles.textEmpty}>Aucun lieu ajouté</Text>
+      }
+    />
   </View>
 );
 

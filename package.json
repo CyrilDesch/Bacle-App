@@ -29,6 +29,7 @@
     "react-native-animated-pagination-dot": "^0.1.8",
     "react-native-config": "^1.4.5",
     "react-native-elements": "^3.4.2",
+    "react-native-flash-message": "^0.2.0",
     "react-native-geolocation-service": "^5.3.0-beta.3",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",

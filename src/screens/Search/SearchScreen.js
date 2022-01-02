@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Alert} from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -14,6 +14,11 @@ import SearchBar from '../../components/Search/SearchBar';
 
 const SearchScreen = ({navigation}) => {
   const insets = useSafeAreaInsets();
+  useEffect(() => {
+    navigation.setOptions({
+      tabBarStyle: {display: 'none'},
+    });
+  }, []);
 
   const [selectedPlaceIndex, setSelectedPlaceIndex] = useState(-1);
   const [data, setData] = useState([]);
@@ -127,7 +132,7 @@ const styles = StyleSheet.create({
     height: wp(60),
     width: wp(100),
     padding: wp(2),
-    paddingBottom: wp(6),
+    paddingBottom: wp(4),
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

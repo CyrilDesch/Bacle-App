@@ -53,7 +53,6 @@ const AuthStackScreen = () => {
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 const TravelStack = createNativeStackNavigator();
-const CreateTravelStack = createNativeStackNavigator();
 const SearchStack = createNativeStackNavigator();
 const ProfilStack = createNativeStackNavigator();
 
@@ -73,20 +72,7 @@ const TravelStackScreen = () => {
       screenOptions={{headerShown: false, gestureEnabled: false}}>
       <TravelStack.Screen name="SelectTravel" component={SelectTravelScreen} />
       <TravelStack.Screen name="TravelDetail" component={TravelDetailScreen} />
-      <TravelStack.Screen name="ShowTravel" component={ShowTravelScreen} />
     </TravelStack.Navigator>
-  );
-};
-
-const CreateTravelStackScreen = () => {
-  return (
-    <CreateTravelStack.Navigator
-      screenOptions={{headerShown: false, gestureEnabled: false}}>
-      <CreateTravelStack.Screen
-        name="CreateTravel"
-        component={CreateTravelScreen}
-      />
-    </CreateTravelStack.Navigator>
   );
 };
 
@@ -102,10 +88,6 @@ const SearchStackScreen = () => {
         };
       }}>
       <SearchStack.Screen name="Search" component={SearchScreen} />
-      <SearchStack.Screen
-        name="AddPlaceToTrip"
-        component={AddPlaceToTripScreen}
-      />
     </SearchStack.Navigator>
   );
 };
@@ -171,13 +153,14 @@ const TabScreen = () => {
       <Tab.Screen name="HomeStack" component={HomeStackScreen} />
       <Tab.Screen name="TravelStack" component={TravelStackScreen} />
       <Tab.Screen
-        options={{
-          tabBarStyle: {display: 'none'},
-          unmountOnBlur: true,
-          lazy: false,
-        }}
         name="CreateTravelStack"
-        component={CreateTravelStackScreen}
+        component={Empty}
+        listeners={({navigation}) => ({
+          tabPress: e => {
+            e.preventDefault();
+            navigation.navigate('CreateTravel');
+          },
+        })}
       />
       <Tab.Screen name="SearchStack" component={SearchStackScreen} />
       <Tab.Screen name="ProfilStack" component={ProfilStackScreen} />
@@ -213,6 +196,12 @@ const App = () => {
         ) : (
           <AppStack.Screen name="AuthStack" component={AuthStackScreen} />
         )}
+        <AppStack.Screen
+          name="AddPlaceToTrip"
+          component={AddPlaceToTripScreen}
+        />
+        <AppStack.Screen name="CreateTravel" component={CreateTravelScreen} />
+        <AppStack.Screen name="ShowTravel" component={ShowTravelScreen} />
       </AppStack.Navigator>
     </NavigationContainer>
   );
@@ -231,3 +220,5 @@ export default () => {
     </SafeAreaProvider>
   );
 };
+
+const Empty = () => <></>;

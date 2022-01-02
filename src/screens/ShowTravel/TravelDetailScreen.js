@@ -16,13 +16,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Planning from '../../components/ShowTrip/Planning';
 import Lieux from '../../components/ShowTrip/Lieux';
 import {Context as TripContext} from '../../context/TripContext';
+import {showMessage} from 'react-native-flash-message';
 
 const TravelDetailScreen = ({navigation}) => {
   const {state: tripState, startRouting} = useContext(TripContext);
   const trip = tripState.tripList[tripState.selectedTrip];
   const [index, setIndex] = useState(0);
-
-  console.log(trip.places);
 
   const routes = [
     {key: 'lieux', title: 'Lieux'},
@@ -53,32 +52,45 @@ const TravelDetailScreen = ({navigation}) => {
 
   return (
     <>
-      <View style={{backgroundColor: 'white'}}>
+      <View
+        style={{
+          backgroundColor: 'white',
+        }}>
         <SafeAreaView>
           <Pressable
             onPress={() =>
-              navigation.navigate('TravelStack', {screen: 'SelectTravel'})
+              trip.days.length > 0
+                ? navigation.navigate('TravelStack', {screen: 'SelectTravel'})
+                : showMessage({
+                    message: 'Hello World',
+                    description: 'This is our second message',
+                    type: 'success',
+                  })
             }>
             <Icon name="chevron-back" size={wp(8)} />
           </Pressable>
-          <Text style={styles.title}>{`Voyage\n${trip.name}`}</Text>
+          <Text
+            style={styles.title}
+            numberOfLines={1}
+            ellipsizeMode="tail">{`${trip.name}`}</Text>
           <View style={styles.firstLine}>
             <TouchableOpacity onPress={() => navigation.navigate('ShowTravel')}>
               <View style={styles.round}>
                 <Icon name="map" size={wp(6.5)} />
               </View>
-              <Text style={styles.buttonTitle}>Afficher le voyage</Text>
+              <Text style={styles.buttonTitle}>Afficher sur la carte</Text>
             </TouchableOpacity>
             <View style={styles.space} />
             <TouchableOpacity
+              style={styles.planificationButton}
               onPress={() =>
                 startRouting(tripState.tripList, tripState.selectedTrip)
               }>
-              <View style={styles.round}>
-                <Icon name="flag" size={wp(6.5)} />
+              <View style={styles.planificationButtonRound}>
+                <Icon name="flag" size={wp(6.5)} color="white" />
               </View>
-              <Text style={styles.buttonTitle}>
-                Lancer la planification automatique
+              <Text style={styles.planificationButtonTitle}>
+                Planification automatique
               </Text>
             </TouchableOpacity>
             <View style={styles.space} />
@@ -109,14 +121,13 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Montserrat-SemiBold',
     textAlign: 'center',
-    marginTop: wp(2),
     fontSize: wp(7),
   },
   firstLine: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingHorizontal: wp(15),
-    marginTop: wp(7),
+    paddingHorizontal: wp(12),
+    marginTop: wp(3),
   },
   round: {
     backgroundColor: '#f2f2f2',
@@ -150,6 +161,27 @@ const styles = StyleSheet.create({
   tabStyle: {
     width: wp(50),
     margin: 0,
+    borderBottomWidth: wp(0.1),
+    borderBottomColor: '#ccc',
+  },
+  planificationButton: {
+    marginTop: wp(5),
+  },
+  planificationButtonRound: {
+    backgroundColor: '#1c3052',
+    width: wp(15),
+    height: wp(15),
+    marginLeft: wp(5),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: wp(10),
+  },
+  planificationButtonTitle: {
+    marginTop: wp(1),
+    fontSize: wp(3),
+    width: wp(25),
+    textAlign: 'center',
+    fontFamily: 'Montserrat-Regular',
   },
 });
 

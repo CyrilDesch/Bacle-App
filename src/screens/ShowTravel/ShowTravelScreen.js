@@ -19,11 +19,13 @@ import TravelMap from '../../components/Map/TravelMap';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import {Context as TripContext} from '../../context/TripContext';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const TravelScreen = ({navigation}) => {
   const carouselRef = useRef();
   const [focusedPlaceIndex, setFocusedPlaceIndex] = useState(0);
   const {state: tripState} = useContext(TripContext);
+  const inset = useSafeAreaInsets();
 
   return (
     <View style={styles.container}>
@@ -32,14 +34,13 @@ const TravelScreen = ({navigation}) => {
         backgroundColor={'transparent'}
         barStyle="dark-content"
       />
-      <View style={styles.buttonBack}>
+      <View style={[styles.buttonBack, {marginTop: inset.top}]}>
         <TouchableOpacity
           style={{zIndex: 1000000}}
           onPress={() => navigation.goBack()}>
           <IoniconsIcon name="chevron-back" color="white" size={wp(6)} />
         </TouchableOpacity>
       </View>
-
       <TravelMap
         style={styles.map}
         travelData={tripState.tripList[tripState.selectedTrip].places}
@@ -87,7 +88,8 @@ const TravelScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    flex: 1,
+    width: wp(100),
+    height: hp(100),
     marginBottom: wp(13),
   },
   text: {
@@ -149,6 +151,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
     fontSize: wp(3),
     color: '#a5a5a5',
+  },
+  buttonBack: {
+    backgroundColor: '#00000080',
+    height: wp(8),
+    width: wp(8),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: wp(5),
+    position: 'absolute',
+    top: wp(2),
+    left: wp(4),
+    zIndex: 1000,
   },
 });
 
