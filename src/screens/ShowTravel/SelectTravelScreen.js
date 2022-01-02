@@ -1,6 +1,9 @@
 import React, {useContext, useEffect} from 'react';
 import {FlatList, Text, View, Pressable, StyleSheet} from 'react-native';
-import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Context as TripContext} from '../../context/TripContext';
 import SelectTrip from '../../components/Trip/SelectTrip';
@@ -9,12 +12,9 @@ const SelectTravelScreen = ({navigation}) => {
   const {state: tripState, getTrips, selectTrip} = useContext(TripContext);
 
   const insets = useSafeAreaInsets();
-  useEffect(() => {
-    getTrips();
-  }, []);
 
   return (
-    <>
+    <View style={{flex: 1, marginBottom: hp(8)}}>
       <View style={[styles.header, {paddingTop: insets.top}]}>
         <Text style={styles.title}>Sélectionnez un voyage</Text>
       </View>
@@ -31,7 +31,7 @@ const SelectTravelScreen = ({navigation}) => {
           }}
         />
       )}
-    </>
+    </View>
   );
 };
 

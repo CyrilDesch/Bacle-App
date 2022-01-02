@@ -25,19 +25,13 @@ import SelectTrip from '../../components/Trip/SelectTrip';
 // Par exemple avec un écran intermédiaire qui a comme titre le nom du voyage et du lieu
 // + sélection du temps + un bouton ajouter le lieu
 const AddPlaceToTripScreen = ({route, navigation}) => {
-  const {state: tripState, getTrips, addPlaceToTrip} = useContext(TripContext);
+  const {state: tripState, addPlaceToTrip} = useContext(TripContext);
   const [processState, setProcessState] = useState(0); // 0: en cours, 1: succès, 2: échec
   const [selectedTripIndex, setSelectedTripIndex] = useState(-1); // Si l'index est -1, il faut sélectionner un voyage.
-  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
-  const [selectedHours, setSelectedHours] = useState(0);
-  const [selectedMinutes, setSelectedMinutes] = useState(30);
+  const [selectedMinutes, setSelectedMinutes] = useState(0);
   const [notes, setNotes] = useState('');
   const {place} = route.params;
   const insets = useSafeAreaInsets();
-
-  useEffect(() => {
-    getTrips();
-  }, []);
 
   const backButtonAction = () => {
     setSelectedTripIndex(-1);
@@ -87,29 +81,16 @@ const AddPlaceToTripScreen = ({route, navigation}) => {
             <Text style={styles.subtitle}>{place.name}</Text>
 
             <Text style={{...styles.text, ...styles.centered}}>
-              Temps estimé à passer sur le lieu
+              {`Temps estimé à passer sur le lieu\n(en minute)`}
             </Text>
-            <TouchableOpacity
-              style={styles.timePressable}
-              onPress={() => {
-                setTimePickerVisibility(true);
-              }}>
-              <Text style={{...styles.text, ...styles.timeText}}>
-                {selectedHours + ':' + selectedMinutes}
-              </Text>
-            </TouchableOpacity>
-            <DateTimePickerModal
-              isVisible={isTimePickerVisible}
-              mode="time"
-              locale="fr_FR"
-              date={new Date(0, 0, 0, selectedHours, selectedMinutes)}
-              onConfirm={date => {
-                setTimePickerVisibility(false);
-                setSelectedHours(date.getHours());
-                setSelectedMinutes(date.getMinutes());
-              }}
-              onCancel={() => {
-                setTimePickerVisibility(false);
+            <TextInput
+              style={(styles.text, styles.timeText)}
+              maxLength={3}
+              placeholder="0"
+              autoCapitalize="none"
+              keyboardType="number-pad"
+              onChangeText={minute => {
+                setSelectedMinutes(minute);
               }}
             />
 
@@ -125,7 +106,6 @@ const AddPlaceToTripScreen = ({route, navigation}) => {
               onChangeText={text => {
                 setNotes(text);
               }}
-              value={notes}
             />
 
             <TouchableOpacity
@@ -295,20 +275,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: wp(2),
   },
-  timePressable: {
-    marginTop: wp(2),
-    marginBottom: wp(6),
-    width: wp(25),
-    backgroundColor: '#fff',
-    padding: wp(1),
-    borderRadius: wp(2),
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
   timeText: {
     fontFamily: 'Montserrat-Medium',
     fontSize: wp(5),
     textAlign: 'center',
+    marginTop: wp(2),
+    marginBottom: wp(6),
+    width: wp(20),
+    backgroundColor: '#fff',
+    padding: wp(1),
+    borderRadius: wp(2),
+    alignSelf: 'center',
   },
   textArea: {
     fontFamily: 'Montserrat-Medium',

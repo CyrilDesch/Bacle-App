@@ -8,9 +8,10 @@ const TripReducer = (state, action) => {
     case 'saveTripList':
       return {
         ...state,
-        tripList: action.payload,
+        tripList: action.payload.tripList,
         loadingToPost: false,
         loadingToGet: false,
+        selectedTrip: action.payload.selectedTrip,
       };
     case 'saveTrip':
       return {
@@ -53,7 +54,10 @@ const getTrips = dispatch => async () => {
       headers: {'content-type': 'application/x-www-form-urlencoded'},
     });
     const tripList = [...resp.data.trips];
-    dispatch({type: 'saveTripList', payload: tripList});
+    dispatch({
+      type: 'saveTripList',
+      payload: {tripList: tripList, selectedTrip: null},
+    });
   } catch (err) {
     console.log(err);
   }
@@ -101,8 +105,10 @@ const addPlaceToTrip = dispatch => async (tripList, tripIndex, place) => {
     const editedTrip = tripList[tripIndex];
     editedTrip.places.push(resp.data.place);
     const newTripList = updateList(tripList, tripIndex, editedTrip);
-
-    dispatch({type: 'saveTripList', payload: newTripList});
+    dispatch({
+      type: 'saveTripList',
+      payload: {tripList: newTripList, selectedTrip: tripIndex},
+    });
     return 1;
   } catch (err) {
     console.log(err);
@@ -128,25 +134,44 @@ const startRouting = dispatch => async (tripList, tripIndex) => {
     const editedTrip = tripList[tripIndex];
     editedTrip.days = resp.data.days;
     const newTripList = updateList(tripList, tripIndex, editedTrip);
-    dispatch({type: 'saveTripList', payload: newTripList});
+    dispatch({
+      type: 'saveTripList',
+      payload: {tripList: newTripList, selectedTrip: tripIndex},
+    });
   } catch (err) {
     console.log(err.response);
   }
 };
 
-const removeError = () => {};
+const removeTrip = dispatch => async (tripList, tripIndex) => {
+  try {
+    const resp = await trackerApi.delete('/user/' + tripList[tripIndex]._id, {
+      headers: {'content-type': 'application/x-www-form-urlencoded'},
+    });
+    console.log(resp);
+    const newTripList = [...tripList];
+    newTripList.splice(tripIndex, 1);
+
+    navigate('SelectTravel', 'TravelStack');
+    dispatch({
+      type: 'saveTripList',
+      payload: {tripList: newTripList, selectedTrip: null},
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 const updateList = (tripList, tripIndex, editedTrip) => {
   // Les voyages avant celui qui est modifié
-  const newTripList = tripList.slice(0, tripIndex);
+
+  let newTripList = tripList.slice(0, tripIndex);
 
   // Le voyage modifié
   newTripList.push(editedTrip);
-
   // Les voyages après celui qui est modifié
   const endOfList = tripList.slice(tripIndex + 1);
-  if (endOfList.length > 0) newTripList.push(endOfList);
-
+  if (endOfList.length > 0) newTripList = [...newTripList, ...endOfList];
   return newTripList;
 };
 
@@ -157,9 +182,9 @@ export const {Provider, Context} = createDataContext(
     getTrips,
     selectTrip,
     addPlaceToTrip,
-    removeError,
     startLoading,
     startRouting,
+    removeTrip,
   },
   {
     tripList: [],

@@ -9,26 +9,28 @@ import Icon from 'react-native-vector-icons/Ionicons';
 // onSelection: (item, index) => {}
 const SelectTrip = ({trips, onSelection}) => {
   return (
-    <FlatList
-      contentContainerStyle={{
-        paddingHorizontal: wp(5),
-        paddingVertical: wp(3),
-      }}
-      keyExtractor={item => item._id + new Date().toDateString()}
-      data={trips}
-      ListEmptyComponent={<Text>Veuillez créer un voyage</Text>}
-      renderItem={({item, index}) => (
-        <TouchableOpacity
-          onPress={() => {
-            onSelection(item, index);
-          }}>
-          <View style={styles.container}>
-            <Text style={styles.text}>{item.name}</Text>
-            <Icon name="arrow-forward-circle-outline" size={wp(7)} />
-          </View>
-        </TouchableOpacity>
-      )}
-    />
+    <View style={{flex: 1}}>
+      <FlatList
+        contentContainerStyle={{
+          paddingHorizontal: wp(5),
+          paddingVertical: wp(3),
+        }}
+        keyExtractor={item => item._id + new Date().toDateString()}
+        data={trips}
+        ListEmptyComponent={<Text>Veuillez créer un voyage</Text>}
+        renderItem={({item, index}) => (
+          <TouchableOpacity
+            onPress={() => {
+              onSelection(item, index);
+            }}>
+            <View style={styles.container}>
+              <Text style={styles.text}>{item.name}</Text>
+              <Icon name="arrow-forward-circle-outline" size={wp(7)} />
+            </View>
+          </TouchableOpacity>
+        )}
+      />
+    </View>
   );
 };
 

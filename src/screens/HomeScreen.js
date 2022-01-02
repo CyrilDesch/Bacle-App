@@ -8,6 +8,7 @@ import {
 } from 'react-native-responsive-screen';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomFlatList from '../components/CustomFlatList';
+import {Context as TripContext} from '../context/TripContext';
 
 const HomeScreen = ({navigation}) => {
   const scrollList = useRef(null);
@@ -38,6 +39,11 @@ const HomeScreen = ({navigation}) => {
   useEffect(() => {
     getTendance(true);
   }, [indexSelectedSection]);
+
+  const {getTrips} = useContext(TripContext);
+  useEffect(() => {
+    getTrips();
+  }, []);
 
   for (let i = 0; i < tendanceTemp.length; i++) {
     if (i % 2 == 0) {

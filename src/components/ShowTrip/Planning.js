@@ -61,7 +61,9 @@ const Planning = ({trip}) => (
         </>
       )}
       ListEmptyComponent={
-        <Text style={styles.textEmpty}>Aucun lieu ajouté</Text>
+        <Text style={styles.textEmpty}>
+          Ajouter un lieu au voyage et lancer la planification automatique
+        </Text>
       }
     />
   </View>
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
   },
   textEmpty: {
-    alignSelf: 'center',
+    textAlign: 'center',
     color: '#9f9f9f',
     fontSize: wp(4.5),
     marginTop: hp(10),

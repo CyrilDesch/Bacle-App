@@ -34,8 +34,7 @@ instance.interceptors.request.use(
       url = url + 'secret=' + Config.REACT_APP_API_KEY;
       let hash = await RNSimpleCrypto.SHA.sha512(url);
 
-      console.log(url);
-      if (config.method == 'get') {
+      if (config.method != 'post') {
         config.params = {hash: hash, ...config.params};
       } else {
         config.data.append('hash', hash);
@@ -43,7 +42,6 @@ instance.interceptors.request.use(
     } catch (err) {
       console.log(err);
     }
-    console.log(config.params);
 
     return config;
   },

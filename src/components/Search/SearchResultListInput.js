@@ -26,6 +26,7 @@ const SearchResultListInput = ({data, onItemPress}) => {
 const styles = StyleSheet.create({
   container: {
     maxHeight: wp(65),
+    paddingTop: wp(1),
     backgroundColor: 'white',
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
