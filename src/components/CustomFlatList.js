@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {ActivityIndicator, Pressable} from 'react-native';
-import {FlatList, Image, StyleSheet, View, Text} from 'react-native';
+import {FlatList, Image, StyleSheet, View, Text, Linking} from 'react-native';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -41,9 +41,19 @@ const CustomFlatList = ({data, navigation, onEndReached, listRef}) => {
         return (
           <View>
             <Pressable
-              onPress={() =>
-                navigation.navigate('DetailLieu', {lieu: item.item1})
-              }>
+              onPress={async () => {
+                const supported = await Linking.canOpenURL(
+                  `https://google.com/search?q=${item.item1.name}+sites+touristiques`,
+                );
+
+                if (supported) {
+                  await Linking.openURL(
+                    `https://google.com/search?q=${item.item1.name}+sites+touristiques`,
+                  );
+                } else {
+                  console.log("Impossible d'ouvrir");
+                }
+              }}>
               <Image
                 style={index % 2 == 0 ? styles.image1 : styles.image2}
                 source={{
@@ -65,9 +75,19 @@ const CustomFlatList = ({data, navigation, onEndReached, listRef}) => {
             </Pressable>
             {item.item2 ? (
               <Pressable
-                onPress={() =>
-                  navigation.navigate('DetailLieu', {lieu: item.item2})
-                }>
+                onPress={async () => {
+                  const supported = await Linking.canOpenURL(
+                    `https://google.com/search?q=${item.item2.name}+sites+touristiques`,
+                  );
+
+                  if (supported) {
+                    await Linking.openURL(
+                      `https://google.com/search?q=${item.item2.name}+sites+touristiques`,
+                    );
+                  } else {
+                    console.log("Impossible d'ouvrir");
+                  }
+                }}>
                 <Image
                   style={index % 2 == 0 ? styles.image2 : styles.image1}
                   source={{

@@ -3,10 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   FlatList,
   StatusBar,
-  Pressable,
   TouchableOpacity,
 } from 'react-native';
 
@@ -16,7 +14,6 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import TravelMap from '../../components/Map/TravelMap';
-import AntIcon from 'react-native-vector-icons/AntDesign';
 import {Context as TripContext} from '../../context/TripContext';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -25,7 +22,20 @@ const TravelScreen = ({navigation}) => {
   const carouselRef = useRef();
   const [focusedPlaceIndex, setFocusedPlaceIndex] = useState(0);
   const {state: tripState} = useContext(TripContext);
+  const [currentDay, setCurrentDay] = useState(0);
+  const [currentDayData, setCurrentDayData] = useState(
+    tripState.tripList[tripState.selectedTrip].days[currentDay].places.slice(1),
+  );
   const inset = useSafeAreaInsets();
+
+  useEffect(() => {
+    setCurrentDayData(
+      tripState.tripList[tripState.selectedTrip].days[currentDay].places.slice(
+        1,
+      ),
+    );
+    setFocusedPlaceIndex(0);
+  }, [currentDay]);
 
   return (
     <View style={styles.container}>
@@ -43,15 +53,53 @@ const TravelScreen = ({navigation}) => {
       </View>
       <TravelMap
         style={styles.map}
-        travelData={tripState.tripList[tripState.selectedTrip].places}
+        travelData={currentDayData}
         focusedPlaceIndex={focusedPlaceIndex}
       />
+      <View style={styles.dayPickerContainer}>
+        <TouchableOpacity
+          onPress={() =>
+            currentDay > 0 ? setCurrentDay(currentDay - 1) : null
+          }>
+          <Text
+            style={[
+              styles.dayButton,
+              currentDay == 0
+                ? {backgroundColor: 'transparent', color: 'transparent'}
+                : {},
+            ]}>
+            {'<'}
+          </Text>
+        </TouchableOpacity>
+        <Text style={styles.dayButton}>
+          Jour {currentDay + 1}/
+          {tripState.tripList[tripState.selectedTrip].days.length}
+        </Text>
+        <TouchableOpacity
+          onPress={() =>
+            currentDay <
+            tripState.tripList[tripState.selectedTrip].days.length - 1
+              ? setCurrentDay(currentDay + 1)
+              : null
+          }>
+          <Text
+            style={[
+              styles.dayButton,
+              currentDay >=
+              tripState.tripList[tripState.selectedTrip].days.length - 1
+                ? {backgroundColor: 'transparent', color: 'transparent'}
+                : {},
+            ]}>
+            {'>'}
+          </Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.slider}>
         <FlatList
           horizontal
           pagingEnabled
           ref={carouselRef}
-          data={tripState.tripList[tripState.selectedTrip].places}
+          data={currentDayData}
           showsHorizontalScrollIndicator={false}
           disableIntervalMomentum
           onMomentumScrollEnd={e => {
@@ -77,7 +125,7 @@ const TravelScreen = ({navigation}) => {
           <PaginationDot
             activeDotColor="#1c3052"
             curPage={focusedPlaceIndex}
-            maxPage={tripState.tripList[tripState.selectedTrip].places.length}
+            maxPage={currentDayData.length}
           />
         </View>
       </View>
@@ -163,6 +211,23 @@ const styles = StyleSheet.create({
     top: wp(2),
     left: wp(4),
     zIndex: 1000,
+  },
+  dayPickerContainer: {
+    top: wp(8),
+    position: 'absolute',
+    flexDirection: 'row',
+  },
+  dayButton: {
+    backgroundColor: '#00000080',
+    color: 'white',
+    marginHorizontal: wp(1.5),
+    padding: wp(1),
+    paddingHorizontal: wp(2.5),
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: wp(4.5),
+    borderRadius: wp(2),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
