@@ -57,8 +57,9 @@ const TravelDetailScreen = ({navigation}) => {
       <View
         style={{
           backgroundColor: 'white',
+          flex: 1,
         }}>
-        <SafeAreaView>
+        <SafeAreaView style={{flex: 1}}>
           <Pressable
             onPress={() =>
               navigation.navigate('TravelStack', {screen: 'SelectTravel'})
@@ -188,7 +189,8 @@ const styles = StyleSheet.create({
   },
   secondLine: {
     marginTop: wp(5),
-    height: hp(57),
+    flex: 1,
+    marginBottom: hp(7.5),
   },
   titleTab: {
     color: '#1c3052',

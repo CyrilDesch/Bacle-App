@@ -15,8 +15,6 @@ import AddPlaceToTripScreen from './src/screens/Search/AddPlaceToTripScreen';
 
 import ProfilScreen from './src/screens/ProfilScreen';
 
-import DetailLieuScreen from './src/screens/DetailLieuScreen';
-
 import SigninScreen from './src/screens/Auth/SigninScreen';
 import SignupScreen from './src/screens/Auth/SignupScreen';
 import WaitScreen from './src/screens/Auth/WaitScreen';
@@ -61,7 +59,6 @@ const HomeStackScreen = () => {
     <HomeStack.Navigator
       screenOptions={{headerShown: false, gestureEnabled: false}}>
       <HomeStack.Screen name="Home" component={HomeScreen} />
-      <HomeStack.Screen name="DetailLieu" component={DetailLieuScreen} />
     </HomeStack.Navigator>
   );
 };
