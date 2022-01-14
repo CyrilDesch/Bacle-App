@@ -10,7 +10,9 @@ const Lieux = ({trip, navigation}) => (
     <FlatList
       overScrollMode="never"
       ListHeaderComponent={
-        <Pressable onPress={() => navigation.navigate('SearchStack')}>
+        <Pressable
+          style={styles.containerButtonAddPlace}
+          onPress={() => navigation.navigate('SearchStack')}>
           <Text style={styles.buttonAddPlace}>+ Ajoutez un lieu</Text>
         </Pressable>
       }
@@ -44,13 +46,16 @@ const styles = StyleSheet.create({
     marginTop: hp(10),
     fontFamily: 'Montserrat-Medium',
   },
-  buttonAddPlace: {
+
+  containerButtonAddPlace: {
     marginBottom: wp(3),
     backgroundColor: '#1c3052',
-    paddingHorizontal: wp(4),
-    paddingVertical: wp(1.5),
     borderRadius: wp(2),
     alignSelf: 'center',
+  },
+  buttonAddPlace: {
+    paddingHorizontal: wp(4),
+    paddingVertical: wp(1.5),
     color: 'white',
     fontSize: wp(3.5),
     fontFamily: 'Montserrat-Regular',
