@@ -61,20 +61,31 @@ const TravelScreen = ({navigation}) => {
           onPress={() =>
             currentDay > 0 ? setCurrentDay(currentDay - 1) : null
           }>
-          <Text
+          <View
             style={[
               styles.dayButton,
-              currentDay == 0
-                ? {backgroundColor: 'transparent', color: 'transparent'}
+              currentDay >=
+              tripState.tripList[tripState.selectedTrip].days.length - 1
+                ? {backgroundColor: 'transparent'}
                 : {},
             ]}>
-            {'<'}
-          </Text>
+            <Text
+              style={[
+                styles.textButton,
+                currentDay == 0
+                  ? {backgroundColor: 'transparent', color: 'transparent'}
+                  : {},
+              ]}>
+              {'<'}
+            </Text>
+          </View>
         </TouchableOpacity>
-        <Text style={styles.dayButton}>
-          Jour {currentDay + 1}/
-          {tripState.tripList[tripState.selectedTrip].days.length}
-        </Text>
+        <View style={styles.dayButton}>
+          <Text style={styles.textButton}>
+            Jour {currentDay + 1}/
+            {tripState.tripList[tripState.selectedTrip].days.length}
+          </Text>
+        </View>
         <TouchableOpacity
           onPress={() =>
             currentDay <
@@ -82,16 +93,25 @@ const TravelScreen = ({navigation}) => {
               ? setCurrentDay(currentDay + 1)
               : null
           }>
-          <Text
+          <View
             style={[
               styles.dayButton,
               currentDay >=
               tripState.tripList[tripState.selectedTrip].days.length - 1
-                ? {backgroundColor: 'transparent', color: 'transparent'}
+                ? {backgroundColor: 'transparent'}
                 : {},
             ]}>
-            {'>'}
-          </Text>
+            <Text
+              style={[
+                styles.textButton,
+                currentDay >=
+                tripState.tripList[tripState.selectedTrip].days.length - 1
+                  ? {color: 'transparent'}
+                  : {},
+              ]}>
+              {'>'}
+            </Text>
+          </View>
         </TouchableOpacity>
       </View>
       <View style={styles.slider}>
@@ -219,15 +239,17 @@ const styles = StyleSheet.create({
   },
   dayButton: {
     backgroundColor: '#00000080',
-    color: 'white',
     marginHorizontal: wp(1.5),
     padding: wp(1),
     paddingHorizontal: wp(2.5),
-    fontFamily: 'Montserrat-SemiBold',
-    fontSize: wp(4.5),
     borderRadius: wp(2),
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  textButton: {
+    color: 'white',
+    fontSize: wp(4.5),
+    fontFamily: 'Montserrat-SemiBold',
   },
 });
 
