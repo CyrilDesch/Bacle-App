@@ -6,7 +6,6 @@ import {
   Pressable,
   FlatList,
   ActivityIndicator,
-  TouchableOpacity,
 } from 'react-native';
 import {Input} from 'react-native-elements';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -15,6 +14,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import {Button} from 'react-native-elements/dist/buttons/Button';
 import Carousel from 'react-native-snap-carousel';
 import SearchBar from '../Search/SearchBar';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -169,8 +169,10 @@ const InformationForm = ({submit, step, loading}) => {
               );
           }
         })}
-        <TouchableOpacity
-          style={styles.button}
+        <Button
+          buttonStyle={styles.button}
+          titleStyle={styles.button}
+          title={dataForm.length - 1 != index ? 'Suivant' : 'Créer'}
           onPress={() => {
             let count = 0;
             item.required.forEach(element =>
@@ -197,11 +199,9 @@ const InformationForm = ({submit, step, loading}) => {
             } else {
               setErrorMessage('Remplir les champs');
             }
-          }}>
-          <Text style={styles.textButton}>
-            {dataForm.length - 1 != index ? 'Suivant' : 'Créer'}
-          </Text>
-        </TouchableOpacity>
+          }}
+          TouchableComponent={Pressable}
+        />
         {loading ? (
           <View style={{marginTop: wp(2)}}>
             <ActivityIndicator color="#1c3052" />
@@ -253,20 +253,15 @@ const styles = StyleSheet.create({
     borderRadius: wp(1),
     alignSelf: 'center',
   },
+
   button: {
     width: wp(80),
     marginLeft: wp(2),
     height: wp(12),
     marginTop: wp(7),
-    backgroundColor: '#1c3052',
-    borderRadius: wp(2),
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textButton: {
-    color: 'white',
-    fontSize: wp(5),
     fontFamily: 'Montserrat-Regular',
+    fontSize: wp(4),
+    backgroundColor: '#1c3052',
   },
   text: {
     fontSize: wp(4),
