@@ -1,7 +1,7 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '11.0'
+platform :ios, '12.0'
 
 target 'PTUT' do
   config = use_native_modules!
@@ -12,9 +12,13 @@ target 'PTUT' do
     :hermes_enabled => false
   )
 
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
+
+
   target 'PTUTTests' do
     inherit! :complete
-    # Pods for testing
+    # Pods for testings
   end
 
   # Enables Flipper.
