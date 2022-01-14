@@ -227,6 +227,8 @@ const InformationForm = ({submit, step, loading}) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: wp(8),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     marginBottom: wp(7),
