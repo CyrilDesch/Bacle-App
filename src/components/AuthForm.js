@@ -156,7 +156,7 @@ const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
         <Text style={styles.error}>{state.error}</Text>
         <Button
           loading={loading}
-          titleStyle={styles.button}
+          buttonStyle={styles.button}
           title={buttonLabel}
           TouchableComponent={Pressable}
           onPress={async () => {
@@ -229,6 +229,7 @@ const styles = StyleSheet.create({
   button: {
     width: wp(85),
     marginLeft: wp(2.5),
+    fontFamily: 'Montserrat-Medium',
     height: wp(13),
     backgroundColor: '#1c3052',
   },
