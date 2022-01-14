@@ -6,10 +6,11 @@ import {
   Pressable,
   FlatList,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import {Input} from 'react-native-elements';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {format, sub} from 'date-fns';
+import {format} from 'date-fns';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -17,7 +18,6 @@ import {
 import Carousel from 'react-native-snap-carousel';
 import SearchBar from '../Search/SearchBar';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const InformationForm = ({submit, step, loading}) => {
   const typeEnum = {

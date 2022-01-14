@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
   },
   buttonTitle: {
     marginTop: wp(1),
+    marginBottom: wp(1),
     fontSize: wp(3),
     width: wp(20),
     textAlign: 'center',
