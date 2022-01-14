@@ -1,7 +1,14 @@
 import React, {useContext, useEffect, useState, useRef} from 'react';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
-import {View, StyleSheet, Pressable, Text, Animated} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Pressable,
+  Text,
+  Animated,
+  TouchableOpacity,
+} from 'react-native';
 import {Input, Button} from 'react-native-elements';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import * as navigation from '../navigationRef';
@@ -149,7 +156,7 @@ const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
         <Text style={styles.error}>{state.error}</Text>
         <Button
           loading={loading}
-          buttonStyle={styles.button}
+          titleStyle={styles.button}
           title={buttonLabel}
           TouchableComponent={Pressable}
           onPress={async () => {
@@ -173,6 +180,7 @@ const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
           }}
         />
         <View height={wp(4)} />
+
         <Button
           titleStyle={{color: '#375ea1'}}
           raised="false"
