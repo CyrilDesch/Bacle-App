@@ -125,17 +125,16 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold',
   },
   sectionTitle: {
-    backgroundColor: '#E3E3E3',
-    borderRadius: wp(5),
-    fontSize: wp(3.25),
     fontFamily: 'Montserrat-Medium',
     color: '#2C2628',
-    marginRight: wp(2),
-  },
-  containerSectionTitle: {
-    fontFamily: 'Montserrat-Medium',
+    fontSize: wp(3.25),
     paddingHorizontal: wp(3.5),
     paddingVertical: wp(2),
+  },
+  containerSectionTitle: {
+    backgroundColor: '#E3E3E3',
+    borderRadius: wp(5),
+    marginRight: wp(2),
   },
   tripList: {
     marginTop: wp(4),
