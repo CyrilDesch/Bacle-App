@@ -136,7 +136,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
     paddingHorizontal: wp(3.5),
     paddingVertical: wp(2),
-    s,
   },
   tripList: {
     marginTop: wp(4),
