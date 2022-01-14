@@ -83,13 +83,20 @@ const HomeScreen = ({navigation}) => {
                 scrollList.current.scrollToIndex({index: 0});
                 setIndexSelectedSection(index);
               }}>
-              <View style={styles.containerSectionTitle}>
+              <View
+                style={[
+                  styles.containerSectionTitle,
+                  indexSelectedSection == index
+                    ? {
+                        backgroundColor: '#1c3052',
+                      }
+                    : {},
+                ]}>
                 <Text
                   style={[
                     styles.sectionTitle,
                     indexSelectedSection == index
                       ? {
-                          backgroundColor: '#1c3052',
                           color: 'white',
                         }
                       : {},
