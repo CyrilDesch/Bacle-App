@@ -177,7 +177,7 @@ const App = () => {
     }, 2000);
   }, []);
 
-  if (auth.localLoading || !launchFinish) {
+  if () {
     return <WaitScreen />;
   }
 
@@ -188,7 +188,9 @@ const App = () => {
           headerShown: false,
           gestureEnabled: false,
         }}>
-        {auth.token && auth.token !== '' ? (
+        {auth.localLoading || !launchFinish ? 
+          (<AppStack.Screen name="Wait" component={WaitScreen} /> ):
+        auth.token && auth.token !== '' ? (
           <AppStack.Screen name="Tab" component={TabScreen} />
         ) : (
           <AppStack.Screen name="AuthStack" component={AuthStackScreen} />
@@ -197,6 +199,7 @@ const App = () => {
           name="AddPlaceToTrip"
           component={AddPlaceToTripScreen}
         />
+        
         <AppStack.Screen name="CreateTravel" component={CreateTravelScreen} />
         <AppStack.Screen name="ShowTravel" component={ShowTravelScreen} />
       </AppStack.Navigator>
