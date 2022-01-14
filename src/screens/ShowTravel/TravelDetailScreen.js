@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingHorizontal: wp(12),
-    marginTop: wp(3),
+    marginTop: wp(6),
   },
   round: {
     backgroundColor: '#f2f2f2',
@@ -182,7 +182,6 @@ const styles = StyleSheet.create({
   },
   buttonTitle: {
     marginTop: wp(1),
-    marginBottom: wp(1),
     fontSize: wp(3),
     width: wp(20),
     textAlign: 'center',
