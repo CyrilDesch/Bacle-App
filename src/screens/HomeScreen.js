@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     backgroundColor: '#E3E3E3',
-    borderRadius: wp(5),
+    borderRadius: 50,
     fontSize: wp(3.25),
     paddingHorizontal: wp(3.5),
     paddingVertical: wp(2),
