@@ -259,9 +259,12 @@ const styles = StyleSheet.create({
     height: wp(12),
     marginTop: wp(7),
     backgroundColor: '#1c3052',
-    borderRadius: wp(10),
+    borderRadius: wp(2),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   textButton: {
+    color: 'white',
     fontSize: wp(5),
     fontFamily: 'Montserrat-Regular',
   },
