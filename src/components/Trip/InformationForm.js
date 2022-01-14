@@ -256,7 +256,6 @@ const styles = StyleSheet.create({
 
   button: {
     width: wp(80),
-    marginLeft: wp(2),
     height: wp(12),
     marginTop: wp(7),
     fontFamily: 'Montserrat-Regular',
