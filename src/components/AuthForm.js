@@ -156,7 +156,7 @@ const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
         <Text style={styles.error}>{state.error}</Text>
         <Button
           loading={loading}
-          buttonStyle={styles.button}
+          titleStyle={styles.button}
           title={buttonLabel}
           TouchableComponent={Pressable}
           onPress={async () => {
