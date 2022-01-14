@@ -170,7 +170,7 @@ const InformationForm = ({submit, step, loading}) => {
           }
         })}
         <Button
-          buttonStyle={styles.button}
+          buttonStyle={[styles.button, {marginLeft: wp(2)}]}
           titleStyle={styles.button}
           title={dataForm.length - 1 != index ? 'Suivant' : 'Créer'}
           onPress={() => {
@@ -227,8 +227,6 @@ const InformationForm = ({submit, step, loading}) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: wp(8),
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   title: {
     marginBottom: wp(7),
