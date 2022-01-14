@@ -229,10 +229,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: wp(85),
-    marginLeft: wp(2.5),
     fontFamily: 'Montserrat-Medium',
-    height: wp(13),
-    alignSelf: 'center',
     backgroundColor: '#1c3052',
   },
   error: {
