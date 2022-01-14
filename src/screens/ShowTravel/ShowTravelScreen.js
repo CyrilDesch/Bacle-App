@@ -72,9 +72,7 @@ const TravelScreen = ({navigation}) => {
             <Text
               style={[
                 styles.textButton,
-                currentDay == 0
-                  ? {backgroundColor: 'transparent', color: 'transparent'}
-                  : {},
+                currentDay == 0 ? {color: 'transparent'} : {},
               ]}>
               {'<'}
             </Text>
