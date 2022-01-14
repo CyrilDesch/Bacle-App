@@ -83,18 +83,20 @@ const HomeScreen = ({navigation}) => {
                 scrollList.current.scrollToIndex({index: 0});
                 setIndexSelectedSection(index);
               }}>
-              <Text
-                style={[
-                  styles.sectionTitle,
-                  indexSelectedSection == index
-                    ? {
-                        backgroundColor: '#1c3052',
-                        color: 'white',
-                      }
-                    : {},
-                ]}>
-                {item}
-              </Text>
+              <View style={styles.containerSectionTitle}>
+                <Text
+                  style={[
+                    styles.sectionTitle,
+                    indexSelectedSection == index
+                      ? {
+                          backgroundColor: '#1c3052',
+                          color: 'white',
+                        }
+                      : {},
+                  ]}>
+                  {item}
+                </Text>
+              </View>
             </Pressable>
           )}
         />
@@ -124,13 +126,17 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     backgroundColor: '#E3E3E3',
-    borderRadius: 50,
+    borderRadius: wp(5),
     fontSize: wp(3.25),
-    paddingHorizontal: wp(3.5),
-    paddingVertical: wp(2),
     fontFamily: 'Montserrat-Medium',
     color: '#2C2628',
     marginRight: wp(2),
+  },
+  containerSectionTitle: {
+    fontFamily: 'Montserrat-Medium',
+    paddingHorizontal: wp(3.5),
+    paddingVertical: wp(2),
+    s,
   },
   tripList: {
     marginTop: wp(4),
