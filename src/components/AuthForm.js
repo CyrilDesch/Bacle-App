@@ -183,7 +183,7 @@ const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
         <View height={wp(4)} />
 
         <Button
-          titleStyle={{color: '#375ea1'}}
+          titleStyle={{color: '#375ea1', fontFamily: 'Montserrat-Regular'}}
           raised="false"
           TouchableComponent={Pressable}
           type="clear"
@@ -229,7 +229,8 @@ const styles = StyleSheet.create({
   },
   button: {
     width: wp(85),
-    fontFamily: 'Montserrat-Medium',
+    fontFamily: 'Montserrat-Regular',
+    paddingVertical: wp(1),
     backgroundColor: '#1c3052',
   },
   error: {
