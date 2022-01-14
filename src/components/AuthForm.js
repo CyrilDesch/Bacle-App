@@ -152,7 +152,12 @@ const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
           />
         </Animated.View>
       ) : null}
-      <Animated.View style={{opacity: fadeSubmitButton}}>
+      <Animated.View
+        style={{
+          opacity: fadeSubmitButton,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
         <Text style={styles.error}>{state.error}</Text>
         <Button
           loading={loading}
@@ -183,7 +188,11 @@ const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
         <View height={wp(4)} />
 
         <Button
-          titleStyle={{color: '#375ea1', fontFamily: 'Montserrat-Regular'}}
+          titleStyle={{
+            color: '#375ea1',
+            fontFamily: 'Montserrat-Regular',
+            fontSize: wp(4),
+          }}
           raised="false"
           TouchableComponent={Pressable}
           type="clear"
@@ -229,8 +238,9 @@ const styles = StyleSheet.create({
   },
   button: {
     width: wp(85),
+    fontSize: wp(4),
     fontFamily: 'Montserrat-Regular',
-    paddingVertical: wp(1),
+    paddingVertical: wp(2),
     backgroundColor: '#1c3052',
   },
   error: {
