@@ -64,10 +64,7 @@ const TravelScreen = ({navigation}) => {
           <View
             style={[
               styles.dayButton,
-              currentDay >=
-              tripState.tripList[tripState.selectedTrip].days.length - 1
-                ? {backgroundColor: 'transparent'}
-                : {},
+              currentDay == 0 ? {backgroundColor: 'transparent'} : {},
             ]}>
             <Text
               style={[
