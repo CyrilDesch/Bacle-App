@@ -32,7 +32,9 @@ const LightPlaceDetail = ({style, placeData, backButtonAction, navigation}) => {
         <View style={styles.line1}>
           <Text style={styles.title}>{title}</Text>
           {/* Bouton Ajout à un voyage */}
-          <Pressable onPress={onAddToTripButtonPress}>
+          <Pressable
+            style={styles.containerAddButton}
+            onPress={onAddToTripButtonPress}>
             <Text style={styles.addButton}>Ajouter à un voyage</Text>
           </Pressable>
         </View>
@@ -67,28 +69,30 @@ const styles = StyleSheet.create({
   backButton: {
     alignSelf: 'flex-start',
     marginBottom: wp(1.5),
+    backgroundColor: '#1c3052',
+    borderRadius: wp(2),
   },
   textBackButton: {
     paddingHorizontal: wp(2),
     padding: wp(1),
     fontFamily: 'Montserrat-Medium',
-    borderRadius: wp(2),
     color: 'white',
-    backgroundColor: '#1c3052',
   },
   line1: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  containerAddButton: {
+    backgroundColor: '#1c3052',
+    borderRadius: wp(2),
+  },
   addButton: {
     paddingHorizontal: wp(1.5),
     padding: wp(0.8),
     fontFamily: 'Montserrat-Medium',
     fontSize: wp(3.3),
-    borderRadius: wp(2),
     color: 'white',
-    backgroundColor: '#1c3052',
   },
   title: {
     width: wp(44),

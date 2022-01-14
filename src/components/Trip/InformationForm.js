@@ -258,6 +258,7 @@ const styles = StyleSheet.create({
     height: wp(12),
     marginTop: wp(7),
     backgroundColor: '#1c3052',
+    fontFamily: 'Montserrat-Regular',
   },
   text: {
     fontSize: wp(4),
