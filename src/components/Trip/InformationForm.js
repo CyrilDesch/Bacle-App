@@ -15,9 +15,9 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import Carousel from 'react-native-snap-carousel';
-import {Button} from 'react-native-elements/dist/buttons/Button';
 import SearchBar from '../Search/SearchBar';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const InformationForm = ({submit, step, loading}) => {
   const typeEnum = {
@@ -169,9 +169,8 @@ const InformationForm = ({submit, step, loading}) => {
               );
           }
         })}
-        <Button
-          buttonStyle={styles.button}
-          title={dataForm.length - 1 != index ? 'Suivant' : 'Créer'}
+        <TouchableOpacity
+          style={styles.button}
           onPress={() => {
             let count = 0;
             item.required.forEach(element =>
@@ -198,9 +197,11 @@ const InformationForm = ({submit, step, loading}) => {
             } else {
               setErrorMessage('Remplir les champs');
             }
-          }}
-          TouchableComponent={Pressable}
-        />
+          }}>
+          <Text style={styles.textButton}>
+            {dataForm.length - 1 != index ? 'Suivant' : 'Créer'}
+          </Text>
+        </TouchableOpacity>
         {loading ? (
           <View style={{marginTop: wp(2)}}>
             <ActivityIndicator color="#1c3052" />
@@ -258,6 +259,10 @@ const styles = StyleSheet.create({
     height: wp(12),
     marginTop: wp(7),
     backgroundColor: '#1c3052',
+    borderRadius: wp(10),
+  },
+  textButton: {
+    fontSize: wp(5),
     fontFamily: 'Montserrat-Regular',
   },
   text: {
