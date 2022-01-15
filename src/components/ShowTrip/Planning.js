@@ -11,7 +11,7 @@ const Planning = ({trip}) => (
       overScrollMode="never"
       contentContainerStyle={{
         paddingHorizontal: wp(5),
-        paddingBottom: hp(3),
+        paddingBottom: hp(5),
       }}
       keyExtractor={item => item._id}
       data={trip.days}
