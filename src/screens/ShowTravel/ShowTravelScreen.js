@@ -229,7 +229,6 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   dayPickerContainer: {
-    top: wp(8),
     position: 'absolute',
     flexDirection: 'row',
   },
