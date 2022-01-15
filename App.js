@@ -108,7 +108,7 @@ const TabScreen = () => {
         tabBarStyle: {
           borderTopLeftRadius: wp(5),
           borderTopRightRadius: wp(5),
-          height: hp(8),
+          height: hp(12),
           position: 'absolute',
           bottom: 0,
           shadowColor: '#000',
