@@ -1,5 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import HomeScreen from './src/screens/HomeScreen';
@@ -105,7 +108,7 @@ const TabScreen = () => {
         tabBarStyle: {
           borderTopLeftRadius: wp(5),
           borderTopRightRadius: wp(5),
-          height: hp(15),
+          height: hp(8),
           position: 'absolute',
           bottom: 0,
           shadowColor: '#000',
