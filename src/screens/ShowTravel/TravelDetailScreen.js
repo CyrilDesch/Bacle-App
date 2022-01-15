@@ -56,10 +56,9 @@ const TravelDetailScreen = ({navigation}) => {
     <>
       <View
         style={{
-          backgroundColor: 'red',
           flex: 1,
         }}>
-        <SafeAreaView style={{flex: 1}}>
+        <SafeAreaView style={{flex: 1, backgroundColor: 'red'}}>
           <Pressable
             onPress={() =>
               navigation.navigate('TravelStack', {screen: 'SelectTravel'})
