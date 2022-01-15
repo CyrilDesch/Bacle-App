@@ -16,7 +16,7 @@ const Lieux = ({trip, navigation}) => (
           <Text style={styles.buttonAddPlace}>+ Ajoutez un lieu</Text>
         </Pressable>
       }
-      contentContainerStyle={{padding: wp(5), paddingBottom: hp(5)}}
+      contentContainerStyle={{padding: wp(5), paddingBottom: hp(2)}}
       keyExtractor={item => item._id}
       data={trip.places}
       renderItem={({item, index}) => (
