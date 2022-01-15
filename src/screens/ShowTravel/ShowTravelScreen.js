@@ -56,7 +56,7 @@ const TravelScreen = ({navigation}) => {
         travelData={currentDayData}
         focusedPlaceIndex={focusedPlaceIndex}
       />
-      <View style={styles.dayPickerContainer}>
+      <View style={[styles.dayPickerContainer, {marginTop: inset.top}]}>
         <TouchableOpacity
           onPress={() =>
             currentDay > 0 ? setCurrentDay(currentDay - 1) : null
@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
   },
   dotBackground: {
     alignItems: 'center',
+    marginBottom: hp(1),
     padding: wp(0.2),
     paddingHorizontal: wp(1),
     borderRadius: wp(2),
