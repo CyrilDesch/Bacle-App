@@ -38,8 +38,8 @@ const authValidator = (email, password) => {
 };
 
 const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
-  const [email, setEmail] = useState('test@bacle.eu.org'); // TODO: Enlever les logins de test
-  const [password, setPassword] = useState('MdpDeT3st');
+  const [email, setEmail] = useState(''); // TODO: Enlever les logins de test
+  const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
