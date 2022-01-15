@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   secondLine: {
     marginTop: wp(5),
     flex: 1,
-    marginBottom: hp(6),
+    marginBottom: hp(5),
   },
   titleTab: {
     color: '#1c3052',
