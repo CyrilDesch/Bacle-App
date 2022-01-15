@@ -13,7 +13,7 @@ const SelectTrip = ({trips, onSelection}) => {
       <FlatList
         contentContainerStyle={{
           paddingHorizontal: wp(5),
-          paddingVertical: hp(5),
+          paddingVertical: hp(2),
         }}
         keyExtractor={item => item._id + new Date().toDateString()}
         data={trips}
