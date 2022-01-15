@@ -14,7 +14,6 @@ const SelectTrip = ({trips, onSelection}) => {
         contentContainerStyle={{
           paddingHorizontal: wp(5),
           paddingVertical: hp(2),
-          paddingBottom: hp(7),
         }}
         keyExtractor={item => item._id + new Date().toDateString()}
         data={trips}
