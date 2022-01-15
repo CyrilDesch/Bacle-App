@@ -224,7 +224,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: wp(5),
     position: 'absolute',
-    top: wp(2),
     left: wp(4),
     zIndex: 1000,
   },
