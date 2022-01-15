@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   tripList: {
     marginTop: wp(4),
     flex: 1,
-    marginBottom: wp(15),
+    marginBottom: hp(10),
   },
 });
 
