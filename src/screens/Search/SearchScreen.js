@@ -120,11 +120,11 @@ const styles = StyleSheet.create({
   },
   lightDetail: {
     position: 'absolute',
-    bottom: wp(5),
+    bottom: hp(5),
   },
   resultArea: {
     position: 'absolute',
-    bottom: wp(-2),
+    bottom: hp(2),
     backgroundColor: 'white',
     borderRadius: wp(4),
     borderBottomEndRadius: 0,
