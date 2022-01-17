@@ -132,7 +132,7 @@ const TabScreen = () => {
               iconName = 'home';
               break;
             case 'TravelStack':
-              iconName = 'find';
+              iconName = 'table';
               break;
             case 'CreateTravelStack':
               iconName = 'pluscircleo';

@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   },
   resultArea: {
     position: 'absolute',
-    bottom: hp(1),
+    bottom: 0,
     backgroundColor: 'white',
     borderRadius: wp(4),
     borderBottomEndRadius: 0,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     height: wp(60),
     width: wp(100),
     padding: wp(2),
-    paddingBottom: wp(4),
+    paddingBottom: wp(5),
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
