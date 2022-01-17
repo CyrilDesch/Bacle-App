@@ -53,7 +53,7 @@ const SearchBar = ({
         console.log('test2');
         setLoading(true);
         const res = await searchCity(text, source.token);
-        console.log('test3');
+        console.log(res.data);
         setLoading(false);
         setData(res.data);
         onSubmit(res.data);
