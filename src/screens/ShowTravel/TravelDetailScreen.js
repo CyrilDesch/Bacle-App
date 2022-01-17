@@ -135,11 +135,10 @@ const TravelDetailScreen = ({navigation}) => {
           Les données supprimées ne seront pas récupérables !
         </Text>
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-          <TouchableOpacity onPress={() => setRemoveConfirmationVisible(false)}>
-            <Text
-              style={[styles.buttonConfirmTitle, {backgroundColor: '#1c3052'}]}>
-              Annuler
-            </Text>
+          <TouchableOpacity
+            style={styles.buttonConfirmedContainer}
+            onPress={() => setRemoveConfirmationVisible(false)}>
+            <Text style={styles.buttonConfirmTitle}>Annuler</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
@@ -229,15 +228,19 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Medium',
     marginBottom: wp(6),
   },
+
+  buttonConfirmedContainer: {
+    backgroundColor: '#1c3052',
+    marginBottom: wp(1),
+    borderRadius: wp(2),
+  },
   buttonConfirmTitle: {
     color: 'white',
     fontSize: wp(4),
     textAlign: 'center',
     fontFamily: 'Montserrat-Medium',
-    marginBottom: wp(1),
     padding: wp(1),
     paddingHorizontal: wp(2),
-    borderRadius: wp(2),
   },
 });
 

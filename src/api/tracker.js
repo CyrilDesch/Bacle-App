@@ -54,6 +54,7 @@ export const searchAll = async place => {
   try {
     const req = await axios.get(
       `https://nominatim.openstreetmap.org/search?q=${place}&format=json&limit=10`,
+      {headers: {'User-Agent': 'Mozilla/5.0'}},
     );
     return req;
   } catch (err) {
@@ -65,7 +66,7 @@ export const searchCity = async (place, cancelToken) => {
   try {
     const req = await axios.get(
       `https://nominatim.openstreetmap.org/search?city=${place}&format=json&limit=10`,
-      {cancelToken: cancelToken},
+      {cancelToken: cancelToken, headers: {'User-Agent': 'Mozilla/5.0'}},
     );
     return req;
   } catch (err) {
