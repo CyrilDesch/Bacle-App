@@ -19,14 +19,11 @@ const authValidator = (email, password) => {
   const emailVerif = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
     email,
   );
-  const passwordVerif = password => {
-    return (
-      password.length > 8 &&
-      /\d/g.test(password) &&
-      /[A-Z]/g.test(password) &&
-      /[a-z]/g.test(password)
-    );
-  };
+  const passwordVerif =
+    password.length > 8 &&
+    /\d/g.test(password) &&
+    /[A-Z]/g.test(password) &&
+    /[a-z]/g.test(password);
 
   if (!emailVerif && !passwordVerif) {
     throw "L'adresse email entrée est invalide.\nPour votre sécurité, le mot de passe doit contenir au moin 8 caractères dont une majuscule, une minuscule et un chiffre.";
@@ -38,7 +35,7 @@ const authValidator = (email, password) => {
 };
 
 const AuthForm = ({buttonLabel, authMethod, showSecondForm}) => {
-  const [email, setEmail] = useState(''); // TODO: Enlever les logins de test
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');

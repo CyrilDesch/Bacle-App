@@ -20,7 +20,9 @@ const Lieux = ({trip, navigation}) => (
       keyExtractor={item => item._id}
       data={trip.places}
       renderItem={({item, index}) => (
-        <Text style={styles.itemListPlace}>{item.name}</Text>
+        <View style={styles.itemListPlaceContainer}>
+          <Text style={styles.itemListPlace}>{item.name}</Text>
+        </View>
       )}
       ListEmptyComponent={
         <Text style={styles.textEmpty}>Aucun lieu ajouté</Text>
@@ -31,13 +33,15 @@ const Lieux = ({trip, navigation}) => (
 
 const styles = StyleSheet.create({
   itemListPlace: {
-    marginBottom: wp(3),
-    backgroundColor: 'white',
     paddingHorizontal: wp(3),
     paddingVertical: wp(1.5),
-    borderRadius: wp(2),
     fontSize: wp(4),
     fontFamily: 'Montserrat-Medium',
+  },
+  itemListPlaceContainer: {
+    marginBottom: wp(3),
+    backgroundColor: 'white',
+    borderRadius: wp(2),
   },
   textEmpty: {
     textAlign: 'center',
@@ -46,7 +50,6 @@ const styles = StyleSheet.create({
     marginTop: hp(10),
     fontFamily: 'Montserrat-Medium',
   },
-
   containerButtonAddPlace: {
     marginBottom: wp(3),
     backgroundColor: '#1c3052',

@@ -76,8 +76,8 @@ const getViewWindow = placeList => {
   const viewWindow = {
     latitude: (maxBoundingBox[1] + maxBoundingBox[0]) * 0.5,
     longitude: (maxBoundingBox[3] + maxBoundingBox[2]) * 0.5,
-    latitudeDelta: (maxBoundingBox[1] - maxBoundingBox[0]) * 1.1,
-    longitudeDelta: (maxBoundingBox[3] - maxBoundingBox[2]) * 1.1,
+    latitudeDelta: (maxBoundingBox[1] - maxBoundingBox[0]) * 1.5,
+    longitudeDelta: (maxBoundingBox[3] - maxBoundingBox[2]) * 1.5,
   };
 
   return viewWindow;

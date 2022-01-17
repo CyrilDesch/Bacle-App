@@ -50,9 +50,23 @@ instance.interceptors.request.use(
   },
 );
 
-export const search = async place => {
+export const searchAll = async place => {
   try {
-    const req = await instance.get(`/search/?q=${place}`);
+    const req = await axios.get(
+      `https://nominatim.openstreetmap.org/search?q=${place}&format=json&limit=10`,
+    );
+    return req;
+  } catch (err) {
+    console.log('Erreur search');
+  }
+};
+
+export const searchCity = async (place, cancelToken) => {
+  try {
+    const req = await axios.get(
+      `https://nominatim.openstreetmap.org/search?city=${place}&format=json&limit=10`,
+      {cancelToken: cancelToken},
+    );
     return req;
   } catch (err) {
     console.log('Erreur search');

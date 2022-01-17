@@ -13,7 +13,12 @@ import IconIonicons from 'react-native-vector-icons/Ionicons';
 const SearchResultItem = ({item, onPress}) => {
   return (
     <TouchableOpacity
-      style={{flexDirection: 'row', paddingTop: wp(2), marginLeft: wp(2)}}
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingTop: wp(2),
+        marginLeft: wp(2),
+      }}
       onPress={onPress}>
       <View
         style={{
@@ -27,13 +32,16 @@ const SearchResultItem = ({item, onPress}) => {
         }}>
         <IconIonicons name="location-outline" size={wp(6)} />
       </View>
-      <Text style={styles.result}>{item.display_name.split(',')[0]}</Text>
+      <Text style={styles.result}>
+        {item.display_name.split(',')[0]} - {item.display_name.split(',')[1]}
+      </Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   result: {
+    width: wp(70),
     padding: wp(3),
     fontSize: wp(4),
     fontFamily: 'Montserrat-SemiBold',

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {search} from '../../api/tracker';
+import {searchCity, searchAll} from '../../api/tracker';
+import axios from 'axios';
 import {
   StyleSheet,
   View,
@@ -16,8 +17,10 @@ import {
 import Icon from 'react-native-vector-icons/AntDesign';
 import SearchResultListInput from './SearchResultListInput';
 
+let source = axios.CancelToken.source();
+
 const SearchBar = ({
-  onlyCountry,
+  onlyCity,
   showResult,
   setSearchData,
   onSubmit,
@@ -42,19 +45,30 @@ const SearchBar = ({
     }
   }, [data]);
 
+  const callSearchCityAPI = async text => {
+    source.cancel();
+    source = axios.CancelToken.source();
+    if (text.length > 0) {
+      try {
+        setLoading(true);
+        const res = await searchCity(text, source.token);
+        setLoading(false);
+        setData(res.data);
+        onSubmit(res.data);
+      } catch {}
+    } else {
+      setLoading(false);
+      setData([]);
+      onSubmit([]);
+    }
+  };
+
   const callSearchAPI = async () => {
     if (text.length > 1) {
       setLoading(true);
-      const res = await search(text);
+      const res = await searchAll(text);
       setLoading(false);
-      let data;
-      if (onlyCountry) {
-        data = res.data.filter(
-          value => value.display_name.split(',').length == 1,
-        );
-      } else {
-        data = res.data;
-      }
+      let data = res.data;
       setData(data);
       onSubmit(data);
     }
@@ -70,14 +84,15 @@ const SearchBar = ({
           renderErrorMessage={false}
           onChangeText={text => {
             if (data.length >= 0) {
-              setData([]);
+              onlyCity ? null : setData([]);
               if (setSelected) {
                 setSelected(null);
               }
             }
             setText(text);
+            onlyCity ? callSearchCityAPI(text) : null;
           }}
-          onSubmitEditing={callSearchAPI}
+          onSubmitEditing={onlyCity ? null : callSearchAPI}
           placeholder={'Rechercher'}
           leftIcon={<Icon name="search1" size={wp(5)} color="#00000090" />}
           rightIcon={
@@ -104,7 +119,11 @@ const SearchBar = ({
           <SearchResultListInput
             data={data}
             onItemPress={index => {
-              setText(data[index].display_name.split(',')[0]);
+              setText(
+                data[index].display_name.split(',')[0] +
+                  ' - ' +
+                  data[index].display_name.split(',')[1],
+              );
               if (setSelected) {
                 setSelected(data[index]);
               }
@@ -119,7 +138,7 @@ const SearchBar = ({
 
 SearchBar.defaultProps = {
   showResult: true,
-  onlyCountry: null,
+  onlyCity: null,
   onClose: null,
   onSubmit: () => {},
   style: null,

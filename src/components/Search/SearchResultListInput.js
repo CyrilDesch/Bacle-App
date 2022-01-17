@@ -14,7 +14,11 @@ const SearchResultListInput = ({data, onItemPress}) => {
         contentContainerStyle={{paddingBottom: wp(2)}}
         persistentScrollbar
         data={data}
-        keyExtractor={item => item.osm_id.toString()}
+        keyExtractor={item =>
+          Date.now().toString() +
+          item.display_name +
+          Math.floor(Math.random() * 100000).toString()
+        }
         renderItem={({item, index}) => (
           <SearchResultItem item={item} onPress={() => onItemPress(index)} />
         )}

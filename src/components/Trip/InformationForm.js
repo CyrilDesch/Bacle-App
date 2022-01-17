@@ -69,6 +69,7 @@ const InformationForm = ({submit, step, loading}) => {
         },
       ],
     },
+    /*
     {
       title: 'Information',
       required: [selectedCountry],
@@ -77,18 +78,20 @@ const InformationForm = ({submit, step, loading}) => {
           name: 'Pays du voyage',
           type: typeEnum.SEARCH,
           state: name,
-          onlyCountry: true,
+          onlyCity: true,
           setState: setName,
           selected: selectedCountry,
           onSelect: setSelectedCountry,
         },
       ],
     },
+    */
     {
       title: 'Information',
       required: [selectedCity],
       data: [
         {
+          onlyCity: true,
           name: 'Ville de destination',
           type: typeEnum.SEARCH,
           state: name,
@@ -153,7 +156,7 @@ const InformationForm = ({submit, step, loading}) => {
                   <SearchBar
                     style={styles.searchBar}
                     key={inputData.name}
-                    onlyCountry={inputData.onlyCountry}
+                    onlyCity={inputData.onlyCity}
                     setSelected={inputData.onSelect}
                     selected={inputData.selected}
                   />

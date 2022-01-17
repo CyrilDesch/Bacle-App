@@ -46,10 +46,12 @@ const signup =
       await AsyncStorage.setItem('token', token);
 
       const user = await getUserRequest();
-      saveUser({email: user.jwt.username});
+      saveUser();
 
       dispatch({type: 'signup', payload: token});
     } catch (err) {
+      console.log(err);
+      console.log(err.response);
       dispatch({type: 'add_error', payload: err});
     }
   };
@@ -62,7 +64,7 @@ const signin =
       await AsyncStorage.setItem('token', token);
 
       const user = await getUserRequest();
-      saveUser({email: user.jwt.username});
+      saveUser();
 
       dispatch({
         type: 'signin',
@@ -80,7 +82,7 @@ const tryLocalSignIn =
     if (token) {
       try {
         const user = await getUserRequest();
-        saveUser({email: user.jwt.username});
+        saveUser();
         dispatch({
           type: 'signin',
           payload: {token: token, localLoading: false},

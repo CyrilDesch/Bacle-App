@@ -57,6 +57,7 @@ const TravelDetailScreen = ({navigation}) => {
       <View
         style={{
           flex: 1,
+          backgroundColor: 'white',
         }}>
         <SafeAreaView style={{flex: 1}}>
           <Pressable

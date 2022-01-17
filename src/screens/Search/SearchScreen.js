@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Alert} from 'react-native';
+import {View, StyleSheet, Alert, StatusBar} from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -40,6 +40,11 @@ const SearchScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        translucent={true}
+        backgroundColor={'transparent'}
+        barStyle="dark-content"
+      />
       {/* Carte */}
       <SafeAreaView style={styles.container}>
         <SearchMap

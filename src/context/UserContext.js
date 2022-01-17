@@ -1,4 +1,5 @@
 import createDataContext from '../context/createDataContext';
+import trackerApi from '../api/tracker';
 
 const userReducer = (state, action) => {
   switch (action.type) {
@@ -9,14 +10,20 @@ const userReducer = (state, action) => {
   }
 };
 
-const saveUser = dispatch => user => {
-  dispatch({type: 'saveUser', payload: user});
-};
+const saveUser = dispatch => async () => {
+  try {
+    const resp = await trackerApi.get('/user/me', {
+      headers: {'content-type': 'application/x-www-form-urlencoded'},
+    });
 
-const updateUser = dispatch => async user => {};
+    dispatch({type: 'saveUser', payload: resp.data});
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const {Provider, Context} = createDataContext(
   userReducer,
-  {saveUser, updateUser},
-  {pseudo: '', name: '', dateOfBirth: null, idProfilImage: '', email: ''},
+  {saveUser},
+  {},
 );
