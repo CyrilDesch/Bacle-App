@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     maxHeight: wp(65),
     paddingTop: wp(1),
     backgroundColor: 'white',
+    zIndex: 10,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     borderWidth: wp(0.3),
