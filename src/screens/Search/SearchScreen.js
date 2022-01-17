@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   },
   resultArea: {
     position: 'absolute',
-    bottom: hp(2),
+    bottom: hp(1),
     backgroundColor: 'white',
     borderRadius: wp(4),
     borderBottomEndRadius: 0,
