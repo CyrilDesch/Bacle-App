@@ -50,13 +50,16 @@ const SearchBar = ({
     source = axios.CancelToken.source();
     if (text.length > 0) {
       try {
+        console.log('test2');
         setLoading(true);
         const res = await searchCity(text, source.token);
+        console.log('test3');
         setLoading(false);
         setData(res.data);
         onSubmit(res.data);
       } catch {}
     } else {
+      console.log('test1');
       setLoading(false);
       setData([]);
       onSubmit([]);

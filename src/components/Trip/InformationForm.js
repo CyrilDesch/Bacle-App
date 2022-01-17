@@ -213,7 +213,21 @@ const InformationForm = ({submit, step, loading}) => {
             <ActivityIndicator color="#1c3052" />
           </View>
         ) : null}
-        <Text>{errorMessage}</Text>
+        <View
+          style={{
+            zIndex: -1,
+          }}>
+          <Text
+            style={{
+              padding: wp(1),
+              color: 'red',
+              fontSize: wp(4),
+              fontFamily: 'Montserrat-Medium',
+              textAlign: 'center',
+            }}>
+            {errorMessage}
+          </Text>
+        </View>
       </View>
     );
   };
