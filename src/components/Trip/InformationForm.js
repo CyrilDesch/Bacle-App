@@ -172,39 +172,42 @@ const InformationForm = ({submit, step, loading}) => {
               );
           }
         })}
-        <Button
-          buttonStyle={[styles.button, {marginLeft: wp(2)}]}
-          titleStyle={styles.button}
-          title={dataForm.length - 1 != index ? 'Suivant' : 'Créer'}
-          onPress={() => {
-            let count = 0;
-            item.required.forEach(element =>
-              (element != null && Object.values(element).length > 0) ||
-              (element instanceof Date && element.getTime() > 0)
-                ? count++
-                : null,
-            );
+        <View style={{zIndex: -1}}>
+          <Button
+            buttonStyle={[styles.button, {marginLeft: wp(2)}]}
+            titleStyle={styles.button}
+            title={dataForm.length - 1 != index ? 'Suivant' : 'Créer'}
+            onPress={() => {
+              let count = 0;
+              item.required.forEach(element =>
+                (element != null && Object.values(element).length > 0) ||
+                (element instanceof Date && element.getTime() > 0)
+                  ? count++
+                  : null,
+              );
 
-            if (count == item.required.length) {
-              if (index == dataForm.length - 1) {
-                submit({
-                  name: name,
-                  defaultStartLoc: {
-                    lat: selectedCity.lat,
-                    lon: selectedCity.lon,
-                  },
-                  startDate: date,
-                });
+              if (count == item.required.length) {
+                if (index == dataForm.length - 1) {
+                  submit({
+                    name: name,
+                    defaultStartLoc: {
+                      lat: selectedCity.lat,
+                      lon: selectedCity.lon,
+                    },
+                    startDate: date,
+                  });
+                } else {
+                  submit();
+                }
+                setErrorMessage('');
               } else {
-                submit();
+                setErrorMessage('Remplir les champs');
               }
-              setErrorMessage('');
-            } else {
-              setErrorMessage('Remplir les champs');
-            }
-          }}
-          TouchableComponent={Pressable}
-        />
+            }}
+            TouchableComponent={Pressable}
+          />
+        </View>
+
         {loading ? (
           <View style={{marginTop: wp(2)}}>
             <ActivityIndicator color="#1c3052" />
@@ -256,7 +259,6 @@ const styles = StyleSheet.create({
     borderRadius: wp(1),
     alignSelf: 'center',
   },
-
   button: {
     width: wp(80),
     height: wp(12),
