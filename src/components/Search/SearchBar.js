@@ -76,7 +76,7 @@ const SearchBar = ({
   };
 
   useEffect(() => {
-    if (onlyCity) {
+    if (onlyCity && text.length > 1) {
       const delayDebounceFn = setTimeout(() => {
         callSearchCityAPI(text);
       }, 1000);
