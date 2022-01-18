@@ -77,6 +77,16 @@ const SearchBar = ({
     }
   };
 
+  useEffect(() => {
+    if (onlyCity) {
+      const delayDebounceFn = setTimeout(() => {
+        console.log('testcaca');
+        // Send Axios request here
+      }, 3000);
+      return () => clearTimeout(delayDebounceFn);
+    }
+  }, [text]);
+
   return (
     <>
       <View style={[styles.searchBar, style]}>
@@ -93,7 +103,6 @@ const SearchBar = ({
               }
             }
             setText(text);
-            onlyCity ? callSearchCityAPI(text) : null;
           }}
           onSubmitEditing={onlyCity ? null : callSearchAPI}
           placeholder={'Rechercher'}
