@@ -79,7 +79,7 @@ const SearchBar = ({
     if (onlyCity) {
       const delayDebounceFn = setTimeout(() => {
         callSearchCityAPI(text);
-      }, 500);
+      }, 1000);
       return () => clearTimeout(delayDebounceFn);
     }
   }, [text]);

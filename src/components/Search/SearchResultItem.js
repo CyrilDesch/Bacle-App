@@ -41,7 +41,7 @@ const SearchResultItem = ({item, onPress}) => {
 
 const styles = StyleSheet.create({
   result: {
-    width: wp(70),
+    width: wp(65),
     padding: wp(3),
     fontSize: wp(4),
     fontFamily: 'Montserrat-SemiBold',
