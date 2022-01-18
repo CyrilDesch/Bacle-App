@@ -70,7 +70,8 @@ export const searchCity = async (place, cancelToken) => {
     );
     return req;
   } catch (err) {
-    console.log('Erreur search');
+    console.log(err);
+    console.log(err.response);
   }
 };
 

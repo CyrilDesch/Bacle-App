@@ -17,7 +17,7 @@ import Planning from '../../components/ShowTrip/Planning';
 import Lieux from '../../components/ShowTrip/Lieux';
 import {Context as TripContext} from '../../context/TripContext';
 import FlashMessage, {showMessage} from 'react-native-flash-message';
-import {Button, Overlay} from 'react-native-elements';
+import {Overlay} from 'react-native-elements';
 
 const TravelDetailScreen = ({navigation}) => {
   const {state: tripState, startRouting, removeTrip} = useContext(TripContext);
@@ -141,13 +141,11 @@ const TravelDetailScreen = ({navigation}) => {
             <Text style={styles.buttonConfirmTitle}>Annuler</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            style={styles.buttonRemoveContainer}
             onPress={() =>
               removeTrip(tripState.tripList, tripState.selectedTrip)
             }>
-            <Text
-              style={[styles.buttonConfirmTitle, {backgroundColor: '#c3c3c3'}]}>
-              Supprimer
-            </Text>
+            <Text style={styles.buttonConfirmTitle}>Supprimer</Text>
           </TouchableOpacity>
         </View>
       </Overlay>
@@ -231,6 +229,11 @@ const styles = StyleSheet.create({
 
   buttonConfirmedContainer: {
     backgroundColor: '#1c3052',
+    marginBottom: wp(1),
+    borderRadius: wp(2),
+  },
+  buttonRemoveContainer: {
+    backgroundColor: '#c3c3c3',
     marginBottom: wp(1),
     borderRadius: wp(2),
   },
