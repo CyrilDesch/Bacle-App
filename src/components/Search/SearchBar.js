@@ -50,7 +50,6 @@ const SearchBar = ({
     source = axios.CancelToken.source();
     if (text.length > 0) {
       try {
-        console.log('test2');
         setLoading(true);
         const res = await searchCity(text, source.token);
         console.log(res.data);
@@ -59,7 +58,6 @@ const SearchBar = ({
         onSubmit(res.data);
       } catch {}
     } else {
-      console.log('test1');
       setLoading(false);
       setData([]);
       onSubmit([]);
@@ -80,9 +78,8 @@ const SearchBar = ({
   useEffect(() => {
     if (onlyCity) {
       const delayDebounceFn = setTimeout(() => {
-        console.log('testcaca');
-        // Send Axios request here
-      }, 3000);
+        callSearchCityAPI(text);
+      }, 500);
       return () => clearTimeout(delayDebounceFn);
     }
   }, [text]);
