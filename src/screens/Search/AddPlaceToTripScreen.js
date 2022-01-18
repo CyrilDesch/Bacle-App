@@ -81,16 +81,29 @@ const AddPlaceToTripScreen = ({route, navigation}) => {
             <Text style={styles.subtitle}>{place.name}</Text>
 
             <Text style={{...styles.text, ...styles.centered}}>
-              {`Temps estimé à passer sur le lieu\n(en minute)`}
+              {`Temps estimé à passer sur le lieu\n(en minutes)`}
             </Text>
             <TextInput
               style={(styles.text, styles.timeText)}
-              maxLength={3}
+              value={(selectedMinutes !== 0) ? selectedMinutes.toString() : ""}
+              maxLength={4}
               placeholder="0"
               autoCapitalize="none"
               keyboardType="number-pad"
-              onChangeText={minute => {
-                setSelectedMinutes(minute);
+              onChangeText={value => {
+                const minutes = Number.parseInt(value)
+                if (minutes !== selectedMinutes) {
+                  console.log(minutes, selectedMinutes);
+                  if (Number.isNaN(minutes)) {
+                    setSelectedMinutes(0)
+                  } 
+                  else if (minutes > 1440) {
+                    setSelectedMinutes(1440)
+                  } 
+                  else {
+                    setSelectedMinutes(minutes)
+                  }
+                }
               }}
             />
 
@@ -236,6 +249,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Montserrat-Medium',
     fontSize: wp(4),
+    color: '#000',
   },
   centered: {
     textAlign: 'center',
