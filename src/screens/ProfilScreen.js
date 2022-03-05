@@ -2,18 +2,43 @@ import React, {useContext} from 'react';
 import {Context as AuthContext} from '../context/AuthContext';
 import {Context as UserContext} from '../context/UserContext';
 import {Button} from 'react-native-elements/dist/buttons/Button';
-import {StyleSheet, ImageBackground, View, Text, Pressable} from 'react-native';
+import {
+  StyleSheet,
+  ImageBackground,
+  View,
+  Text,
+  Pressable,
+  StatusBar,
+  SectionList,
+} from 'react-native';
 
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const ProfilScreen = ({navigation}) => {
   const {signout} = useContext(AuthContext);
   const {state} = useContext(UserContext);
+
+
+  //{title: 'Modifier vos informations', icon: 'edit', action: navigation.navigate('EditProfil')}
+  //{title: "Conditions générales d'utilisation", icon: 'mobile1', action: () => navigation.navigate('ShowDoc', {doc: 'CGT'})}
+  const profilSection = [
+    {
+      title: 'Mes informations',
+      data: [{title: 'Se déconnecter', icon: 'logout', action: signout}],
+    },
+    {
+      title: 'Réglages',
+      data: [
+        {title: 'Politique de confidentialité', icon: 'lock1', action: () => navigation.navigate('ShowDoc', {doc: 'PDC'})},
+        {title: 'Crédit', icon: 'copyright', action: () => navigation.navigate('ShowDoc', {doc: 'CREDIT'})},
+      ],
+    },
+  ];
 
   return (
     <SafeAreaView>
@@ -26,17 +51,20 @@ const ProfilScreen = ({navigation}) => {
         <Text style={styles.title}>Mon compte</Text>
       </View>
       <View style={styles.container}>
-        <Text style={styles.text}>
-          {`Bonjour\n${state.firstName ? state.firstName : ''} ${
-            state.lastName ? state.lastName : ''
-          }`}
-        </Text>
-        <Button
-          buttonStyle={styles.button}
-          titleStyle={styles.button}
-          title="Se déconnecter"
-          onPress={signout}
-          TouchableComponent={Pressable}
+        <SectionList
+          sections={profilSection}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({item}) => (
+            <Pressable onPress={item.action}>
+              <View style={styles.card}>
+                <Icon name={item.icon} size={wp(6)} color="black" />
+                <Text style={styles.text}>{item.title}</Text>
+              </View>
+            </Pressable>
+          )}
+          renderSectionHeader={({section: {title}}) => (
+            <Text style={styles.sectionHeader}>{title}</Text>
+          )}
         />
       </View>
     </SafeAreaView>
@@ -44,8 +72,18 @@ const ProfilScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: wp(1.5),
+    marginBottom: wp(3),
+    paddingVertical: wp(2),
+    paddingHorizontal: wp(3),
+    minWidth: wp(90)
+  },
   text: {
-    fontSize: wp(5),
+    fontSize: wp(4),
     fontFamily: 'Montserrat-Regular',
     textAlign: 'center',
     padding: wp(2),
@@ -61,7 +99,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     top: 0,
-    backgroundColor: 'gray',
+    backgroundColor: 'red',
     height: hp(100),
     width: wp(100),
   },
@@ -79,7 +117,7 @@ const styles = StyleSheet.create({
   container: {
     width: wp(100),
     height: hp(100),
-    backgroundColor: 'white',
+    backgroundColor: '#EBEBEB',
     borderTopLeftRadius: wp(8),
     borderTopRightRadius: wp(8),
     padding: wp(5),
@@ -104,6 +142,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     fontSize: wp(4),
     backgroundColor: '#1c3052',
+  },
+  sectionHeader: {
+    fontSize: wp(3.5),
+    fontFamily: 'Montserrat-SemiBold',
+    color: 'gray',
+    marginTop: wp(2),
+    marginBottom: wp(1.5),
   },
 });
 

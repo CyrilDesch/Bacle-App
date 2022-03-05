@@ -20,7 +20,7 @@ const authValidator = (email, password) => {
     email,
   );
   const passwordVerif =
-    password.length > 8 &&
+    password.length >= 8 &&
     /\d/g.test(password) &&
     /[A-Z]/g.test(password) &&
     /[a-z]/g.test(password);

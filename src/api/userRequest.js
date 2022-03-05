@@ -49,6 +49,7 @@ export const signUpRequest = async (email, password, lastName, firstName) => {
 export const getUserRequest = async () => {
   try {
     const resp = await trackerApi.get('/user/me');
+    console.log(resp.data);
     return resp.data;
   } catch (err) {
     console.log(err);

@@ -17,6 +17,8 @@ import SearchScreen from './src/screens/Search/SearchScreen';
 import AddPlaceToTripScreen from './src/screens/Search/AddPlaceToTripScreen';
 
 import ProfilScreen from './src/screens/ProfilScreen';
+import EditProfilScreen from './src/screens/Settings/EditProfilScreen';
+import ShowDocScreen from './src/screens/Settings/ShowDocScreen';
 
 import SigninScreen from './src/screens/Auth/SigninScreen';
 import SignupScreen from './src/screens/Auth/SignupScreen';
@@ -97,6 +99,8 @@ const ProfilStackScreen = () => {
     <ProfilStack.Navigator
       screenOptions={{headerShown: false, gestureEnabled: false}}>
       <ProfilStack.Screen name="Profil" component={ProfilScreen} />
+      <ProfilStack.Screen name="EditProfil" component={EditProfilScreen} />
+      <ProfilStack.Screen name="ShowDoc" component={ShowDocScreen} />
     </ProfilStack.Navigator>
   );
 };
